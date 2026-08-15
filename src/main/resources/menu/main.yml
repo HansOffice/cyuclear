@@ -1,0 +1,70 @@
+# 所有菜单按钮材质
+# material             - 原版材质、ia:、ox:、ce: 或 craftengine:
+# fallback-material    - 图标无法使用时的回退材质
+# data                 - 旧版材质数据值
+# custom-model-data    - 资源包模型编号
+# head                 - 玩家名、UUID、变量或 basehead-纹理
+# head-base64          - Base64 头颅纹理
+# basehead64            - head-base64 的兼容写法
+# head-player          - 玩家名、UUID 或变量
+# head-owner           - head-player 的兼容写法
+#
+# 所有菜单按钮动作
+# actions              - 从上到下执行
+# [default]            - 执行按钮原有功能
+# [close]              - 关闭当前菜单
+# [refresh]            - 刷新当前菜单
+# [prev_page]          - 上一页
+# [next_page]          - 下一页
+# [open] 入口          - 打开内置菜单
+# [message] 文本       - 发送聊天消息
+# [actionbar] 文本     - 发送快捷提示
+# [title] 主标题;副标题 - 发送标题
+# [sound] 音效 音量 音调 - 播放音效
+# [player] 指令        - 玩家执行指令
+# [console] 指令       - 控制台执行指令
+# 入口                 - bin、buffer、deposit-buffer、admin、rules、runs、hotspots
+# %player_name%        - 当前玩家名
+# %player_uuid%        - 当前玩家 UUID
+# %其他变量%            - 已安装 PlaceholderAPI 后可直接使用
+# *                    - 动态内容格，不写 actions
+
+# 清理规则菜单
+title: "&8CYUCLEAR | 清理设置"
+layout:
+  - "#########"
+  - "# I E R #"
+  - "#       #"
+  - "####X####"
+items:
+  "#":
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&r"
+  "I":
+    material: HOPPER
+    name: "&b掉落物规则"
+    lore:
+      - "&7物品 ID / 展示名 / Lore 名单"
+      - "&7左键进入设置"
+      - ""
+      - "&f点击进入"
+  "E":
+    material: CREEPER_SPAWN_EGG
+    fallback-material: MONSTER_EGG
+    name: "&b实体规则"
+    lore:
+      - "&7使用刷怪蛋添加实体"
+      - ""
+      - "&f点击进入"
+  "R":
+    material: ARROW
+    name: "&b实时拦截"
+    lore:
+      - "&7设置出生时直接拦截的实体"
+      - ""
+      - "&f点击进入"
+  "X":
+    material: CYAN_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&c关闭"

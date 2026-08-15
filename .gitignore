@@ -1,0 +1,17 @@
+**/target/
+**/.idea/
+**/.vscode/
+/work/
+*.iml
+*.ipr
+*.iws
+/hs_err_pid*.log
+/replay_pid*.log
+*.zip
+*.jar
+cyuclear-bungee/
+cyuclear-velocity/
+cyuclear-proxy-common/
+.agents/
+AGENTS.md
+.gemini/

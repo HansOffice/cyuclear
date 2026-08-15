@@ -1,0 +1,318 @@
+# 匹配：精确 / 通配 / 正则
+# 单条可写 通配: 或 正则:
+
+# 高级规则
+rules: {}
+
+targets:
+  # 掉落物规则
+  items:
+    # 清理开关
+    enabled: true
+    # 黑名单 / 白名单 / 并行名单
+    mode: "黑名单"
+
+    # 掉落保护 (秒)
+    grace:
+      minimum-age-seconds: 10
+      high-value-minimum-age-seconds: 60
+      high-value-list:
+        - "minecraft:diamond"
+        - "minecraft:nether_star"
+        - "minecraft:elytra"
+        - "minecraft:netherite_ingot"
+
+    # 物品 ID：minecraft: / ia: / ce: / ox:
+    keep-list:
+      match-mode: "精确"
+      list:
+        - "minecraft:diamond"
+        - "minecraft:nether_star"
+        - "minecraft:player_head"
+        - "minecraft:enchanted_golden_apple"
+        - "minecraft:elytra"
+        - "minecraft:dragon_egg"
+        - "minecraft:heart_of_the_sea"
+        - "minecraft:totem_of_undying"
+        - "minecraft:trident"
+        - "minecraft:beacon"
+        - "minecraft:conduit"
+        - "minecraft:netherite_ingot"
+        - "minecraft:netherite_scrap"
+        - "通配:minecraft:*_shulker_box"
+        - "通配:minecraft:*_smithing_template"
+        - "通配:minecraft:*_spawn_egg"
+    clean-list:
+      # 白名单 / 并行名单清理项
+      match-mode: "精确"
+      list:
+        # - "minecraft:stone"
+        # - "minecraft:cobblestone"
+
+    # 展示名
+    name-rules:
+      enabled: true
+      # 去色 / 保留颜色
+      color-mode: strip
+      # 只匹配自定义名
+      require-custom-name: true
+      # 清理优先
+      force-clean: false
+      keep-list:
+        match-mode: "精确"
+        list:
+          # - "钻石斧"
+          # - "通配:*神器*"
+          # - "正则:^SSR.+"
+      clean-list:
+        match-mode: "精确"
+        list:
+          # - "垃圾"
+          # - "通配:*测试*"
+
+    # Lore
+    lore-rules:
+      enabled: true
+      # 去色 / 保留颜色
+      color-mode: strip
+      # 任意行 / 每条均命中
+      line-mode: any
+      # 清理优先
+      force-clean: false
+      keep-list:
+        match-mode: "精确"
+        list:
+          # - "灵魂绑定"
+          # - "通配:*不可交易*"
+      clean-list:
+        match-mode: "精确"
+        list:
+          # - "一次性"
+          # - "通配:*测试*"
+
+  # 实体规则
+  entities:
+    # 清理开关
+    enabled: true
+    # 黑名单 / 白名单 / 并行名单
+    mode: "黑名单"
+
+    # 实体 ID：minecraft: / mythic: / ce: / pokemon:
+    keep-list:
+      match-mode: "精确"
+      list:
+        - "minecraft:armor_stand"
+        - "minecraft:item_frame"
+        - "minecraft:glow_item_frame"
+        - "minecraft:painting"
+        - "minecraft:villager"
+        - "minecraft:zombie_villager"
+        - "minecraft:wandering_trader"
+        - "minecraft:ender_dragon"
+        - "minecraft:wither"
+        - "通配:minecraft:*boat"
+        - "通配:minecraft:*raft"
+        - "通配:minecraft:*minecart"
+        - "minecraft:interaction"
+        - "minecraft:display"
+        - "minecraft:block_display"
+        - "minecraft:item_display"
+        - "minecraft:text_display"
+        - "minecraft:end_crystal"
+        - "minecraft:leash_knot"
+        - "minecraft:marker"
+        - "minecraft:shulker"
+        - "minecraft:allay"
+        - "minecraft:sniffer"
+        - "minecraft:camel"
+        - "minecraft:llama"
+        - "minecraft:trader_llama"
+        # - "mythic:example_boss"
+        # - "ce:namespace:furniture_id"
+        # - "通配:ce:*"
+        # - "pokemon:tag=legendary"
+        # - "pokemon:shiny=true"
+    clean-list:
+      # 白名单 / 并行名单清理项
+      match-mode: "精确"
+      list:
+        # - "pokemon:mod=cobblemon"
+        # - "pokemon:species=magikarp"
+
+    # 实体保护
+    protections:
+      # 命名实体
+      named: true
+      # 已驯服宠物
+      tamed: true
+      # 玩家放出的宝可梦
+      player-owned-pokemon: true
+      # 持久实体
+      persistent: false
+      # 不消失实体
+      no-despawn: true
+      events:
+        # 袭击实体
+        raid: true
+
+      # 命名保护例外
+      named-bypass:
+        # 不受命名保护的实体
+        entities:
+          # - "minecraft:armor_stand"
+        # 不受命名保护的区域
+        regions:
+          # display-area:
+          #   world: "world"
+          #   min: { x: 0, y: -64, z: 0 }
+          #   max: { x: 100, y: 320, z: 100 }
+
+    # 实体名称
+    name-rules:
+      enabled: true
+      # 去色 / 保留颜色
+      color-mode: "去除"
+      # 只匹配自定义名
+      require-custom-name: true
+      keep-list:
+        match-mode: "精确"
+        list:
+          # - "重要 NPC"
+          # - "通配:*商店*"
+      clean-list:
+        match-mode: "精确"
+        list:
+          # - "临时召唤物"
+          # - "正则:^测试怪物\\d+$"
+      # 清理时可跳过的保护
+      clean-bypasses:
+        - "named"
+
+    # 实体组合规则
+    detail-rules:
+      # clean-temporary-display:
+      #   action: "clean"
+      #   match: "all"
+      #   ids:
+      #     match-mode: "精确"
+      #     list: ["minecraft:armor_stand"]
+      #   names:
+      #     color-mode: "去除"
+      #     match-mode: "通配"
+      #     list: ["临时展示-*"]
+      #   states:
+      #     has-passengers: false
+      #   bypass-protections: ["named", "no-despawn"]
+
+# 特殊实体识别
+hooks:
+  # MythicMobs
+  mythic-mobs:
+    # MythicMobs ID
+    enabled: true
+    # 只匹配 mythic: ID
+    id-only: false
+    # 跳过实体保护
+    bypass-protection-flags: false
+    # 不计入区块限制
+    exclude-from-chunk-limit: false
+    # 不计入紧急清理
+    exclude-from-panic-count: false
+
+  # CraftEngine
+  craft-engine:
+    # CraftEngine 家具
+    enabled: true
+    # 保护家具部件
+    protect-furniture: true
+    # 只匹配 ce: ID
+    id-only: false
+    # 不计入区块限制
+    exclude-from-chunk-limit: true
+    # 不计入紧急清理
+    exclude-from-panic-count: true
+
+  # Cobblemon / Pixelmon
+  pokemon:
+    # 宝可梦属性
+    enabled: true
+
+# 数量限制
+limits:
+  # 区块限制
+  chunk:
+    # 掉落物
+    items:
+      # 软限制
+      soft-threshold: 1000
+      # 硬限制，0 关闭
+      threshold: 1600
+      # 指定物品限制
+      specific:
+        # minecraft:stone: 80
+        # minecraft:diamond: 10
+        # "ia:iasurvival:ruby": 20
+        # "ce:default:ruby": 20
+        # "ox:ruby": 20
+
+    # 实体
+    entities:
+      # 安全 / 严格 / 关闭
+      mode: "安全"
+      # 软限制
+      soft-threshold: 300
+      # 硬限制，0 关闭
+      threshold: 500
+      # 统计窗口 (毫秒)
+      spawn-window-millis: 1000
+      # 指定实体限制
+      specific:
+        # minecraft:armor_stand: 30
+        # mythic:example_mob: 10
+
+    # 过载提示：管理员 / 全服 / 不发送
+    notice-target: "管理员"
+    # 提示冷却 (秒)
+    notice-cooldown-seconds: 60
+    # 计数缓存 (毫秒)
+    count-cache-millis: 250
+    # 熔断时长 (毫秒)
+    overload-cache-millis: 2000
+    hotspot:
+      # 热点记录
+      enabled: true
+      # 保留时长 (秒)
+      retention-seconds: 300
+      # 最大记录数
+      max-records: 80
+
+  # 实时出生拦截
+  realtime:
+    enabled: false
+    # 白名单 / 黑名单
+    mode: "白名单"
+    keep-list:
+      match-mode: "精确"
+      list:
+        # - "minecraft:arrow"
+    clean-list:
+      match-mode: "精确"
+      list:
+        - "minecraft:shulker_bullet"
+        - "minecraft:wither_skull"
+        - "minecraft:fireball"
+        - "minecraft:small_fireball"
+        - "minecraft:dragon_fireball"
+        - "minecraft:arrow"
+        - "minecraft:spectral_arrow"
+        - "minecraft:trident"
+
+  # 全服紧急清理
+  panic:
+    enabled: false
+    # 全服 / 管理员 / 关闭
+    notice-target: "全服"
+    # 实体上限
+    max-global-entities: 5000
+    # 每个世界的普查间隔 (秒)
+    check-interval-seconds: 15

@@ -1,0 +1,21 @@
+name: cyuclear
+version: '${project.version}'
+main: org.cyuCBMclean.cyuclear.Cyuclear
+description: 轻量清理与虚空回收
+softdepend: [PlaceholderAPI, MythicMobs, CraftEngine, ItemsAdder, Oraxen, RoseStacker, WildStacker]
+
+commands:
+  cyuclear:
+    description: Cyuclear 清理与虚空桶命令
+    aliases: [cc, cbin]
+
+permissions:
+  cyuclear.admin:
+    description: 允许管理 Cyuclear、恢复批次、预演和检查规则
+    default: op
+  cyuclear.use:
+    description: 允许使用 Cyuclear 玩家功能
+    default: true
+  cyuclear.bin.deposit:
+    description: 允许向本地虚空垃圾桶投放物品
+    default: true

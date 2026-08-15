@@ -1,0 +1,50 @@
+# 清理目标菜单
+title: "&8CYUCLEAR | {target}"
+layout:
+  - "#########"
+  - "# T M S #"
+  - "# K   C #"
+  - "# A   D #"
+  - "# G   H #"
+  - "####B####"
+items:
+  "#":
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&r"
+  "T":
+    material: LEVER
+    fallback-material: REDSTONE_TORCH_ON
+    name: "&b模块开关"
+  "M":
+    material: COMPARATOR
+    fallback-material: REDSTONE_COMPARATOR
+    name: "&b名单模式"
+  "S":
+    material: BOOK
+    name: "&b当前规则"
+  "K":
+    material: SHIELD
+    fallback-material: IRON_CHESTPLATE
+    name: "&a保留名单"
+  "C":
+    material: FLINT_AND_STEEL
+    name: "&c清理名单"
+  "A":
+    material: NAME_TAG
+    fallback-material: PAPER
+    name: "&a展示名保留"
+  "D":
+    material: NAME_TAG
+    fallback-material: PAPER
+    name: "&c展示名清理"
+  "G":
+    material: BOOK
+    name: "&aLore 保留"
+  "H":
+    material: BOOK
+    name: "&cLore 清理"
+  "B":
+    material: CYAN_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&e返回"

@@ -1,0 +1,30 @@
+# 热点详情菜单
+title: "&8CYUCLEAR | {world} {x}, {z}"
+layout:
+  - "#########"
+  - "####I####"
+  - "#########"
+  - "##C#R#B#X"
+items:
+  "#":
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&r"
+  "R":
+    material: REDSTONE_BLOCK
+    name: "&c解除熔断"
+    lore:
+      - "&7仅解除本次临时拦截"
+  "C":
+    material: HOPPER
+    name: "&e清理这个区块"
+    lore:
+      - "&7左键清理当前区块"
+  "B":
+    material: CYAN_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&b返回热点列表"
+  "X":
+    material: CYAN_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&c关闭"

@@ -1,0 +1,26 @@
+# 名单内容菜单
+title: "&8{target} | {list} · {match-mode} ({page}/{total})"
+layout:
+  - "#########"
+  - "#*******#"
+  - "#*******#"
+  - "#*******#"
+  - "#*******#"
+  - "P###B###N"
+items:
+  "#":
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&r"
+  "P":
+    material: BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&e上一页"
+  "N":
+    material: BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&e下一页"
+  "B":
+    material: CYAN_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&e返回"

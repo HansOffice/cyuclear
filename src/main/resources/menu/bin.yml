@@ -1,0 +1,36 @@
+# 虚空垃圾桶菜单
+title: "&8CYUCLEAR | 虚空垃圾桶 ({page}/{total})"
+layout:
+  - "#########"
+  - "#*******#"
+  - "#*******#"
+  - "#*******#"
+  - "#*******#"
+  - "P###X###N"
+items:
+  "#":
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&r"
+  "P":
+    material: BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&e&l⬅ 上一页"
+    actions:
+      - "[prev_page]"
+      - "[sound] UI_BUTTON_CLICK 1.0 1.0"
+  "N":
+    material: BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&e&l下一页 ➡"
+    actions:
+      - "[next_page]"
+      - "[sound] UI_BUTTON_CLICK 1.0 1.0"
+  "X":
+    material: CYAN_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&c&l关闭菜单"
+    actions:
+      - "[close]"
+      - "[title] &c虚空垃圾桶已关闭;&7请注意清理倒计时"
+      - "[sound] BLOCK_CHEST_CLOSE 1.0 1.0"

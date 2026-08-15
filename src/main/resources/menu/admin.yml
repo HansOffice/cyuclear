@@ -1,0 +1,83 @@
+# 管理菜单
+title: "&8CYUCLEAR | 管理中心"
+layout:
+  - "#########"
+  - "# R H T #"
+  - "# P A K #"
+  - "# S D C #"
+  - "####X####"
+items:
+  "#":
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&r"
+  "R":
+    material: BOOK
+    name: "&b清理规则"
+    lore:
+      - "&7掉落物、实体与实时拦截"
+      - ""
+      - "&f左键进入"
+  "H":
+    material: CHEST
+    name: "&b清理批次"
+    lore:
+      - "&7查看已完成清理与恢复物品"
+      - ""
+      - "&f左键进入"
+  "T":
+    material: COMPASS
+    name: "&b热点区块"
+    lore:
+      - "&7查看区块限流与熔断"
+      - ""
+      - "&f左键进入"
+  "P":
+    material: SPYGLASS
+    fallback-material: COMPASS
+    name: "&b清理预演"
+    lore:
+      - "&7只统计，不会删除实体或掉落物"
+      - ""
+      - "&f左键开始"
+  "A":
+    material: TNT
+    name: "&c立即清理"
+    lore:
+      - "&7立即清理已启用目标"
+      - ""
+      - "&f左键开始"
+  "K":
+    material: BARRIER
+    name: "&c停止清理"
+    lore:
+      - "&7停止当前清理任务"
+      - ""
+      - "&f左键停止"
+  "S":
+    material: COMPASS
+    name: "&b运行状态"
+    lore:
+      - "&7查看扫描预算、索引与 Hook"
+      - ""
+      - "&f左键发送到聊天栏"
+  "D":
+    material: MAP
+    fallback-material: PAPER
+    name: "&b配置检查"
+    lore:
+      - "&7检查配置与菜单"
+      - ""
+      - "&f左键发送到聊天栏"
+  "C":
+    material: WRITABLE_BOOK
+    fallback-material: BOOK
+    name: "&b配置快照"
+    lore:
+      - "&7把当前配置另存一份"
+      - ""
+      - "&f左键创建"
+  "X":
+    material: CYAN_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&c关闭"

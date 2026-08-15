@@ -1,0 +1,30 @@
+# 投放缓冲区菜单
+title: "&8CYUCLEAR | 投放缓冲区 ({page}/{total})"
+layout:
+  - "#########"
+  - "#*******#"
+  - "#*******#"
+  - "#*******#"
+  - "#*******#"
+  - "P##X#C#N#"
+items:
+  "#":
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&r"
+  "P":
+    material: BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&e&l⬅ 上一页"
+  "N":
+    material: BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&e&l下一页 ➡"
+  "X":
+    material: ORANGE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&c&l放回背包并关闭"
+  "C":
+    material: LIME_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&a&l确认投放"

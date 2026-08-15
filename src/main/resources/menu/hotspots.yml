@@ -1,0 +1,30 @@
+# 热点区块菜单
+title: "&8CYUCLEAR | 热点区块 {page}/{total}"
+layout:
+  - "#########"
+  - "#*******#"
+  - "#*******#"
+  - "#*******#"
+  - "#*******#"
+  - "##P#B#N#X"
+items:
+  "#":
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&r"
+  "P":
+    material: BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&e上一页"
+  "N":
+    material: BLUE_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&e下一页"
+  "B":
+    material: CYAN_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&b返回管理中心"
+  "X":
+    material: CYAN_STAINED_GLASS_PANE
+    fallback-material: STAINED_GLASS_PANE
+    name: "&c关闭"

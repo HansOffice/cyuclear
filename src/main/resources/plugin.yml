@@ -1,0 +1,29 @@
+name: cyuclear
+version: '${project.version}'
+main: org.cyuCBMclean.cyuclear.Cyuclear
+api-version: '1.13'
+folia-supported: ${folia.supported}
+description: 轻量清理与虚空回收
+softdepend: [PlaceholderAPI, MythicMobs, CraftEngine, ItemsAdder, Oraxen, RoseStacker, WildStacker]
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:${kotlin.version}
+  - redis.clients:jedis:${jedis.version}
+  - com.mysql:mysql-connector-j:${mysql.version}
+  - org.slf4j:slf4j-nop:1.7.36
+
+
+commands:
+  cyuclear:
+    description: Cyuclear 清理与虚空桶命令
+    aliases: [cc, cbin]
+
+permissions:
+  cyuclear.admin:
+    description: 允许管理 Cyuclear、恢复批次、预演和检查规则
+    default: op
+  cyuclear.use:
+    description: 允许使用 Cyuclear 玩家功能
+    default: true
+  cyuclear.bin.deposit:
+    description: 允许向本地虚空垃圾桶投放物品
+    default: true

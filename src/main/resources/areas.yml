@@ -1,0 +1,17 @@
+# 世界与区域规则
+areas:
+  # 总开关
+  enabled: false
+  # priority 越大越优先
+  rules:
+    # football-field:
+    #   enabled: true
+    #   priority: 100
+    #   worlds: ["world"]
+    #   area:
+    #     min: { x: -50, y: -64, z: -50 }
+    #     max: { x: 50, y: 320, z: 50 }
+    #   items:
+    #     mode: "全部保留"
+    #   entities:
+    #     mode: "全部保留"

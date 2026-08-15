@@ -1,0 +1,51 @@
+cluster:
+  # 跨服同步总开关
+  enabled: false
+  # 同一组子服填写相同名称
+  id: "default"
+  # 当前子服名称，同一集群内不能重复
+  server-id: ""
+  # 在线状态上报间隔 (秒)
+  heartbeat-seconds: 1
+  # 子服离线判定时间 (秒)
+  member-timeout-seconds: 20
+  # 跨服存储方式: redis / mysql
+  storage: "redis"
+
+  redis:
+    # Redis 地址
+    host: "127.0.0.1"
+    # Redis 端口
+    port: 6379
+    # Redis ACL 用户名，未使用时留空
+    username: ""
+    # Redis 密码，未设置时留空
+    password: ""
+    # Redis 数据库编号
+    database: 0
+    # SSL 连接
+    ssl: false
+    # 连接超时时间 (毫秒)
+    connect-timeout-millis: 3000
+    # 读写超时时间 (毫秒)
+    socket-timeout-millis: 3000
+
+  mysql:
+    # MySQL 地址
+    host: "127.0.0.1"
+    # MySQL 端口
+    port: 3306
+    # 数据库名称
+    database: "minecraft"
+    # 数据库用户名
+    username: "root"
+    # 数据库密码，未设置时留空
+    password: ""
+    # SSL 连接
+    ssl: false
+    # 连接超时时间 (毫秒)
+    connect-timeout-millis: 3000
+    # 读写超时时间 (毫秒)
+    socket-timeout-millis: 3000
+    # 数据表前缀，只能使用英文、数字和下划线
+    table-prefix: "cyuclear_"

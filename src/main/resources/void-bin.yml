@@ -1,0 +1,150 @@
+# 虚空垃圾桶
+void-bin:
+  # 总开关
+  enabled: true
+  # 随时打开
+  always-open: false
+  # 堆叠存放
+  stacked-mode: false
+  # 垃圾桶有效时长 (秒)
+  expire-seconds: 60
+  # 垃圾桶关闭倒计时提示点 (秒)
+  warning-times: [30, 10, 3]
+  # 倒计时提示
+  warning-output:
+    # 聊天栏
+    chat: false
+    # ActionBar
+    actionbar: true
+    # BossBar
+    bossbar: false
+    # BossBar 颜色: PINK / BLUE / RED / GREEN / YELLOW / PURPLE / WHITE
+    bossbar-color: RED
+    # BossBar 分段样式: SOLID / SEGMENTED_6 / SEGMENTED_10 / SEGMENTED_12 / SEGMENTED_20
+    bossbar-style: SOLID
+  deposit-feedback:
+    # 投放提示
+    enabled: true
+  # 投放缓冲区
+  deposit-buffer:
+    enabled: true
+  # 入桶规则
+  entry-rules:
+    # 清理回收
+    cleanup-recovery:
+      # 默认：允许 / 拒绝
+      default: "允许"
+      allow-list:
+        # 精确 / 通配 / 正则
+        match-mode: "精确"
+        list:
+          # - "minecraft:diamond"
+          # - "ia:命名空间:物品"
+          # - "通配:ce:命名空间:*"
+      deny-list:
+        # 精确 / 通配 / 正则
+        match-mode: "精确"
+        list:
+          # - "minecraft:rotten_flesh"
+          # - "通配:minecraft:*_seeds"
+      # 展示名
+      name-rules:
+        enabled: false
+        # 去色 / 保留颜色
+        color-mode: strip
+        allow-list:
+          match-mode: "精确"
+          list:
+            # - "活动纪念品"
+            # - "通配:*奖励*"
+        deny-list:
+          match-mode: "精确"
+          list:
+            # - "临时物品"
+            # - "正则:^测试物品\\d+$"
+      # Lore
+      lore-rules:
+        enabled: false
+        # 去色 / 保留颜色
+        color-mode: strip
+        # 任意行 / 每条均命中
+        line-mode: any
+        allow-list:
+          match-mode: "精确"
+          list:
+            # - "灵魂绑定"
+            # - "通配:*不可交易*"
+        deny-list:
+          match-mode: "精确"
+          list:
+            # - "一次性物品"
+            # - "通配:*测试服专用*"
+    # 玩家投放
+    player-deposit:
+      enabled: true
+      # 额外权限
+      permission: "cyuclear.bin.deposit"
+      # 最大种类，0 不限
+      max-unique-items: 2048
+      # 拦截全局保留物品
+      protect-cleanup-kept-items: false
+      # 拦截带内容容器
+      deny-non-empty-containers: false
+      # 默认：允许 / 拒绝
+      default: "允许"
+      allow-list:
+        # 精确 / 通配 / 正则
+        match-mode: "精确"
+        list:
+          # - "minecraft:cobblestone"
+          # - "通配:ia:垃圾分类:*"
+      deny-list:
+        match-mode: "精确"
+        list:
+          # - "minecraft:nether_star"
+          # - "通配:ce:任务物品:*"
+      # 展示名
+      name-rules:
+        enabled: false
+        # 去色 / 保留颜色
+        color-mode: strip
+        allow-list:
+          match-mode: "精确"
+          list:
+            # - "可回收物品"
+            # - "通配:*回收券*"
+        deny-list:
+          match-mode: "精确"
+          list:
+            # - "重要道具"
+            # - "正则:^任务物品\\d+$"
+      # Lore
+      lore-rules:
+        enabled: false
+        # 去色 / 保留颜色
+        color-mode: strip
+        # 任意行 / 每条均命中
+        line-mode: any
+        allow-list:
+          match-mode: "精确"
+          list:
+            # - "允许回收"
+            # - "通配:*普通材料*"
+        deny-list:
+          match-mode: "精确"
+          list:
+            # - "不可丢弃"
+            # - "通配:*灵魂绑定*"
+  open-click:
+    # 打开提示
+    enabled: true
+    command: "/cc bin"
+  claim-cooldown:
+    # 领取冷却
+    enabled: false
+    seconds: 10
+    # 绕过权限
+    bypass-permission: "cyuclear.admin"
+  claim-audit:
+    # 领取记录
+    enabled: true

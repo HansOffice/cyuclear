@@ -1,0 +1,152 @@
+# 欢迎使用 CyuClear
+# 需要获取帮助请在 minebbs 关注我的账号
+# https://www.minebbs.com/members/hansoffice.59149
+
+# --- 配置文件 ---
+# config.yml   - 清理周期、性能、审计、恢复中心、紧急保护、世界范围
+# rules.yml    - 掉落物、实体、实时清理与区块限制
+# areas.yml    - 世界与区域独立清理、回收和投放规则
+# storage.yml  - 跨服同步、Redis 与 MySQL
+# void-bin.yml - 虚空垃圾桶、入桶规则与领取设置
+# sounds.yml   - 提示音效
+# menu/        - 菜单布局
+
+# --- 权限节点 ---
+# cyuclear.use      - 允许使用 /cc bin 打开虚空垃圾桶
+# cyuclear.bin.deposit - 允许向本地虚空垃圾桶手动投放物品
+# cyuclear.admin    - 允许重载 / 手动清理 / 预演 / 管理与检查指令
+
+# --- PlaceholderAPI 变量 ---
+# %cyuclear_enabled% - 配置总开关
+# %cyuclear_active% - 清理任务是否启用
+# %cyuclear_interval_seconds% - 自动清理间隔 (秒)
+# %cyuclear_countdown% - 距离下次清理剩余秒数
+# %cyuclear_countdown_text% - 距离下次清理剩余时间
+# %cyuclear_is_running% - 当前是否正在清理
+# %cyuclear_run_id% - 当前批次编号
+# %cyuclear_run_origin% - 当前批次来源
+# %cyuclear_run_status% - 当前批次状态
+# %cyuclear_run_queued_chunks% - 当前批次区块总数
+# %cyuclear_run_processed_chunks% - 当前批次已处理区块
+# %cyuclear_run_failed_chunks% - 当前批次失败区块
+# %cyuclear_run_scanned_entities% - 当前批次已扫描实体
+# %cyuclear_run_items% - 当前批次已清理掉落物
+# %cyuclear_run_entities% - 当前批次已清理实体
+# %cyuclear_last_items% - 上次清理掉落物数量
+# %cyuclear_last_entities% - 上次清理实体数量
+# %cyuclear_last_total% - 上次清理总数量
+# %cyuclear_last_time% - 上次清理耗时毫秒
+# %cyuclear_last_time_text% - 上次清理耗时
+# %cyuclear_bin_enabled% - 虚空垃圾桶是否启用
+# %cyuclear_bin_open% - 虚空垃圾桶是否开放
+# %cyuclear_bin_always_open% - 虚空垃圾桶是否常开
+# %cyuclear_bin_stacked% - 虚空垃圾桶是否合并显示
+# %cyuclear_bin_countdown% - 虚空垃圾桶剩余秒数
+# %cyuclear_bin_countdown_text% - 虚空垃圾桶剩余时间
+# %cyuclear_bin_claim_cooldown% - 当前玩家取回冷却秒数
+# %cyuclear_bin_has_items% - 虚空垃圾桶是否有物品
+# %cyuclear_bin_item_types% - 虚空垃圾桶物品种类
+# %cyuclear_candidate_index% - 候选区块索引是否启用
+# %cyuclear_candidate_chunks% - 当前候选区块数量
+# %cyuclear_profile% - 性能档位
+# %cyuclear_scan_chunks_per_tick% - 单 tick 最大处理区块
+# %cyuclear_scan_budget_millis% - 单 tick 最大耗时毫秒
+# %cyuclear_items_enabled% - 掉落物模块是否启用
+# %cyuclear_entities_enabled% - 实体模块是否启用
+# %cyuclear_realtime_enabled% - 实时拦截是否启用
+# %cyuclear_recovery_enabled% - 恢复中心是否启用
+# %cyuclear_cluster_enabled% - 跨服同步是否启用
+# %cyuclear_cluster_active% - 跨服同步是否已连接
+# %cyuclear_rules_total% - 规则总数
+# %cyuclear_rules_items% - 掉落物规则数量
+# %cyuclear_rules_entities% - 实体规则数量
+# %cyuclear_platform% - 当前运行包
+# %cyuclear_version% - 插件版本
+# %cyuclear_config_version% - 配置版本
+
+# 配置文件版本，请勿手动修改
+config-version: 140
+config-layout: 6
+
+# 总开关，首次安装默认关闭
+# 调整完配置后改为 true，再执行 /cc reload
+# 关闭时停用清理与拦截
+enabled: false
+
+cleanup:
+  # 自动清理循环间隔 (秒)
+  interval-seconds: 600
+  # 清理前倒计时提示点 (秒)
+  warning-times: [60, 30, 10, 3]
+  # 清理提示点显示方式
+  warning-output:
+    # 聊天栏提示
+    chat: true
+    # ActionBar 提示
+    actionbar: false
+    # BossBar 提示
+    bossbar: false
+    # BossBar 颜色: PINK / BLUE / RED / GREEN / YELLOW / PURPLE / WHITE
+    bossbar-color: BLUE
+    # BossBar 分段样式: SOLID / SEGMENTED_6 / SEGMENTED_10 / SEGMENTED_12 / SEGMENTED_20
+    bossbar-style: SOLID
+
+performance:
+  # 清理速度档位: 保守 / 均衡 / 快速 / 极限
+  profile: "快速"
+  scan:
+    # 每 tick 最多处理区块
+    max-chunks-per-tick: 240
+    # 每 tick 最多占用时间 (毫秒)
+    max-millis-per-tick: 7
+  candidate-index:
+    # 优先扫描活跃区块
+    enabled: true
+    # 全量扫描间隔 (轮)
+    full-scan-every-cycles: 6
+  folia:
+    # 同时运行的区域清理任务
+    max-active-region-tasks: 512
+    # 每 tick 最多派发区块
+    dispatch-chunks-per-tick: 512
+  stats:
+    # 性能明细
+    detail: true
+    # 阶段耗时
+    stage-timing: false
+
+audit:
+  # 清理原因汇总
+  enabled: true
+  # 最多输出多少行
+  max-lines: 30
+
+recovery:
+  # 保存误清掉落物
+  enabled: false
+  capture:
+    # 定时清理
+    scheduled: true
+    # 手动清理
+    manual: true
+    # 紧急清理
+    panic: false
+  # 单次保存上限，0 表示关闭
+  max-entries-per-run: 256
+  # 保存时长 (小时)
+  expire-hours: 72
+  # 最近批次数量
+  recent-limit: 50
+
+emergency:
+  # 区块加载清扫
+  chunk-load-sweep: false
+  # 区块卸载清扫
+  chunk-unload-sweep: false
+
+worlds:
+  # 世界过滤模式: blacklist(跳过以下世界) | whitelist(只清理以下世界)
+  mode: "blacklist"
+  # 支持 "*" 或 "all"
+  list:
+    - "test_world"

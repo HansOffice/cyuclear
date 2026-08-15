@@ -1,0 +1,296 @@
+# ---------------------------------------------------
+# 基础系统提示
+# ---------------------------------------------------
+prefix: "&#4A90E2[&#5DADE2Cyuclear&#4A90E2] &f"
+reload-success: "&f配置文件与语言包已重新加载。"
+no-permission: "&#E74C3C你没有权限执行此命令。"
+player-only: "&#E74C3C这个命令只能由玩家执行。"
+
+# ---------------------------------------------------
+# 帮助信息
+# ---------------------------------------------------
+help-page-size: 8
+help-border: "&#3A4352&m┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+help-title: "<gradient:#58C7FF:#7DE2B8>&lCyuclear 帮助</gradient>"
+help-invalid-page: "&#E74C3C× 页码无效，请输入数字"
+help-page-out-of-bounds: "&#8A96A8帮助页码超出范围，已为你显示第 &#D7DEE81 &#8A96A8页，共 &#D7DEE8{total_pages} &#8A96A8页"
+help-json-button-prev: "&#7DD3FC&l‹ 上一页"
+help-json-button-next: "&#7DD3FC&l下一页 ›"
+help-json-hover-prev: "&#8A96A8点击查看第 &#D7DEE8{page}&#8A96A8 页"
+help-json-hover-next: "&#8A96A8点击查看第 &#D7DEE8{page}&#8A96A8 页"
+help-json-page-info: "&#8A96A8第 &#D7DEE8{current_page}/{total_pages} &#8A96A8页"
+help-json-hover-entry: "&#8A96A8点击在聊天框填入指令 &#D7DEE8{command}"
+help-console-page-info: "&#8A96A8第 &#D7DEE8{current_page}/{total_pages} &#8A96A8页 &8| &#8A96A8使用 &#D7DEE8{command} &#8A96A8翻页"
+
+help-bin: "&#D7DEE8› /cyuclear bin &#8A96A8打开虚空垃圾桶"
+help-items: "&#D7DEE8› /cyuclear items &#8A96A8手动清理全服掉落物"
+help-entities: "&#D7DEE8› /cyuclear entities &#8A96A8手动清理全服游荡实体"
+help-all: "&#D7DEE8› /cyuclear all &#8A96A8手动执行全量大扫除"
+help-check: "&#D7DEE8› /cyuclear check &#8A96A8显示准星目标的判定过程"
+help-preview: "&#D7DEE8› /cyuclear preview &#8A96A8预演本次清理，不删除实体"
+help-status: "&#D7DEE8› /cyuclear status &#8A96A8查看性能参数、名单规模与 Hook 状态"
+help-reload: "&#D7DEE8› /cyuclear reload &#8A96A8重载配置并应用总开关"
+help-cluster: "&#D7DEE8› /cyuclear cluster &#8A96A8查看跨服连接与严格版本身份"
+help-menu: "&#D7DEE8› /cyuclear menu &#8A96A8打开管理中心"
+help-runs: "&#D7DEE8› /cyuclear runs [页码] &#8A96A8查看历史清理批次"
+help-run: "&#D7DEE8› /cyuclear run <批次> [details|reasons] &#8A96A8查看批次详情"
+help-recover: "&#D7DEE8› /cyuclear recover <批次> &#8A96A8打开指定批次的恢复物品"
+help-hotspots: "&#D7DEE8› /cyuclear hotspots [页码] &#8A96A8查看热点区块"
+help-cancel: "&#D7DEE8› /cyuclear cancel &#8A96A8停止当前清理"
+help-doctor: "&#D7DEE8› /cyuclear doctor &#8A96A8检查配置文件和菜单"
+help-snapshot: "&#D7DEE8› /cyuclear snapshot &#8A96A8备份当前配置"
+help-history: "&#D7DEE8› /cyuclear history [玩家] [页码] &#8A96A8查看虚空桶领取记录"
+
+# ---------------------------------------------------
+# 状态与重载提示
+# ---------------------------------------------------
+startup-disabled-console: "&e当前处于安全关闭。请调整配置，将 config.yml 中的 enabled 改为 true，再执行 /cc reload"
+startup-disabled-admin: "&eCyuClear 当前处于安全关闭。请调整配置，将 config.yml 中的 enabled 改为 true，再执行 /cc reload"
+reload-enabled: "&a总开关已启用，清理任务、区块限制和跨服连接已经启动"
+reload-disabled: "&e总开关仍为关闭，不会清理或拦截实体与掉落物"
+plugin-disabled: "&#E74C3C插件总开关尚未启用，请先修改 config.yml 并执行 /cc reload"
+
+# ---------------------------------------------------
+# 名单与菜单交互
+# ---------------------------------------------------
+menu-list-item-hint: "&7点击背包里的物品添加到当前名单，点击菜单中的条目移除"
+menu-list-entity-hint: "&7点击背包里的刷怪蛋添加实体，点击菜单中的条目移除"
+menu-list-name-hint: "&7点击背包里带展示名的物品，写入去色后的名字；点击菜单条目移除"
+menu-list-lore-hint: "&7点击背包里有描述的物品，写入全部去色 lore 行；点击菜单条目移除"
+menu-list-added: "&a已添加到当前名单"
+menu-list-added-multi: "&a已添加 &#5DADE2{count} &a条到当前名单"
+menu-list-removed: "&a已从当前名单移除"
+menu-list-changed: "&e名单已在别处发生变化，界面已刷新"
+menu-list-duplicate: "&e当前名单中已有这一项"
+menu-list-first-page: "&7已经是第一页"
+menu-list-last-page: "&7已经是最后一页"
+menu-match-mode-changed: "&a{list} 的匹配方式已改为 &f{mode}"
+menu-rule-toggled: "&a{rule}规则已{state}"
+menu-list-spawn-egg-only: "&#E74C3C实体名单只接受能够识别实体类型的刷怪蛋"
+menu-list-no-display-name: "&#E74C3C这件物品没有自定义展示名"
+menu-list-no-lore: "&#E74C3C这件物品没有 lore 描述"
+menu-list-items-only: "&#E74C3C展示名与 lore 名单仅掉落物规则可用"
+menu-save-failed: "&#E74C3C配置保存失败，请查看控制台并检查 rules.yml"
+
+# ---------------------------------------------------
+# 倒计时与清理广播
+# ---------------------------------------------------
+countdown-warn: "&f全服实体清理将在 &#5DADE2{time} &f秒后开始！"
+countdown-warn-chat: "&f全服实体清理将在 &#5DADE2{time} &f秒后开始！"
+countdown-warn-actionbar: "&f全服清理剩余 &#5DADE2{time} &f秒"
+countdown-warn-bossbar: "&f全服清理剩余 &#5DADE2{time} &f秒"
+cleanup-summary: "&f大扫除完毕，用时 &#5DADE2{time_text}&f，共清理 &#5DADE2{items} &f个掉落物与 &#5DADE2{entities} &f个游荡实体。"
+panic-warn: "&#E74C3C[紧急中断] &f全服实体数量突破极限值 &#E74C3C({count})&f！正在强制执行跨区块大扫除..."
+
+# ---------------------------------------------------
+# 区块超载保护
+# ---------------------------------------------------
+chunk-overload-warn: "&#E74C3C区块保护 &8· &f{world} &7{x}, {y}, {z} &8· &7已拦截 {type} &f{id} &8· &7{count}/{threshold}"
+overload-type-item: "掉落物"
+overload-type-item-type: "指定掉落物"
+overload-type-entity: "实体"
+overload-type-entity-type: "指定实体"
+overload-type-spawn-pressure: "生成压力"
+
+# ---------------------------------------------------
+# 虚空垃圾桶与个人缓冲区
+# ---------------------------------------------------
+bin-not-enabled: "&#E74C3C本服务器未开启虚空垃圾桶功能。"
+bin-empty: "&f虚空垃圾桶当前为空，请等待下一次大扫除！"
+bin-expired: "&#E74C3C虚空垃圾桶已超时锁定，&f请等待下一次大扫除！"
+bin-open-hint: "&f你有 &#5DADE2{time} &f秒的时间输入 &#5DADE2/cc bin &f取回误扫物品！"
+bin-open-click:
+  text: "&f你有 &#5DADE2{time} &f秒的时间 &#5DADE2[点击打开虚空垃圾桶]"
+  hover: "&f剩余 &#5DADE2{time} &f秒，点击执行 &#5DADE2/cc bin"
+bin-closing-warn: "&#E74C3C[提示] &f虚空垃圾桶将在 &#E74C3C{time} &f秒后彻底销毁！"
+bin-closing-warn-chat: "&#E74C3C[提示] &f虚空垃圾桶将在 &#E74C3C{time} &f秒后彻底销毁！"
+bin-closing-warn-actionbar: "&f虚空垃圾桶将在 &#E74C3C{time} &f秒后销毁！"
+bin-closing-warn-bossbar: "&f虚空垃圾桶剩余 &#E74C3C{time} &f秒"
+bin-deposit-success: "&a已成功将物品丢入虚空垃圾桶！"
+bin-deposit-buffer-staged: "&f物品已放入个人投放缓冲区，请在菜单中确认后才会进入虚空垃圾桶。"
+bin-deposit-cluster-disabled: "&#E74C3C跨服同步开启时，玩家不能手动存入共享虚空垃圾桶。"
+bin-deposit-disabled: "&#E74C3C服务器已关闭玩家手动投放。"
+bin-deposit-no-permission: "&#E74C3C你没有向虚空垃圾桶投放物品的权限。"
+bin-deposit-denied: "&#E74C3C该物品不能进入虚空垃圾桶：&f{reason}"
+bin-deposit-limit: "&#E74C3C虚空垃圾桶已达到手动投放物品种类上限。"
+bin-item-gone: "&7这件物品已经被其他玩家取走"
+bin-sync-unavailable: "&#E74C3C跨服同步当前不可用，为防止物品复制或丢失，虚空垃圾桶已锁定。"
+bin-claim-pending: "&7上一笔取回请求仍在处理中，请稍候。"
+bin-claim-cooldown: "&#E74C3C请等待 {time} 秒后再取回其他物品。"
+bin-claim-success: "&f已取回物品，下一次取回需要等待 &#5DADE2{time} &f秒。"
+bin-claim-recovered: "&f已恢复 &#5DADE2{amount} &f个等待发放的跨服垃圾桶物品。"
+bin-buffer-empty: "&7个人投放缓冲区当前没有待确认物品。"
+bin-buffer-confirmed: "&a已确认投放，物品已进入虚空垃圾桶。"
+bin-buffer-cancelled: "&7已取消投放，物品已退回背包。"
+bin-buffer-returned: "&7已将 &#5DADE2{amount} &7个物品退回背包。"
+bin-buffer-return-full: "&e背包空间不足，未能退回的物品仍保存在个人投放缓冲区；整理背包后执行 &f/cc bin &e即可继续处理。"
+bin-buffer-recovered: "&f已从个人投放缓冲区恢复 &#5DADE2{amount} &f个物品。"
+bin-buffer-recovery-failed: "&#E74C3C个人投放缓冲区读取失败，物品文件已保留，请查看控制台。"
+bin-buffer-persist-failed: "&#E74C3C个人投放缓冲区暂时无法保存，物品仍留在背包中，请稍后重试。"
+bin-buffer-disabled: "&#E74C3C个人投放缓冲区当前已关闭，请联系管理员。"
+bin-buffer-confirm-failed: "&#E74C3C确认投放失败：{reason}"
+bin-buffer-item-returned: "&7已取回 &#5DADE2{returned} &7个物品"
+bin-buffer-item-returned-partial: "&7已取回 &#5DADE2{returned} &7个物品，仍有 &#5DADE2{remaining} &7个待确认"
+bin-buffer-item-return-full: "&e背包空间不足，这件物品仍保留在待确认列表中"
+bin-buffer-item-gone: "&7这件待确认物品已不在缓冲区"
+bin-buffer-item-persist-failed: "&#E74C3C个人投放缓冲区保存失败，物品没有取回，请稍后重试"
+
+# ---------------------------------------------------
+# 任务调度与模块状态
+# ---------------------------------------------------
+scan-running: "&#E74C3C当前已有清理任务正在运行，请等待其处理完毕！"
+scan-not-running: "&7当前没有正在运行的清理任务"
+scan-cancelled: "&e已停止当前清理任务"
+cleanup-started: "&f已开始清理，完成后会广播结果。"
+module-items-disabled: "&#E74C3C掉落物清理模块当前已关闭。"
+module-entities-disabled: "&#E74C3C实体清理模块当前已关闭。"
+module-all-disabled: "&#E74C3C掉落物与实体清理模块当前都已关闭。"
+cluster-local-cleanup-no-bin: "&e跨服同步开启时，手动清理不会写入共享虚空垃圾桶。"
+
+# ---------------------------------------------------
+# 运行状态
+# ---------------------------------------------------
+status-header: "&#4A90E2&m----------&r &f&l运行状态 &#4A90E2&m----------"
+status-runtime: "&7平台 &#5DADE2{platform} &8| &7清理 &f{running} &8| &7档位 &#5DADE2{profile}"
+status-activation: "&7启用状态 &#5DADE2{state}"
+status-scan: "&7每 tick 区块 &#5DADE2{chunks} &8| &7预算 &#5DADE2{budget}ms &8| &7候选索引 &f{candidate}"
+status-folia: "&7Folia 区域任务 &#5DADE2{active} &8| &7派发 &#5DADE2{dispatch}/tick"
+status-last: "&7上次清理 &f{summary}"
+status-recovery: "&7恢复中心 &f{state} &8| &7最近批次 &#5DADE2{run} &8| &7待领取 &#5DADE2{recovery}"
+status-hotspots: "&7热点区块 &#5DADE2{total} &8| &7正在熔断 &#E74C3C{breakers}"
+status-modules: "&7模块 掉落物 &f{items} &7实体 &f{entities} &8| &7名单 &f{item_mode}/{entity_mode}"
+status-lists: "&7物品 ID 保留/清理 &f{item_keep}/{item_clean} &8| &7展示名 &f{name_keep}/{name_clean} &8| &7Lore &f{lore_keep}/{lore_clean} &8| &7实体 &f{entity_keep}/{entity_clean}"
+status-named-rules: "&7命名规则 &#5DADE2{total} &8| &7掉落物 &#5DADE2{items} &8| &7实体 &#5DADE2{entities}"
+status-hooks: "&7Hook Mythic &f{mythic} &8| &7CraftEngine &f{craftengine} &8| &7宝可梦 &f{pokemon}"
+status-footer: "&#4A90E2&m-----------------------------"
+
+# ---------------------------------------------------
+# 虚空桶记录
+# ---------------------------------------------------
+history-header: "&#4A90E2&m----------&r &f&l虚空桶领取记录 &#4A90E2&m----------"
+history-empty: "&7暂无符合条件的领取记录。"
+history-entry: "&7{time} &f{player} &8[{server}] &7取回 &#5DADE2{item} &fx{amount} &8{delivery}"
+history-footer: "&8第 &f{page}&8/&f{total} &8页  &7/cc history [玩家] [页码]"
+
+# ---------------------------------------------------
+# 批次详情与恢复中心
+# ---------------------------------------------------
+runs-header: "&#4A90E2&m----------&r &f&l清理批次 &#4A90E2&m----------"
+runs-empty: "&7当前还没有清理批次。"
+runs-entry: "&7#{id} &f{origin} &8| &7{state} &8| &7掉落物 &#5DADE2{items} &8| &7实体 &#5DADE2{entities} &8| &7待恢复 &#5DADE2{recovery}"
+runs-footer: "&8第 &f{page}&8/&f{total} &8页  &7/cc recover <批次>"
+run-not-found: "&#E74C3C没有找到这个清理批次。"
+run-header: "&#4A90E2&m----------&r &f&l清理批次详情 &#4A90E2&m----------"
+run-summary: "&7#{id} &f{origin} &8| &7{state}"
+run-counts: "&7区块 &#5DADE2{chunks} &8| &7掉落物 &#5DADE2{items} &8| &7实体 &#5DADE2{entities} &8| &7待恢复 &#5DADE2{recovery}"
+run-slowest: "&7最慢区块 &#5DADE2{world} {x},{z} &8| &#5DADE2{millis}ms"
+run-failures: "&7失败区块 &#E74C3C{count} &8| &7{message}"
+run-reasons-empty: "&7本批次没有可显示的清理原因"
+run-reason: "&8- &7{reason} &f{count}"
+run-footer: "&#4A90E2&m-----------------------------"
+recovery-confirm-hint: "&e再次左键同一件物品确认领取。"
+recovery-claimed: "&a已将 &#5DADE2{amount} &a个物品放入背包。"
+recovery-not-ready: "&#E74C3C本批次尚未完成，暂时不能领取。"
+recovery-expired: "&#E74C3C这个批次的恢复物品已过期。"
+recovery-claimed-before: "&7这件恢复物品已被领取。"
+recovery-invalid-item: "&#E74C3C恢复物品无法读取，原始记录已保留。"
+recovery-no-space: "&#E74C3C背包空间不足，请整理后再试。"
+recovery-save-failed: "&#E74C3C领取记录写入失败，物品没有发放。"
+
+# ---------------------------------------------------
+# 配置自检
+# ---------------------------------------------------
+doctor-header: "&#4A90E2&m----------&r &f&l配置检查 &#4A90E2&m----------"
+doctor-entry: "&8[{level}] &7{file} &f{path} &8- &f{message}"
+doctor-more: "&7其余 &#5DADE2{count} &7项请检查对应配置。"
+doctor-summary: "&7检查完成 &8| &7错误 &#E74C3C{errors} &8| &7注意 &#E6B422{warnings}"
+doctor-footer: "&#4A90E2&m-----------------------------"
+
+# ---------------------------------------------------
+# 配置快照
+# ---------------------------------------------------
+snapshot-success: "&a已保存当前配置，共 &#5DADE2{count} &a个文件。"
+snapshot-failed: "&#E74C3C配置快照创建失败，请查看控制台。"
+reload-snapshot: "&7重载前已保存 &#5DADE2{count} &7个配置文件。"
+
+# ---------------------------------------------------
+# 热点区块监控
+# ---------------------------------------------------
+hotspots-header: "&#4A90E2&m----------&r &f&l热点区块 &#4A90E2&m----------"
+hotspots-empty: "&7当前没有热点区块"
+hotspots-entry: "&7{index}. &f{world} &#5DADE2{x},{z} &8| &7{state} &8| &7掉落物 &#5DADE2{items} &8| &7实体 &#5DADE2{entities} &8| &7触发 &#5DADE2{triggers}"
+hotspots-footer: "&8第 &f{page}&8/&f{total} &8页  &7/cc hotspots [页码]"
+hotspot-not-found: "&#E74C3C这个热点区块已经恢复正常"
+hotspot-no-breaker: "&7这个区块当前没有熔断"
+hotspot-release-confirm: "&e再次左键确认解除本次熔断"
+hotspot-released: "&a已解除 &f{world} {x},{z} &a的临时熔断"
+hotspot-cleanup-confirm: "&e再次左键确认清理这个区块"
+hotspot-cleanup-started: "&a已开始清理 &f{world} {x},{z} &a的当前区块"
+admin-cleanup-confirm: "&e再次左键确认立即清理"
+admin-cancel-confirm: "&e再次左键确认停止当前清理"
+
+# ---------------------------------------------------
+# 准星规则检查
+# ---------------------------------------------------
+check-no-target: "&7请看向一个实体或掉落物后再执行此命令。"
+check-header: "&#4A90E2&m----------&r &f&l清理规则检查 &#4A90E2&m----------"
+check-entity-id: "&7实体: &#5DADE2{id}"
+check-entity-name: "&7自定义名称: &f{name}"
+check-entity-name-none: "&7自定义名称: &8无"
+check-scoreboard-tags: "&7计分板标签: &f{tags}"
+check-scoreboard-tags-none: "&7计分板标签: &8无"
+check-ce-id: "&7CraftEngine: &#5DADE2{id}"
+check-item-id: "&7物品: &#5DADE2{id}"
+check-item-ids: "&7识别 ID: &#5DADE2{ids}"
+check-item-name: "&7展示名: &f{name}"
+check-item-name-none: "&7展示名: &8无"
+check-item-lore: "&7Lore: &f{lore}"
+check-item-lore-none: "&7Lore: &8无"
+check-world: "&7世界: &f{world}"
+check-location: "&7位置: &#5DADE2{x}, {y}, {z} &8| &7区块: &#5DADE2{chunk_x}, {chunk_z}"
+check-age: "&7存在时间: &#5DADE2{seconds} 秒"
+check-hotspot: "&7区块状态: &#5DADE2{state} &8| &7掉落物 &#5DADE2{items} &8| &7实体 &#5DADE2{entities} &8| &7触发 &#5DADE2{triggers}"
+check-hotspot-none: "&7区块状态: &f正常"
+check-named: "&7是否命名: &f{value}"
+check-persistent: "&7是否持久: &f{value}"
+check-no-despawn: "&7是否不远离消失: &f{value}"
+check-tamed: "&7是否驯服: &f{value}"
+check-raid-event: "&7是否参与袭击: &f{value}"
+check-passengers: "&7是否搭载乘客: &f{value}"
+check-vehicle: "&7是否正在乘坐: &f{value}"
+check-detail-rule: "&7深度规则: &#5DADE2{rule}"
+check-named-rule: "&7命名规则: &#5DADE2{rule}"
+check-rule-priority: "&7规则优先级: &#5DADE2{priority}"
+check-bypasses: "&7本次绕过保护: &f{protections}"
+check-reason: "&7命中原因: &#5DADE2{reason}"
+check-result: "&7最终结果: &#5DADE2{result}"
+check-bin-recovery: "&7清理回收: &#5DADE2{result} &8- &7{reason}"
+check-bin-deposit: "&7玩家投放: &#5DADE2{result} &8- &7{reason}"
+check-trace: "&8- &7{stage}: &f{detail}"
+check-footer: "&#4A90E2&m--------------------------------"
+
+# ---------------------------------------------------
+# 清理预演
+# ---------------------------------------------------
+preview-start: "&7正在预演本次清理，结果稍后显示。"
+preview-disabled: "&#E74C3C当前没有启用可预演的清理模块。"
+preview-header: "&#4A90E2&m----------&r &f&l清理预演 &#4A90E2&m----------"
+preview-summary: "&7扫描区块 &f{chunks} &7个，实体总数 &f{scanned}"
+preview-remove: "&7预计清理掉落物 &#5DADE2{items} &7个，实体 &#5DADE2{entities} &7个"
+preview-protected: "&7保护统计 命名 &f{named} &7驯服 &f{tamed} &7持久 &f{persistent} &7不远离消失 &f{no_despawn} &7事件 &f{event} &7保留名单 &f{keep}"
+preview-reason: "&8- &7{reason}: &f{count}"
+preview-footer: "&#4A90E2&m-----------------------------"
+
+# ---------------------------------------------------
+# 界面物品 Lore 提示
+# ---------------------------------------------------
+bin-lore-amount: "&7共 &a{amount} &7个"
+bin-lore-left: "&a左键点击拿取一个"
+bin-lore-right: "&a右键点击拿取半组"
+bin-lore-shift: "&aShift+左键点击拿取一组"
+bin-buffer-lore-amount: "&7待确认数量: &a{amount}"
+bin-buffer-lore-left: "&a左键取回 1 个"
+bin-buffer-lore-right: "&a右键取回半组"
+bin-buffer-lore-shift-stack: "&aShift+左键取回一组"
+bin-buffer-lore-shift-all: "&aShift+右键取回全部"
+bin-buffer-lore-hint: "&e确认后才会进入虚空垃圾桶"
