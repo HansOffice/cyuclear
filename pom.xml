@@ -6,7 +6,7 @@
 
     <groupId>org.cyuCBMclean</groupId>
     <artifactId>cyuclear</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -22,6 +22,9 @@
         <folia.supported>false</folia.supported>
         <spigot-api.version>1.13.2-R0.1-SNAPSHOT</spigot-api.version>
         <paper-api.version>1.21.8-R0.1-SNAPSHOT</paper-api.version>
+        <resource.dir>src/main/resources</resource.dir>
+        <edition.suffix></edition.suffix>
+        <target.output.directory>${project.basedir}/target</target.output.directory>
     </properties>
 
     <repositories>
@@ -73,17 +76,14 @@
     </dependencies>
 
     <build>
+        <directory>${target.output.directory}</directory>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-        <finalName>${project.artifactId}-${platform.name}-${project.version}</finalName>
-        <outputDirectory>${project.build.directory}/classes-${platform.name}</outputDirectory>
+        <finalName>${project.artifactId}-${platform.name}${edition.suffix}-${project.version}</finalName>
+        <outputDirectory>${target.output.directory}/classes-${platform.name}${edition.suffix}</outputDirectory>
 
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-            <resource>
-                <directory>src/${platform.name}/resources</directory>
+                <directory>${resource.dir}</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
@@ -164,6 +164,7 @@
     </build>
 
     <profiles>
+        <!-- 国内版 Profiles (默认) -->
         <profile>
             <id>paper</id>
             <activation>
@@ -176,6 +177,9 @@
                 <kotlin.jvmTarget>1.8</kotlin.jvmTarget>
                 <maven.compiler.source>1.8</maven.compiler.source>
                 <maven.compiler.target>1.8</maven.compiler.target>
+                <resource.dir>src/main/resources</resource.dir>
+                <edition.suffix></edition.suffix>
+                <target.output.directory>${project.basedir}/target</target.output.directory>
             </properties>
             <dependencies>
                 <dependency>
@@ -195,6 +199,9 @@
                 <kotlin.jvmTarget>17</kotlin.jvmTarget>
                 <maven.compiler.source>17</maven.compiler.source>
                 <maven.compiler.target>17</maven.compiler.target>
+                <resource.dir>src/main/resources</resource.dir>
+                <edition.suffix></edition.suffix>
+                <target.output.directory>${project.basedir}/target</target.output.directory>
             </properties>
             <dependencies>
                 <dependency>
@@ -215,9 +222,11 @@
                 <maven.compiler.source>1.8</maven.compiler.source>
                 <maven.compiler.target>1.8</maven.compiler.target>
                 <spigot-api.version>1.8.8-R0.1-SNAPSHOT</spigot-api.version>
+                <resource.dir>src/main/resources</resource.dir>
+                <edition.suffix></edition.suffix>
+                <target.output.directory>${project.basedir}/target</target.output.directory>
             </properties>
             <build>
-                <finalName>${project.artifactId}-legacy-${project.version}</finalName>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -284,6 +293,7 @@
                 </dependency>
             </dependencies>
         </profile>
+
         <profile>
             <id>modern-api-check</id>
             <properties>

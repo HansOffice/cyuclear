@@ -24,6 +24,7 @@ internal object RuntimeReloadService {
     fun reload(): Result {
         val snapshot = ConfigSnapshotManager.create("reload")
         ActivationService.stop()
+        Language.load()
         Settings.load()
         ChunkLimitService.reset()
         HotspotTracker.reset()
@@ -31,7 +32,6 @@ internal object RuntimeReloadService {
         MythicMobsHook.reset()
         ItemIdentity.reloadExternalResolvers()
         SoundNoticeManager.reload()
-        Language.load()
         MenuReloadService.reload()
         StackerBridge.reload()
         DepositBufferManager.onSettingsReload()

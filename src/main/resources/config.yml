@@ -96,9 +96,9 @@ performance:
   profile: "快速"
   scan:
     # 每 tick 最多处理区块
-    max-chunks-per-tick: 240
+    max-chunks-per-tick: 600
     # 每 tick 最多占用时间 (毫秒)
-    max-millis-per-tick: 7
+    max-millis-per-tick: 15
   candidate-index:
     # 优先扫描活跃区块
     enabled: true
@@ -106,9 +106,9 @@ performance:
     full-scan-every-cycles: 6
   folia:
     # 同时运行的区域清理任务
-    max-active-region-tasks: 512
+    max-active-region-tasks: 1024
     # 每 tick 最多派发区块
-    dispatch-chunks-per-tick: 512
+    dispatch-chunks-per-tick: 1024
   stats:
     # 性能明细
     detail: true

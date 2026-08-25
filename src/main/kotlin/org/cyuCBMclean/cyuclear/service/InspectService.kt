@@ -67,7 +67,7 @@ object InspectService {
                     decision.itemIds
                 )
             } else {
-                BinEntryRules.Decision(false, "虚空垃圾桶未启用")
+                BinEntryRules.Decision(false, if (Language.isEnglish) "Void Bin Disabled" else "虚空垃圾桶未启用")
             }
             val playerLocation = player.location
             val depositDecision = if (Settings.binEnabled) {
@@ -81,7 +81,7 @@ object InspectService {
                     decision.itemIds
                 )
             } else {
-                BinEntryRules.Decision(false, "虚空垃圾桶未启用")
+                BinEntryRules.Decision(false, if (Language.isEnglish) "Void Bin Disabled" else "虚空垃圾桶未启用")
             }
             player.sendMessage(
                 Language.get(
@@ -181,15 +181,18 @@ object InspectService {
     }
 
     private fun yesNo(value: Boolean): String {
-        return if (value) "是" else "否"
+        val isEn = Language.isEnglish
+        return if (value) (if (isEn) "Yes" else "是") else (if (isEn) "No" else "否")
     }
 
     private fun resultText(remove: Boolean): String {
-        return if (remove) "会清理" else "不清理"
+        val isEn = Language.isEnglish
+        return if (remove) (if (isEn) "Will Clean" else "会清理") else (if (isEn) "Keep" else "不清理")
     }
 
     private fun allowText(allowed: Boolean): String {
-        return if (allowed) "允许" else "拒绝"
+        val isEn = Language.isEnglish
+        return if (allowed) (if (isEn) "Allowed" else "允许") else (if (isEn) "Denied" else "拒绝")
     }
 
     private fun sendNamedRule(player: Player, decision: CleanupFilter.FilterDecision) {

@@ -161,11 +161,12 @@ internal class TargetRuleLoader(
     }
 
     fun displayListMode(raw: String?, action: Settings.DefaultAction): String {
+        val isEn = Language.isEnglish
         return when (normalize(raw, "")) {
-            "黑名单", "单黑名单", "clean", "清理", "默认清理" -> "黑名单"
-            "白名单", "单白名单", "keep", "保留", "默认保留" -> "白名单"
-            "并行名单", "并行", "parallel" -> "并行名单"
-            else -> if (action == Settings.DefaultAction.CLEAN) "黑名单" else "白名单"
+            "黑名单", "单黑名单", "clean", "清理", "默认清理", "blacklist" -> if (isEn) "BLACKLIST" else "黑名单"
+            "白名单", "单白名单", "keep", "保留", "默认保留", "whitelist" -> if (isEn) "WHITELIST" else "白名单"
+            "并行名单", "并行", "parallel" -> if (isEn) "PARALLEL" else "并行名单"
+            else -> if (action == Settings.DefaultAction.CLEAN) (if (isEn) "BLACKLIST" else "黑名单") else (if (isEn) "WHITELIST" else "白名单")
         }
     }
 
@@ -176,10 +177,14 @@ internal class TargetRuleLoader(
     ): Settings.DefaultAction {
         val fallbackName = fallback.name.lowercase()
         return when (normalize(raw, fallbackName)) {
-            "clean", "清理", "拦截", "黑名单", "单黑名单", "默认清理" -> Settings.DefaultAction.CLEAN
-            "keep", "保留", "放行", "白名单", "单白名单", "默认保留", "并行名单", "并行", "parallel" -> Settings.DefaultAction.KEEP
+            "clean", "清理", "拦截", "黑名单", "单黑名单", "默认清理", "blacklist" -> Settings.DefaultAction.CLEAN
+            "keep", "保留", "放行", "白名单", "单白名单", "默认保留", "并行名单", "并行", "parallel", "whitelist" -> Settings.DefaultAction.KEEP
             else -> {
-                warning("Cyuclear 在 $path 读取到未知值 '$raw'，已回退为 $fallbackName")
+                if (Language.isEnglish) {
+                    warning("CyuClear read unknown value '$raw' at $path, fallen back to $fallbackName")
+                } else {
+                    warning("Cyuclear 在 $path 读取到未知值 '$raw'，已回退为 $fallbackName")
+                }
                 fallback
             }
         }
@@ -192,10 +197,14 @@ internal class TargetRuleLoader(
     ): Settings.FilterMode {
         val fallbackName = fallback.name.lowercase()
         return when (normalize(raw, fallbackName)) {
-            "blacklist" -> Settings.FilterMode.BLACKLIST
-            "whitelist" -> Settings.FilterMode.WHITELIST
+            "blacklist", "黑名单", "单黑名单", "clean", "清理" -> Settings.FilterMode.BLACKLIST
+            "whitelist", "白名单", "单白名单", "keep", "保留" -> Settings.FilterMode.WHITELIST
             else -> {
-                warning("Cyuclear 在 $path 读取到未知值 '$raw'，已回退为 $fallbackName")
+                if (Language.isEnglish) {
+                    warning("CyuClear read unknown value '$raw' at $path, fallen back to $fallbackName")
+                } else {
+                    warning("Cyuclear 在 $path 读取到未知值 '$raw'，已回退为 $fallbackName")
+                }
                 fallback
             }
         }
@@ -203,11 +212,15 @@ internal class TargetRuleLoader(
 
     private fun parseMatchMode(raw: String?, path: String): Settings.MatchMode {
         return when (normalize(raw, "exact")) {
-            "exact", "精确" -> Settings.MatchMode.EXACT
-            "wildcard", "通配" -> Settings.MatchMode.WILDCARD
-            "regex", "正则" -> Settings.MatchMode.REGEX
+            "exact", "精确", "精准" -> Settings.MatchMode.EXACT
+            "wildcard", "通配", "glob" -> Settings.MatchMode.WILDCARD
+            "regex", "正则", "regexp", "re" -> Settings.MatchMode.REGEX
             else -> {
-                warning("Cyuclear 在 $path 读取到未知值 '$raw'，已回退为 exact")
+                if (Language.isEnglish) {
+                    warning("CyuClear read unknown value '$raw' at $path, fallen back to exact")
+                } else {
+                    warning("Cyuclear 在 $path 读取到未知值 '$raw'，已回退为 exact")
+                }
                 Settings.MatchMode.EXACT
             }
         }

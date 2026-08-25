@@ -18,7 +18,10 @@ internal class DecisionTraceBuilder {
     }
 
     fun build(decision: CleanupFilter.FilterDecision): DecisionTrace {
-        steps += DecisionStep("最终结果", "${decision.reason} · ${if (decision.remove) "清理" else "保留"}")
+        val isEn = org.cyuCBMclean.cyuclear.config.Language.isEnglish
+        val stageName = if (isEn) "Final Verdict" else "最终结果"
+        val actionText = if (decision.remove) (if (isEn) "Clean" else "清理") else (if (isEn) "Keep" else "保留")
+        steps += DecisionStep(stageName, "${decision.reason} · $actionText")
         return DecisionTrace(decision, steps.toList())
     }
 }

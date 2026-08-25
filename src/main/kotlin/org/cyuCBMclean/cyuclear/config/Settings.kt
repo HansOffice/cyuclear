@@ -2,6 +2,7 @@ package org.cyuCBMclean.cyuclear.config
 
 import org.bukkit.configuration.file.YamlConfiguration
 import org.cyuCBMclean.cyuclear.Cyuclear
+import org.cyuCBMclean.cyuclear.cluster.BuildInfo
 import org.cyuCBMclean.cyuclear.platform.NoticeBossBarColor
 import org.cyuCBMclean.cyuclear.platform.NoticeBossBarStyle
 import org.cyuCBMclean.cyuclear.service.CleanupOrigin
@@ -86,14 +87,23 @@ object Settings {
     var cleanupChunksPerTick: Int = 10
         private set
     var performanceProfile: String = "快速"
+        get() {
+            val isEn = Language.isEnglish
+            return when (field) {
+                "保守", "CONSERVATIVE" -> if (isEn) "CONSERVATIVE" else "保守"
+                "均衡", "BALANCED" -> if (isEn) "BALANCED" else "均衡"
+                "极限", "EXTREME" -> if (isEn) "EXTREME" else "极限"
+                else -> if (isEn) "FAST" else "快速"
+            }
+        }
         private set
-    var scanMaxChunksPerTick: Int = 240
+    var scanMaxChunksPerTick: Int = 600
         private set
-    var scanMaxMillisPerTick: Long = 7L
+    var scanMaxMillisPerTick: Long = 15L
         private set
-    var foliaMaxActiveRegionTasks: Int = 512
+    var foliaMaxActiveRegionTasks: Int = 1024
         private set
-    var foliaDispatchChunksPerTick: Int = 512
+    var foliaDispatchChunksPerTick: Int = 1024
         private set
     var cleanupDetailStats: Boolean = true
         private set
@@ -255,6 +265,15 @@ object Settings {
     var itemDefaultAction: DefaultAction = DefaultAction.CLEAN
         private set
     var itemListModeName: String = "黑名单"
+        get() {
+            val isEn = Language.isEnglish
+            return when (field) {
+                "黑名单", "BLACKLIST" -> if (isEn) "BLACKLIST" else "黑名单"
+                "白名单", "WHITELIST" -> if (isEn) "WHITELIST" else "白名单"
+                "并行名单", "PARALLEL" -> if (isEn) "PARALLEL" else "并行名单"
+                else -> field
+            }
+        }
         private set
     var itemProtectMatcher: IdMatcher = IdMatcher.empty()
         private set
@@ -285,6 +304,15 @@ object Settings {
     var entityDefaultAction: DefaultAction = DefaultAction.CLEAN
         private set
     var entityListModeName: String = "黑名单"
+        get() {
+            val isEn = Language.isEnglish
+            return when (field) {
+                "黑名单", "BLACKLIST" -> if (isEn) "BLACKLIST" else "黑名单"
+                "白名单", "WHITELIST" -> if (isEn) "WHITELIST" else "白名单"
+                "并行名单", "PARALLEL" -> if (isEn) "PARALLEL" else "并行名单"
+                else -> field
+            }
+        }
         private set
     var entityProtectMatcher: IdMatcher = IdMatcher.empty()
         private set
@@ -299,6 +327,15 @@ object Settings {
     var entityRealtimeDefaultAction: DefaultAction = DefaultAction.KEEP
         private set
     var entityRealtimeListModeName: String = "白名单"
+        get() {
+            val isEn = Language.isEnglish
+            return when (field) {
+                "黑名单", "BLACKLIST" -> if (isEn) "BLACKLIST" else "黑名单"
+                "白名单", "WHITELIST" -> if (isEn) "WHITELIST" else "白名单"
+                "并行名单", "PARALLEL" -> if (isEn) "PARALLEL" else "并行名单"
+                else -> field
+            }
+        }
         private set
     var entityRealtimeProtectMatcher: IdMatcher = IdMatcher.empty()
         private set
@@ -428,6 +465,9 @@ object Settings {
         clusterHeartbeatSeconds = config.getInt("cluster.heartbeat-seconds", 1).coerceIn(1, 5)
         clusterMemberTimeoutSeconds = config.getInt("cluster.member-timeout-seconds", 20)
             .coerceIn(clusterHeartbeatSeconds * 3, 120)
+        if (BuildInfo.isEnglishEdition) {
+            clusterEnabled = false
+        }
         intervalSeconds = config.getInt("cleanup.interval-seconds", 600).coerceAtLeast(10)
         warningTimes = config.getIntegerList("cleanup.warning-times")
         cleanupWarningChatEnabled = config.getBoolean("cleanup.warning-output.chat", true)
@@ -826,10 +866,10 @@ object Settings {
 
     private fun performanceDefaults(profile: String): PerformanceDefaults {
         return when (profile) {
-            "保守" -> PerformanceDefaults(60, 3L, 128, 128)
-            "均衡" -> PerformanceDefaults(140, 5L, 320, 320)
-            "极限" -> PerformanceDefaults(1000, 12L, 2048, 2048)
-            else -> PerformanceDefaults(240, 7L, 512, 512)
+            "保守" -> PerformanceDefaults(120, 5L, 256, 256)
+            "均衡" -> PerformanceDefaults(300, 10L, 512, 512)
+            "极限" -> PerformanceDefaults(1500, 25L, 2048, 2048)
+            else -> PerformanceDefaults(600, 15L, 1024, 1024)
         }
     }
 

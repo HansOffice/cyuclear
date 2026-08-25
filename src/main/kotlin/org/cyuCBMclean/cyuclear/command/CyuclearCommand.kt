@@ -10,6 +10,7 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 import org.cyuCBMclean.cyuclear.Cyuclear
 import org.cyuCBMclean.cyuclear.bootstrap.RuntimeReloadService
+import org.cyuCBMclean.cyuclear.cluster.BuildInfo
 import org.cyuCBMclean.cyuclear.cluster.ClusterManager
 import org.cyuCBMclean.cyuclear.config.ConfigDoctor
 import org.cyuCBMclean.cyuclear.config.ConfigSnapshotManager
@@ -42,6 +43,11 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
         "cancel", "doctor", "validate", "snapshot", "history", "status", "reload", "check", "inspect", "preview"
     )
 
+    private fun isAdminCommand(name: String): Boolean {
+        if (name == "cluster" && BuildInfo.isEnglishEdition) return false
+        return name in adminCommands
+    }
+
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) {
             sendHelp(sender, null)
@@ -55,7 +61,7 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
         }
 
         val subCommand = args[0].lowercase()
-        if (subCommand in adminCommands && !requireAdmin(sender)) return true
+        if (isAdminCommand(subCommand) && !requireAdmin(sender)) return true
 
         when (subCommand) {
             "bin" -> {
@@ -135,6 +141,10 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
                 )
             }
             "cluster" -> {
+                if (BuildInfo.isEnglishEdition) {
+                    sendHelp(sender, null)
+                    return true
+                }
                 ClusterManager.statusLines().forEach(sender::sendMessage)
             }
             "menu" -> {
@@ -290,10 +300,13 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
             if (sender.hasPermission("cyuclear.admin")) {
                 subCommands.addAll(
                     listOf(
-                        "items", "entities", "all", "reload", "cluster", "menu", "runs", "run", "recover",
+                        "items", "entities", "all", "reload", "menu", "runs", "run", "recover",
                         "hotspots", "cancel", "doctor", "validate", "snapshot", "history", "check", "preview", "status"
                     )
                 )
+                if (!BuildInfo.isEnglishEdition) {
+                    subCommands.add("cluster")
+                }
             }
 
             return subCommands.filter { it.startsWith(args[0], ignoreCase = true) }
@@ -348,7 +361,9 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
 
     private fun getAvailableEntries(sender: CommandSender): List<HelpEntry> {
         val hasAdmin = sender.hasPermission("cyuclear.admin")
-        return allHelpEntries.filter { !it.adminOnly || hasAdmin }
+        return allHelpEntries.filter { entry ->
+            (!entry.adminOnly || hasAdmin) && !(BuildInfo.isEnglishEdition && entry.key == "help-cluster")
+        }
     }
 
     private fun getHelpTotalPages(sender: CommandSender): Int {
@@ -435,7 +450,8 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
                 sender.sendMessage(Language.getRaw(entry.key))
             }
             if (totalPages > 1) {
-                sender.sendMessage(Language.getRaw("help-console-page-info", "current_page" to page.toString(), "total_pages" to totalPages.toString(), "command" to "/cc help <页码>"))
+                val cmdExample = if (Language.isEnglish) "/cc help <page>" else "/cc help <页码>"
+                sender.sendMessage(Language.getRaw("help-console-page-info", "current_page" to page.toString(), "total_pages" to totalPages.toString(), "command" to cmdExample))
             }
         }
         sender.sendMessage(Language.getRaw("help-border"))
@@ -524,7 +540,10 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
                 sender.sendMessage(Language.get("run-failures", "count" to run.failedChunks.toString(), "message" to (run.failureMessage ?: "-")))
             }
         }
-        val reasons = run.itemReasons.map { "掉落物 ${it.title}" to it.count } + run.entityReasons.map { "实体 ${it.title}" to it.count }
+        val isEn = Language.isEnglish
+        val itemPrefix = if (isEn) "Item " else "掉落物 "
+        val entityPrefix = if (isEn) "Entity " else "实体 "
+        val reasons = run.itemReasons.map { "$itemPrefix${it.title}" to it.count } + run.entityReasons.map { "$entityPrefix${it.title}" to it.count }
         if (reasons.isEmpty()) {
             sender.sendMessage(Language.get("run-reasons-empty"))
         } else {

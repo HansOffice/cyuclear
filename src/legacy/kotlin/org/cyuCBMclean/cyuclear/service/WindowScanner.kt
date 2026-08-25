@@ -126,7 +126,7 @@ object WindowScanner {
                 try {
                     val chunkStart = System.nanoTime()
                     val chunk = ref.world.getChunkAt(ref.x, ref.z)
-                    val result = CleanupChunkProcessor.process(chunk, cleanupPass, run, shouldContinue)
+                    val result = CleanupChunkProcessor.process(chunk, cleanupPass, run)
                     val chunkNanos = System.nanoTime() - chunkStart
                     processNanos += chunkNanos
                     if (chunkNanos > maxChunkNanos) {
@@ -137,14 +137,14 @@ object WindowScanner {
                     clearedEntities += result.entities
                     HotspotTracker.recordCleanup(ref.world.name, ref.x, ref.z, result.items, result.entities, chunkNanos)
                     run.recordChunk(ref.world.name, ref.x, ref.z, chunkNanos)
-                    if (!result.complete) {
-                        chunkQueue.addFirst(ref)
-                        break
-                    }
                     processedChunks++
                 } catch (ex: Exception) {
                     processedChunks++
-                    Cyuclear.instance.logger.warning("区块清理失败：${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+                    if (Language.isEnglish) {
+                        Cyuclear.instance.logger.warning("Chunk cleanup failed: ${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+                    } else {
+                        Cyuclear.instance.logger.warning("区块清理失败：${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+                    }
                     run.recordFailure(ref.world.name, ref.x, ref.z, ex.message)
                 }
             }
@@ -213,15 +213,18 @@ object WindowScanner {
 
     private fun logDetailStats(timeCost: Long) {
         if (!Settings.cleanupDetailStats) return
+        val isEn = Language.isEnglish
+        val header = if (isEn) "Cleanup Performance Stats" else "清理性能统计"
         Cyuclear.instance.logger.info(
-            "清理性能统计: profile=${Settings.performanceProfile}, chunks=$processedChunks/$queuedChunks, " +
+            "$header: profile=${Settings.performanceProfile}, chunks=$processedChunks/$queuedChunks, " +
                 "entitiesScanned=$scannedEntities, work=${TimeFormat.compactMillis(processNanos / 1_000_000L)}, " +
                 "maxChunk=${TimeFormat.compactMillis(maxChunkNanos / 1_000_000L)}, rounds=$tickRounds, total=${TimeFormat.compactMillis(timeCost)}, " +
                 "index=${if (usedFullScan) "full" else "candidate"}, pendingCandidates=${CandidateChunkIndex.size()}, " +
                 "maxChunksPerTick=${Settings.scanMaxChunksPerTick}, budget=${Settings.scanMaxMillisPerTick}ms"
         )
         if (Settings.cleanupStageTimings) {
-            Cyuclear.instance.logger.info("清理阶段耗时: ${CleanupTimings.text(timeCost)}")
+            val stageHeader = if (isEn) "Cleanup Stage Breakdown" else "清理阶段耗时"
+            Cyuclear.instance.logger.info("$stageHeader: ${CleanupTimings.text(timeCost)}")
         }
     }
 

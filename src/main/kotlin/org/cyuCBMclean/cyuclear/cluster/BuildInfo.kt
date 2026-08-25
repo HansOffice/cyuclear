@@ -1,6 +1,7 @@
 package org.cyuCBMclean.cyuclear.cluster
 
 import org.bukkit.Bukkit
+import org.cyuCBMclean.cyuclear.Cyuclear
 import org.cyuCBMclean.cyuclear.platform.PlatformInfo
 
 object BuildInfo {
@@ -9,6 +10,9 @@ object BuildInfo {
 
     val compatibilityDomain: String
         get() = if (isLegacyServer()) "legacy" else "modern"
+
+    val isEnglishEdition: Boolean
+        get() = !Cyuclear.instance.description.description.orEmpty().any { it in '\u4e00'..'\u9fa5' }
 
     private fun isLegacyServer(): Boolean {
         val version = Bukkit.getBukkitVersion().substringBefore('-')

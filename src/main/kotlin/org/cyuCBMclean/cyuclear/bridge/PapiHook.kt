@@ -84,9 +84,14 @@ class PapiHook : PlaceholderExpansion() {
 
     private fun secondsText(seconds: Int): String {
         val value = seconds.coerceAtLeast(0)
-        if (value < 60) return "$value 秒"
+        val isEn = org.cyuCBMclean.cyuclear.config.Language.isEnglish
+        if (value < 60) return if (isEn) "${value}s" else "$value 秒"
         val minutes = value / 60
         val remain = value % 60
-        return if (remain == 0) "$minutes 分钟" else "$minutes 分 $remain 秒"
+        return if (remain == 0) {
+            if (isEn) "${minutes}m" else "$minutes 分钟"
+        } else {
+            if (isEn) "${minutes}m ${remain}s" else "$minutes 分 $remain 秒"
+        }
     }
 }

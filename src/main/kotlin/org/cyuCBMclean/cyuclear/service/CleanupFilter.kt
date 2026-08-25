@@ -28,32 +28,35 @@ object CleanupFilter {
     private const val ITEM_CACHE_MAX = 8_192
     private val emptyTextRules = ItemText.emptyRules()
 
-    enum class ReasonKey(val title: String) {
-        DEFAULT_CLEAN("默认清理"),
-        DEFAULT_KEEP("默认保留"),
-        KEEP_LIST("保留名单"),
-        CLEAN_LIST("清理名单"),
-        NAME_KEEP("展示名保留"),
-        NAME_CLEAN("展示名清理"),
-        LORE_KEEP("Lore 保留"),
-        LORE_CLEAN("Lore 清理"),
-        NAMED("命名保护"),
-        TAMED("驯服保护"),
-        PERSISTENT("持久保护"),
-        NO_DESPAWN("不远离消失保护"),
-        RAID_EVENT("袭击保护"),
-        PLAYER("玩家保护"),
-        NPC("NPC 保护"),
-        PLAYER_OWNED_POKEMON("玩家宝可梦保护"),
-        ENTITY_NAME_KEEP("实体名称保留"),
-        ENTITY_NAME_CLEAN("实体名称清理"),
-        NAMED_RULE_KEEP("命名规则保留"),
-        NAMED_RULE_CLEAN("命名规则清理"),
-        DETAIL_KEEP("深度保留"),
-        DETAIL_CLEAN("深度清理"),
-        CRAFT_ENGINE_FURNITURE("CraftEngine 家具保护"),
-        AGE_GRACE("掉落宽限"),
-        AREA_RULE("区域规则")
+    enum class ReasonKey(private val titleCn: String, private val titleEn: String) {
+        DEFAULT_CLEAN("默认清理", "Default Clean"),
+        DEFAULT_KEEP("默认保留", "Default Keep"),
+        KEEP_LIST("保留名单", "Keep List"),
+        CLEAN_LIST("清理名单", "Clean List"),
+        NAME_KEEP("展示名保留", "Display Name Keep"),
+        NAME_CLEAN("展示名清理", "Display Name Clean"),
+        LORE_KEEP("Lore 保留", "Lore Keep"),
+        LORE_CLEAN("Lore 清理", "Lore Clean"),
+        NAMED("命名保护", "Named Protection"),
+        TAMED("驯服保护", "Tamed Protection"),
+        PERSISTENT("持久保护", "Persistent Protection"),
+        NO_DESPAWN("不远离消失保护", "No-Despawn Protection"),
+        RAID_EVENT("袭击保护", "Raid Event Protection"),
+        PLAYER("玩家保护", "Player Protection"),
+        NPC("NPC 保护", "NPC Protection"),
+        PLAYER_OWNED_POKEMON("玩家宝可梦保护", "Player-Owned Pokémon Protection"),
+        ENTITY_NAME_KEEP("实体名称保留", "Entity Name Keep"),
+        ENTITY_NAME_CLEAN("实体名称清理", "Entity Name Clean"),
+        NAMED_RULE_KEEP("命名规则保留", "Named Rule Keep"),
+        NAMED_RULE_CLEAN("命名规则清理", "Named Rule Clean"),
+        DETAIL_KEEP("深度保留", "Detail Rule Keep"),
+        DETAIL_CLEAN("深度清理", "Detail Rule Clean"),
+        CRAFT_ENGINE_FURNITURE("CraftEngine 家具保护", "CraftEngine Furniture Protection"),
+        AGE_GRACE("掉落宽限", "Drop Grace Age"),
+        AREA_RULE("区域规则", "Area Rule");
+
+        val title: String
+            get() = if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) titleEn else titleCn
     }
 
     data class FilterDecision(

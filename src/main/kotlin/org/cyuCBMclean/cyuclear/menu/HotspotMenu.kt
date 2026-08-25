@@ -259,6 +259,7 @@ object HotspotMenu : Listener {
     }
 
     private fun listItem(hotspot: HotspotTracker.HotspotView): ItemStack {
+        val isEn = Language.isEnglish
         val material = when (hotspot.state) {
             HotspotTracker.State.BREAKER -> Material.matchMaterial("REDSTONE_BLOCK")
             HotspotTracker.State.THROTTLED -> Material.matchMaterial("BLAZE_POWDER")
@@ -268,20 +269,33 @@ object HotspotMenu : Listener {
         return ItemStack(material).apply {
             itemMeta = itemMeta?.also { meta ->
                 meta.setDisplayName(ColorUtils.color("&b${hotspot.world} &f${hotspot.chunkX}, ${hotspot.chunkZ}"))
-                meta.lore = listOf(
-                    "&7状态: &f${hotspot.state.display}",
-                    "&7最近数量: &f掉落物 ${hotspot.itemCount} &8| &f实体 ${hotspot.entityCount}",
-                    "&7近期触发: &f掉落物 ${hotspot.itemTriggerRate}/秒 &8| &f实体 ${hotspot.entityTriggerRate}/秒",
-                    "&7触发次数: &f${hotspot.triggerCount}",
-                    "&7最近活动: &f${formatTime(hotspot.lastSeenAt)}",
-                    "",
-                    "&f左键查看"
-                ).map(ColorUtils::color)
+                meta.lore = if (isEn) {
+                    listOf(
+                        "&7Status: &f${hotspot.state.display}",
+                        "&7Recent Count: &fItems ${hotspot.itemCount} &8| &fEntities ${hotspot.entityCount}",
+                        "&7Trigger Rate: &fItems ${hotspot.itemTriggerRate}/s &8| &fEntities ${hotspot.entityTriggerRate}/s",
+                        "&7Trigger Count: &f${hotspot.triggerCount}",
+                        "&7Last Seen: &f${formatTime(hotspot.lastSeenAt)}",
+                        "",
+                        "&fLeft-Click to inspect"
+                    )
+                } else {
+                    listOf(
+                        "&7状态: &f${hotspot.state.display}",
+                        "&7最近数量: &f掉落物 ${hotspot.itemCount} &8| &f实体 ${hotspot.entityCount}",
+                        "&7近期触发: &f掉落物 ${hotspot.itemTriggerRate}/秒 &8| &f实体 ${hotspot.entityTriggerRate}/秒",
+                        "&7触发次数: &f${hotspot.triggerCount}",
+                        "&7最近活动: &f${formatTime(hotspot.lastSeenAt)}",
+                        "",
+                        "&f左键查看"
+                    )
+                }.map(ColorUtils::color)
             }
         }
     }
 
     private fun detailItem(hotspot: HotspotTracker.HotspotView): ItemStack {
+        val isEn = Language.isEnglish
         val material = when (hotspot.state) {
             HotspotTracker.State.BREAKER -> Material.matchMaterial("REDSTONE_BLOCK")
             HotspotTracker.State.THROTTLED -> Material.matchMaterial("BLAZE_POWDER")
@@ -291,18 +305,33 @@ object HotspotMenu : Listener {
         return ItemStack(material).apply {
             itemMeta = itemMeta?.also { meta ->
                 meta.setDisplayName(ColorUtils.color("&b${hotspot.world} &f${hotspot.chunkX}, ${hotspot.chunkZ}"))
-                meta.lore = listOf(
-                    "&7状态: &f${hotspot.state.display}",
-                    "&7最近数量: &f掉落物 ${hotspot.itemCount} &8| &f实体 ${hotspot.entityCount}",
-                    "&7近期触发: &f掉落物 ${hotspot.itemTriggerRate}/秒 &8| &f实体 ${hotspot.entityTriggerRate}/秒",
-                    if (hotspot.itemSubject.isNotEmpty()) "&7掉落物触发对象: &f${hotspot.itemSubject}" else "",
-                    if (hotspot.entitySubject.isNotEmpty()) "&7实体触发对象: &f${hotspot.entitySubject}" else "",
-                    "&7首次记录: &f${formatTime(hotspot.firstSeenAt)}",
-                    "&7最近活动: &f${formatTime(hotspot.lastSeenAt)}",
-                    "&7清理记录: &f${hotspot.cleanupRuns} 次 &8| &f掉落物 ${hotspot.cleanedItems} &8| &f实体 ${hotspot.cleanedEntities}",
-                    "&7最近处理: &f${hotspot.lastProcessMillis}ms",
-                    "&7触发次数: &f${hotspot.triggerCount}"
-                ).filter { it.isNotEmpty() }.map(ColorUtils::color)
+                meta.lore = if (isEn) {
+                    listOf(
+                        "&7Status: &f${hotspot.state.display}",
+                        "&7Recent Count: &fItems ${hotspot.itemCount} &8| &fEntities ${hotspot.entityCount}",
+                        "&7Trigger Rate: &fItems ${hotspot.itemTriggerRate}/s &8| &fEntities ${hotspot.entityTriggerRate}/s",
+                        if (hotspot.itemSubject.isNotEmpty()) "&7Item Subject: &f${hotspot.itemSubject}" else "",
+                        if (hotspot.entitySubject.isNotEmpty()) "&7Entity Subject: &f${hotspot.entitySubject}" else "",
+                        "&7First Seen: &f${formatTime(hotspot.firstSeenAt)}",
+                        "&7Last Seen: &f${formatTime(hotspot.lastSeenAt)}",
+                        "&7Cleanup Stats: &f${hotspot.cleanupRuns} runs &8| &fItems ${hotspot.cleanedItems} &8| &fEntities ${hotspot.cleanedEntities}",
+                        "&7Last Process: &f${hotspot.lastProcessMillis}ms",
+                        "&7Trigger Count: &f${hotspot.triggerCount}"
+                    )
+                } else {
+                    listOf(
+                        "&7状态: &f${hotspot.state.display}",
+                        "&7最近数量: &f掉落物 ${hotspot.itemCount} &8| &f实体 ${hotspot.entityCount}",
+                        "&7近期触发: &f掉落物 ${hotspot.itemTriggerRate}/秒 &8| &f实体 ${hotspot.entityTriggerRate}/秒",
+                        if (hotspot.itemSubject.isNotEmpty()) "&7掉落物触发对象: &f${hotspot.itemSubject}" else "",
+                        if (hotspot.entitySubject.isNotEmpty()) "&7实体触发对象: &f${hotspot.entitySubject}" else "",
+                        "&7首次记录: &f${formatTime(hotspot.firstSeenAt)}",
+                        "&7最近活动: &f${formatTime(hotspot.lastSeenAt)}",
+                        "&7清理记录: &f${hotspot.cleanupRuns} 次 &8| &f掉落物 ${hotspot.cleanedItems} &8| &f实体 ${hotspot.cleanedEntities}",
+                        "&7最近处理: &f${hotspot.lastProcessMillis}ms",
+                        "&7触发次数: &f${hotspot.triggerCount}"
+                    )
+                }.filter { it.isNotEmpty() }.map(ColorUtils::color)
             }
         }
     }
@@ -319,9 +348,10 @@ object HotspotMenu : Listener {
     }
 
     private fun drawListButtons(inventory: Inventory, page: Int, totalPages: Int, empty: Boolean) {
-        setLore(inventory, listTemplate.slots('P'), if (page > 0) listOf("&e左键上一页") else listOf("&8已经是第一页"))
-        setLore(inventory, listTemplate.slots('N'), if (page < totalPages - 1) listOf("&e左键下一页") else listOf("&8已经是最后一页"))
-        if (empty) setEmpty(inventory, listTemplate.slots('*').firstOrNull(), "当前没有热点区块")
+        val isEn = Language.isEnglish
+        setLore(inventory, listTemplate.slots('P'), if (page > 0) listOf(if (isEn) "&eLeft-Click for prev page" else "&e左键上一页") else listOf(if (isEn) "&8First page" else "&8已经是第一页"))
+        setLore(inventory, listTemplate.slots('N'), if (page < totalPages - 1) listOf(if (isEn) "&eLeft-Click for next page" else "&e左键下一页") else listOf(if (isEn) "&8Last page" else "&8已经是最后一页"))
+        if (empty) setEmpty(inventory, listTemplate.slots('*').firstOrNull(), if (isEn) "No hotspot chunks tracked" else "当前没有热点区块")
     }
 
     private fun drawDetailButtons(
@@ -329,16 +359,17 @@ object HotspotMenu : Listener {
         hotspot: HotspotTracker.HotspotView,
         confirmAction: ConfirmAction?
     ) {
+        val isEn = Language.isEnglish
         val cleanupText = if (confirmAction == ConfirmAction.CLEANUP) {
-            "&c再次左键确认清理"
+            if (isEn) "&cClick again to confirm sweep" else "&c再次左键确认清理"
         } else {
-            "&e左键清理当前区块"
+            if (isEn) "&eLeft-Click to sweep this chunk" else "&e左键清理当前区块"
         }
         setLore(inventory, detailTemplate.slots('C'), listOf(cleanupText))
         val releaseText = when {
-            confirmAction == ConfirmAction.RELEASE -> "&c再次左键解除熔断"
-            hotspot.state == HotspotTracker.State.BREAKER -> "&e左键解除熔断"
-            else -> "&8当前没有熔断"
+            confirmAction == ConfirmAction.RELEASE -> if (isEn) "&cClick again to confirm release" else "&c再次左键解除熔断"
+            hotspot.state == HotspotTracker.State.BREAKER -> if (isEn) "&eLeft-Click to release breaker" else "&e左键解除熔断"
+            else -> if (isEn) "&8No active breaker" else "&8当前没有熔断"
         }
         setLore(inventory, detailTemplate.slots('R'), listOf(releaseText))
     }

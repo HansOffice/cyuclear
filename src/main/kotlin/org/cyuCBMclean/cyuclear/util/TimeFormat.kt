@@ -5,24 +5,26 @@ import java.util.Locale
 object TimeFormat {
 
     fun cleanupDuration(millis: Long): String {
-        if (millis <= 0L) return "低于 1 秒"
-        if (millis < 1000L) return "低于 1 秒"
+        val isEn = org.cyuCBMclean.cyuclear.config.Language.isEnglish
+        if (millis <= 0L || millis < 1000L) return if (isEn) "under 1s" else "低于 1 秒"
 
         val seconds = millis / 1000.0
         if (seconds < 10.0) {
-            return "${formatOneDecimal(seconds)} 秒"
+            val formatted = formatOneDecimal(seconds)
+            return if (isEn) "${formatted}s" else "$formatted 秒"
         }
 
         if (millis < 60_000L) {
-            return "${millis / 1000L} 秒"
+            val sec = millis / 1000L
+            return if (isEn) "${sec}s" else "$sec 秒"
         }
 
         val minutes = millis / 60_000L
         val remainSeconds = (millis % 60_000L) / 1000L
         if (remainSeconds == 0L) {
-            return "${minutes} 分钟"
+            return if (isEn) "${minutes}m" else "${minutes} 分钟"
         }
-        return "${minutes} 分 ${remainSeconds} 秒"
+        return if (isEn) "${minutes}m ${remainSeconds}s" else "${minutes} 分 ${remainSeconds} 秒"
     }
 
     fun compactMillis(millis: Long): String {

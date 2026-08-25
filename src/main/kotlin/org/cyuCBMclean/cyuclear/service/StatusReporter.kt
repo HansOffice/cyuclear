@@ -13,16 +13,22 @@ import org.cyuCBMclean.cyuclear.util.TimeFormat
 object StatusReporter {
 
     fun send(sender: CommandSender) {
-        val running = if (WindowScanner.isRunning) "进行中" else "空闲"
+        val isEn = Language.isEnglish
+        val running = if (WindowScanner.isRunning) (if (isEn) "Running" else "进行中") else (if (isEn) "Idle" else "空闲")
         val candidate = if (Settings.candidateIndexEnabled) {
-            "开 / 每${Settings.candidateFullScanEveryCycles}轮全量 / 待扫${CandidateChunkIndex.size()}"
+            if (isEn) "ON / Full scan every ${Settings.candidateFullScanEveryCycles} cycles / Pending ${CandidateChunkIndex.size()}"
+            else "开 / 每${Settings.candidateFullScanEveryCycles}轮全量 / 待扫${CandidateChunkIndex.size()}"
         } else {
-            "关"
+            if (isEn) "OFF" else "关"
         }
         val last = if (WindowScanner.lastTimeCost > 0L || WindowScanner.lastClearedItems > 0 || WindowScanner.lastClearedEntities > 0) {
-            "掉落物 ${WindowScanner.lastClearedItems} · 实体 ${WindowScanner.lastClearedEntities} · ${TimeFormat.cleanupDuration(WindowScanner.lastTimeCost)}"
+            if (isEn) {
+                "Items ${WindowScanner.lastClearedItems} · Entities ${WindowScanner.lastClearedEntities} · ${TimeFormat.cleanupDuration(WindowScanner.lastTimeCost)}"
+            } else {
+                "掉落物 ${WindowScanner.lastClearedItems} · 实体 ${WindowScanner.lastClearedEntities} · ${TimeFormat.cleanupDuration(WindowScanner.lastTimeCost)}"
+            }
         } else {
-            "尚无记录"
+            if (isEn) "No records" else "尚无记录"
         }
         val recentRun = CleanupRunManager.list(0, 1).first.firstOrNull()
         val hotspots = HotspotTracker.summary()
@@ -32,11 +38,11 @@ object StatusReporter {
         val mythic = hookState(Settings.entityMythicEnabled && MythicMobsHook.isAvailable())
         val cePlugin = pluginOn("CraftEngine") || pluginOn("CE")
         val ce = when {
-            !Settings.entityCraftEngineEnabled -> "关闭"
-            !cePlugin -> "开启(插件未装)"
-            !CraftEngineFurnitureHook.isAvailable() -> "开启(API不可用)"
-            Settings.entityCraftEngineProtectFurniture -> "已接入 · 家具保护开"
-            else -> "已接入 · 家具保护关"
+            !Settings.entityCraftEngineEnabled -> if (isEn) "Disabled" else "关闭"
+            !cePlugin -> if (isEn) "Enabled (Plugin missing)" else "开启(插件未装)"
+            !CraftEngineFurnitureHook.isAvailable() -> if (isEn) "Enabled (API unavailable)" else "开启(API不可用)"
+            Settings.entityCraftEngineProtectFurniture -> if (isEn) "Connected · Furniture Protect ON" else "已接入 · 家具保护开"
+            else -> if (isEn) "Connected · Furniture Protect OFF" else "已接入 · 家具保护关"
         }
 
         sender.sendMessage(Language.getRaw("status-header"))
@@ -51,7 +57,7 @@ object StatusReporter {
         sender.sendMessage(
             Language.get(
                 "status-activation",
-                "state" to if (ActivationService.isActive()) "已启用" else "安全关闭"
+                "state" to if (ActivationService.isActive()) (if (isEn) "Active" else "已启用") else (if (isEn) "Safe-Disabled" else "安全关闭")
             )
         )
         sender.sendMessage(
@@ -76,7 +82,7 @@ object StatusReporter {
             Language.get(
                 "status-recovery",
                 "state" to onOff(Settings.recoveryEnabled),
-                "run" to (recentRun?.id ?: "无"),
+                "run" to (recentRun?.id ?: (if (isEn) "None" else "无")),
                 "recovery" to recentRun?.let { "${it.pendingRecoveryEntries}/${it.recoveryEntries}" }.orEmpty().ifEmpty { "0/0" }
             )
         )
@@ -128,9 +134,15 @@ object StatusReporter {
         sender.sendMessage(Language.getRaw("status-footer"))
     }
 
-    private fun onOff(value: Boolean): String = if (value) "开" else "关"
+    private fun onOff(value: Boolean): String {
+        val isEn = Language.isEnglish
+        return if (value) (if (isEn) "ON" else "开") else (if (isEn) "OFF" else "关")
+    }
 
-    private fun hookState(ok: Boolean): String = if (ok) "已接入" else "未接入"
+    private fun hookState(ok: Boolean): String {
+        val isEn = Language.isEnglish
+        return if (ok) (if (isEn) "Connected" else "已接入") else (if (isEn) "None" else "未接入")
+    }
 
     private fun pluginOn(name: String): Boolean {
         val plugin = Bukkit.getPluginManager().getPlugin(name)

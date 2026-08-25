@@ -450,11 +450,11 @@
         <div class="grid">
           <div class="card">
             <h4>选择文件</h4>
-            <p>1.13 及以上的普通 Bukkit / Paper 服务端使用 <code>cyuclear-paper-1.4.0.jar</code>；Folia 服务端使用 <code>cyuclear-folia-1.4.0.jar</code>；1.8 到 1.12 的老版本服务端使用 <code>cyuclear-legacy-1.4.0.jar</code></p>
+            <p>1.13 及以上的普通 Bukkit / Paper 服务端使用 <code>cyuclear-paper-1.4.1.jar</code>；Folia 服务端使用 <code>cyuclear-folia-1.4.1.jar</code>；1.8 到 1.12 的老版本服务端使用 <code>cyuclear-legacy-1.4.1.jar</code></p>
           </div>
           <div class="card">
             <h4>当前版本</h4>
-            <p>当前文档对应 <code>1.4.0</code>，配置文件以默认生成内容为准</p>
+            <p>当前文档对应 <code>1.4.1</code>，配置文件以默认生成内容为准</p>
           </div>
           <div class="card">
             <h4>软依赖</h4>
@@ -647,14 +647,14 @@ cleanup:
         <pre><code>performance:
   profile: "快速"
   scan:
-    max-chunks-per-tick: 240
-    max-millis-per-tick: 7
+    max-chunks-per-tick: 600
+    max-millis-per-tick: 15
   candidate-index:
     enabled: true
     full-scan-every-cycles: 6
   folia:
-    max-active-region-tasks: 512
-    dispatch-chunks-per-tick: 512
+    max-active-region-tasks: 1024
+    dispatch-chunks-per-tick: 1024
   stats:
     detail: true
     stage-timing: false</code></pre>
@@ -2206,7 +2206,7 @@ items:
       <section id="faq">
         <h2>常见问题</h2>
         <h3>刚安装后为什么没有开始清理</h3>
-         <p>全新安装的 1.4.0 默认使用 <code>enabled: false</code>。请按服务器实际情况调整配置，使用 <code>/cc check</code> 与 <code>/cc preview</code> 核对结果，再把总开关改为 <code>true</code> 并执行 <code>/cc reload</code>。升级已有数据目录时会迁移为已启用，严格实体总量模式需要在 <code>rules.yml</code> 中手动选择</p>
+         <p>全新安装的 1.4.1 默认使用 <code>enabled: false</code>。请按服务器实际情况调整配置，使用 <code>/cc check</code> 与 <code>/cc preview</code> 核对结果，再把总开关改为 <code>true</code> 并执行 <code>/cc reload</code>。升级已有数据目录时会迁移为已启用，严格实体总量模式需要在 <code>rules.yml</code> 中手动选择</p>
 
         <h3>代理端为什么看不到刚安装的子服</h3>
         <p>总开关关闭的后端不会连接代理端，也不会发送集群心跳。完成配置后把 <code>enabled</code> 改为 <code>true</code> 并执行 <code>/cc reload</code> 即可自动接入；随后可用 <code>/cc cluster</code> 查看连接状态</p>

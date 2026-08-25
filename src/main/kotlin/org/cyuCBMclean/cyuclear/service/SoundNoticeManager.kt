@@ -75,7 +75,11 @@ object SoundNoticeManager {
 
         return SoundCompat.resolve(normalized) ?: run {
             invalidSoundNames.add(normalized)
-            Cyuclear.instance.logger.warning("Cyuclear 在 sounds.${event.configKey}.sound 读取到未知音效 '$rawSound'，已跳过播放")
+            if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) {
+                Cyuclear.instance.logger.warning("CyuClear read unknown sound '$rawSound' at sounds.${event.configKey}.sound, skipping playback")
+            } else {
+                Cyuclear.instance.logger.warning("Cyuclear 在 sounds.${event.configKey}.sound 读取到未知音效 '$rawSound'，已跳过播放")
+            }
             null
         }
     }

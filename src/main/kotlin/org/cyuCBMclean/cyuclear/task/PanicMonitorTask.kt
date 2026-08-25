@@ -101,8 +101,11 @@ object PanicMonitorTask {
                     }
                 } catch (ex: Exception) {
                     activeCounters.remove(world.name, counter)
-                    pendingWorlds.remove(world.name)
-                    Cyuclear.instance.logger.warning("紧急实体统计启动失败，${world.name} - ${ex.message}")
+                    if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) {
+                        Cyuclear.instance.logger.warning("Failed to start emergency entity count for ${world.name}: ${ex.message}")
+                    } else {
+                        Cyuclear.instance.logger.warning("紧急实体统计启动失败，${world.name} - ${ex.message}")
+                    }
                     null
                 }
                 if (handle != null) {

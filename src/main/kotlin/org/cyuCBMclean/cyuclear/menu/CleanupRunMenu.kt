@@ -202,36 +202,57 @@ object CleanupRunMenu : Listener {
     }
 
     private fun runItem(run: CleanupRunManager.RunView): ItemStack {
+        val isEn = Language.isEnglish
         val material = when {
             run.status == CleanupRunManager.Status.RUNNING -> Material.matchMaterial("CLOCK")
             run.pendingRecoveryEntries > 0 -> Material.matchMaterial("CHEST")
             else -> Material.matchMaterial("HOPPER")
         } ?: Material.STONE
-        val itemReasons = run.itemReasons.take(2).joinToString("、") { "${it.title} ${it.count}" }
-        val entityReasons = run.entityReasons.take(2).joinToString("、") { "${it.title} ${it.count}" }
+        val delimiter = if (isEn) ", " else "、"
+        val itemReasons = run.itemReasons.take(2).joinToString(delimiter) { "${it.title} ${it.count}" }
+        val entityReasons = run.entityReasons.take(2).joinToString(delimiter) { "${it.title} ${it.count}" }
         return ItemStack(material).apply {
             itemMeta = itemMeta?.also { meta ->
                 meta.setDisplayName(ColorUtils.color("&b${CleanupRunManager.originText(run.origin)} &7#${run.id}"))
-                meta.lore = listOf(
-                    "&7状态: &f${run.status.display}",
-                    "&7时间: &f${CleanupRunManager.formatTime(run.startedAt)}",
-                    "&7区块: &f${run.processedChunks}/${run.queuedChunks}",
-                    "&7清理: &f掉落物 ${run.removedItems} &8| &f实体 ${run.removedEntities}",
-                    "&7恢复物品: &f${run.pendingRecoveryEntries}/${run.recoveryEntries}",
-                    if (run.slowestWorld != null) "&7最慢区块: &f${run.slowestWorld} ${run.slowestChunkX},${run.slowestChunkZ} &8| &f${run.slowestChunkMillis}ms" else "",
-                    if (run.failedChunks > 0) "&c失败区块: &f${run.failedChunks}" else "",
-                    run.failureMessage?.let { "&c异常: &f${it.take(72)}" } ?: "",
-                    if (itemReasons.isNotEmpty()) "&7掉落原因: &f$itemReasons" else "",
-                    if (entityReasons.isNotEmpty()) "&7实体原因: &f$entityReasons" else "",
-                    if (run.skippedRecoveryEntries > 0L) "&e未记录条目: &f${run.skippedRecoveryEntries}" else "",
-                    "",
-                    "&f左键查看"
-                ).filter { it.isNotEmpty() }.map(ColorUtils::color)
+                meta.lore = if (isEn) {
+                    listOf(
+                        "&7Status: &f${run.status.display}",
+                        "&7Time: &f${CleanupRunManager.formatTime(run.startedAt)}",
+                        "&7Chunks: &f${run.processedChunks}/${run.queuedChunks}",
+                        "&7Cleaned: &fItems ${run.removedItems} &8| &fEntities ${run.removedEntities}",
+                        "&7Recovery: &f${run.pendingRecoveryEntries}/${run.recoveryEntries}",
+                        if (run.slowestWorld != null) "&7Slowest Chunk: &f${run.slowestWorld} ${run.slowestChunkX},${run.slowestChunkZ} &8| &f${run.slowestChunkMillis}ms" else "",
+                        if (run.failedChunks > 0) "&cFailed Chunks: &f${run.failedChunks}" else "",
+                        run.failureMessage?.let { "&cException: &f${it.take(72)}" } ?: "",
+                        if (itemReasons.isNotEmpty()) "&7Item Reasons: &f$itemReasons" else "",
+                        if (entityReasons.isNotEmpty()) "&7Entity Reasons: &f$entityReasons" else "",
+                        if (run.skippedRecoveryEntries > 0L) "&eSkipped Entries: &f${run.skippedRecoveryEntries}" else "",
+                        "",
+                        "&fLeft-Click to inspect"
+                    )
+                } else {
+                    listOf(
+                        "&7状态: &f${run.status.display}",
+                        "&7时间: &f${CleanupRunManager.formatTime(run.startedAt)}",
+                        "&7区块: &f${run.processedChunks}/${run.queuedChunks}",
+                        "&7清理: &f掉落物 ${run.removedItems} &8| &f实体 ${run.removedEntities}",
+                        "&7恢复物品: &f${run.pendingRecoveryEntries}/${run.recoveryEntries}",
+                        if (run.slowestWorld != null) "&7最慢区块: &f${run.slowestWorld} ${run.slowestChunkX},${run.slowestChunkZ} &8| &f${run.slowestChunkMillis}ms" else "",
+                        if (run.failedChunks > 0) "&c失败区块: &f${run.failedChunks}" else "",
+                        run.failureMessage?.let { "&c异常: &f${it.take(72)}" } ?: "",
+                        if (itemReasons.isNotEmpty()) "&7掉落原因: &f$itemReasons" else "",
+                        if (entityReasons.isNotEmpty()) "&7实体原因: &f$entityReasons" else "",
+                        if (run.skippedRecoveryEntries > 0L) "&e未记录条目: &f${run.skippedRecoveryEntries}" else "",
+                        "",
+                        "&f左键查看"
+                    )
+                }.filter { it.isNotEmpty() }.map(ColorUtils::color)
             }
         }
     }
 
     private fun recoveryItem(entry: CleanupRunManager.RecoveryView, confirming: Boolean): ItemStack {
+        val isEn = Language.isEnglish
         val item = if (entry.claimed) {
             ItemStack(Material.matchMaterial("GRAY_DYE") ?: Material.STONE)
         } else {
@@ -240,14 +261,24 @@ object CleanupRunMenu : Listener {
         if (!entry.claimed && entry.item != null) item.amount = minOf(entry.amount, item.maxStackSize.coerceAtLeast(1))
         val meta = item.itemMeta
         if (meta != null) {
-            if (entry.claimed) meta.setDisplayName(ColorUtils.color("&8已领取 · ${entry.itemId}"))
-            meta.lore = listOf(
-                "&7数量: &f${entry.amount}",
-                "&7来源: &f${entry.world} ${entry.x}, ${entry.y}, ${entry.z}",
-                "&7原因: &f${entry.reason}",
-                if (entry.claimed) "&7领取人: &f${entry.claimedBy}" else "",
-                if (confirming) "&c再次左键确认领取" else if (!entry.claimed) "&f左键领取到背包" else ""
-            ).filter { it.isNotEmpty() }.map(ColorUtils::color)
+            if (entry.claimed) meta.setDisplayName(ColorUtils.color(if (isEn) "&8Claimed · ${entry.itemId}" else "&8已领取 · ${entry.itemId}"))
+            meta.lore = if (isEn) {
+                listOf(
+                    "&7Amount: &f${entry.amount}",
+                    "&7Location: &f${entry.world} ${entry.x}, ${entry.y}, ${entry.z}",
+                    "&7Reason: &f${entry.reason}",
+                    if (entry.claimed) "&7Claimed By: &f${entry.claimedBy}" else "",
+                    if (confirming) "&cClick again to confirm claim" else if (!entry.claimed) "&fLeft-Click to claim to inventory" else ""
+                )
+            } else {
+                listOf(
+                    "&7数量: &f${entry.amount}",
+                    "&7来源: &f${entry.world} ${entry.x}, ${entry.y}, ${entry.z}",
+                    "&7原因: &f${entry.reason}",
+                    if (entry.claimed) "&7领取人: &f${entry.claimedBy}" else "",
+                    if (confirming) "&c再次左键确认领取" else if (!entry.claimed) "&f左键领取到背包" else ""
+                )
+            }.filter { it.isNotEmpty() }.map(ColorUtils::color)
             item.itemMeta = meta
         }
         return item
@@ -265,15 +296,17 @@ object CleanupRunMenu : Listener {
     }
 
     private fun drawRunButtons(inventory: Inventory, page: Int, totalPages: Int, empty: Boolean) {
-        setLore(inventory, runsTemplate.slots('P'), if (page > 0) listOf("&e左键上一页") else listOf("&8已经是第一页"))
-        setLore(inventory, runsTemplate.slots('N'), if (page < totalPages - 1) listOf("&e左键下一页") else listOf("&8已经是最后一页"))
-        if (empty) setEmpty(inventory, runsTemplate.slots('*').firstOrNull(), "当前还没有清理批次")
+        val isEn = Language.isEnglish
+        setLore(inventory, runsTemplate.slots('P'), if (page > 0) listOf(if (isEn) "&eLeft-Click for prev page" else "&e左键上一页") else listOf(if (isEn) "&8First page" else "&8已经是第一页"))
+        setLore(inventory, runsTemplate.slots('N'), if (page < totalPages - 1) listOf(if (isEn) "&eLeft-Click for next page" else "&e左键下一页") else listOf(if (isEn) "&8Last page" else "&8已经是最后一页"))
+        if (empty) setEmpty(inventory, runsTemplate.slots('*').firstOrNull(), if (isEn) "No cleanup runs recorded" else "当前还没有清理批次")
     }
 
     private fun drawRecoveryButtons(inventory: Inventory, page: Int, totalPages: Int, empty: Boolean) {
-        setLore(inventory, recoveryTemplate.slots('P'), if (page > 0) listOf("&e左键上一页") else listOf("&8已经是第一页"))
-        setLore(inventory, recoveryTemplate.slots('N'), if (page < totalPages - 1) listOf("&e左键下一页") else listOf("&8已经是最后一页"))
-        if (empty) setEmpty(inventory, recoveryTemplate.slots('*').firstOrNull(), "这个批次没有保存恢复物品")
+        val isEn = Language.isEnglish
+        setLore(inventory, recoveryTemplate.slots('P'), if (page > 0) listOf(if (isEn) "&eLeft-Click for prev page" else "&e左键上一页") else listOf(if (isEn) "&8First page" else "&8已经是第一页"))
+        setLore(inventory, recoveryTemplate.slots('N'), if (page < totalPages - 1) listOf(if (isEn) "&eLeft-Click for next page" else "&e左键下一页") else listOf(if (isEn) "&8Last page" else "&8已经是最后一页"))
+        if (empty) setEmpty(inventory, recoveryTemplate.slots('*').firstOrNull(), if (isEn) "No recovery items captured for this run" else "这个批次没有保存恢复物品")
     }
 
     private fun setEmpty(inventory: Inventory, slot: Int?, text: String) {

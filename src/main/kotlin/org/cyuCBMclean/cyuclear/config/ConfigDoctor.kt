@@ -11,10 +11,13 @@ import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 
 object ConfigDoctor {
-    enum class Level(val display: String) {
-        ERROR("错误"),
-        WARNING("注意"),
-        OK("正常")
+    enum class Level(private val displayCn: String, private val displayEn: String) {
+        ERROR("错误", "ERROR"),
+        WARNING("注意", "WARNING"),
+        OK("正常", "OK");
+
+        val display: String
+            get() = if (Language.isEnglish) displayEn else displayCn
     }
 
     data class Finding(
@@ -80,11 +83,11 @@ object ConfigDoctor {
         for (relative in expectedFiles) {
             val file = File(dataFolder, relative)
             if (!file.exists()) {
-                findings += Finding(Level.ERROR, relative, "", "文件不存在")
+                findings += Finding(Level.ERROR, relative, "", if (Language.isEnglish) "File does not exist" else "文件不存在")
                 continue
             }
             if (!file.isFile) {
-                findings += Finding(Level.ERROR, relative, "", "不是有效文件")
+                findings += Finding(Level.ERROR, relative, "", if (Language.isEnglish) "Not a valid file" else "不是有效文件")
             }
         }
         val config = load(dataFolder, "config.yml", findings)
@@ -95,7 +98,8 @@ object ConfigDoctor {
         if (areas != null) inspectAreas(areas, findings)
         inspectMenus(dataFolder, findings)
         if (findings.none { it.level == Level.ERROR || it.level == Level.WARNING }) {
-            findings += Finding(Level.OK, "全部", "", "配置结构检查通过")
+            val isEn = Language.isEnglish
+            findings += Finding(Level.OK, if (isEn) "All" else "全部", "", if (isEn) "All configuration files and structures passed verification" else "配置结构检查通过")
         }
         return Report(findings)
     }
@@ -148,7 +152,8 @@ object ConfigDoctor {
         if (config.getInt("recovery.recent-limit", 50) !in 10..200) {
             findings += Finding(Level.WARNING, "config.yml", "recovery.recent-limit", "建议填写 10 到 200")
         }
-        if (config.getString("performance.profile").orEmpty().trim() !in setOf("保守", "均衡", "快速", "极限", "safe", "balanced", "fast", "extreme")) {
+        val profile = config.getString("performance.profile").orEmpty().trim().lowercase(Locale.ROOT)
+        if (profile !in setOf("保守", "均衡", "快速", "极限", "safe", "balanced", "fast", "extreme", "conservative")) {
             findings += Finding(Level.WARNING, "config.yml", "performance.profile", "未识别的性能档位会回退为快速")
         }
         if (config.getInt("performance.scan.max-chunks-per-tick", 240) !in 1..5000) {

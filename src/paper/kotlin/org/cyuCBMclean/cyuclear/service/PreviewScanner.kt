@@ -53,10 +53,7 @@ object PreviewScanner {
                 val chunk = chunks.removeFirst()
                 processedThisTick++
                 if (!chunk.isLoaded) continue
-                if (!processChunk(chunk, effectiveCleanItems, effectiveCleanEntities, report, shouldContinue)) {
-                    chunks.addFirst(chunk)
-                    break
-                }
+                processChunk(chunk, effectiveCleanItems, effectiveCleanEntities, report)
             }
         }, 1L, 1L)
 
@@ -82,18 +79,12 @@ object PreviewScanner {
         chunk: Chunk,
         cleanItems: Boolean,
         cleanEntities: Boolean,
-        report: PreviewReport,
-        shouldContinue: () -> Boolean
-    ): Boolean {
+        report: PreviewReport
+    ) {
         val entities = chunk.entities
         var visited = 0
-        var complete = true
 
         for (entity in entities) {
-            if (visited > 0 && !shouldContinue()) {
-                complete = false
-                break
-            }
             visited++
             if (entity is Item) {
                 if (!cleanItems) continue
@@ -109,8 +100,7 @@ object PreviewScanner {
         }
 
         report.scanned.addAndGet(visited)
-        if (complete) report.chunks.incrementAndGet()
-        return complete
+        report.chunks.incrementAndGet()
     }
 
     private fun finish(report: PreviewReport, callback: (PreviewReport) -> Unit) {

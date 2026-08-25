@@ -42,15 +42,16 @@ object BinEntryRules {
                 !allowIdsPresent && !denyIdsPresent && !nameRules.active && !loreRules.active
 
         internal fun decide(stack: ItemStack, ids: Collection<String>, prefix: String): Decision? {
-            if (allowIdsPresent && ids.any(allowIds::matches)) return Decision(true, "$prefix 允许名单")
-            if (nameRules.matchesAllow(stack)) return Decision(true, "$prefix 展示名允许名单")
-            if (loreRules.matchesAllow(stack)) return Decision(true, "$prefix Lore 允许名单")
-            if (denyIdsPresent && ids.any(denyIds::matches)) return Decision(false, "$prefix 禁止名单")
-            if (nameRules.matchesDeny(stack)) return Decision(false, "$prefix 展示名禁止名单")
-            if (loreRules.matchesDeny(stack)) return Decision(false, "$prefix Lore 禁止名单")
+            val isEn = Language.isEnglish
+            if (allowIdsPresent && ids.any(allowIds::matches)) return Decision(true, "$prefix " + if (isEn) "Allow List" else "允许名单")
+            if (nameRules.matchesAllow(stack)) return Decision(true, "$prefix " + if (isEn) "Display Name Allow List" else "展示名允许名单")
+            if (loreRules.matchesAllow(stack)) return Decision(true, "$prefix " + if (isEn) "Lore Allow List" else "Lore 允许名单")
+            if (denyIdsPresent && ids.any(denyIds::matches)) return Decision(false, "$prefix " + if (isEn) "Deny List" else "禁止名单")
+            if (nameRules.matchesDeny(stack)) return Decision(false, "$prefix " + if (isEn) "Display Name Deny List" else "展示名禁止名单")
+            if (loreRules.matchesDeny(stack)) return Decision(false, "$prefix " + if (isEn) "Lore Deny List" else "Lore 禁止名单")
             return when (defaultAction) {
-                DefaultAction.ALLOW -> Decision(true, "$prefix 默认允许")
-                DefaultAction.DENY -> Decision(false, "$prefix 默认拒绝")
+                DefaultAction.ALLOW -> Decision(true, "$prefix " + if (isEn) "Default Allow" else "默认允许")
+                DefaultAction.DENY -> Decision(false, "$prefix " + if (isEn) "Default Deny" else "默认拒绝")
                 DefaultAction.INHERIT -> null
             }
         }
@@ -140,29 +141,32 @@ object BinEntryRules {
         z: Int,
         knownIds: Collection<String> = emptyList()
     ): Decision {
+        val isEn = Language.isEnglish
         if (source == Source.PLAYER_DEPOSIT) {
-            if (!playerDepositEnabled) return Decision(false, "玩家投放已关闭")
+            if (!playerDepositEnabled) return Decision(false, if (isEn) "Player Deposits Disabled" else "玩家投放已关闭")
             if (protectCleanupKeptItems && isExplicitlyProtectedByCleanup(stack, knownIds)) {
-                return Decision(false, "清理保留名单保护")
+                return Decision(false, if (isEn) "Protected by Cleanup Keep List" else "清理保留名单保护")
             }
             if (denyNonEmptyContainers && isNonEmptyContainer(stack)) {
-                return Decision(false, "非空容器保护")
+                return Decision(false, if (isEn) "Non-Empty Container Protection" else "非空容器保护")
             }
         }
 
         val global = if (source == Source.CLEANUP_RECOVERY) cleanupRecovery else playerDeposit
-        if (!AreaRules.hasBinEntryRules() && global.unrestricted) return Decision(true, "默认允许")
+        if (!AreaRules.hasBinEntryRules() && global.unrestricted) return Decision(true, if (isEn) "Default Allow" else "默认允许")
 
         val ids = if (knownIds.isEmpty()) ItemIdentity.matchIds(stack) else knownIds
         if (AreaRules.hasBinEntryRules()) {
             val area = AreaRules.find(world, x, y, z)
             val areaPolicy = area?.binPolicy(source)
             if (area != null && areaPolicy != null) {
-                val decision = areaPolicy.decide(stack, ids, "区域 ${area.name}")
+                val areaPrefix = if (isEn) "Area ${area.name}" else "区域 ${area.name}"
+                val decision = areaPolicy.decide(stack, ids, areaPrefix)
                 if (decision != null) return decision.copy(area = area.name)
             }
         }
-        return global.decide(stack, ids, "全局") ?: Decision(true, "全局默认允许")
+        val globalPrefix = if (isEn) "Global" else "全局"
+        return global.decide(stack, ids, globalPrefix) ?: Decision(true, if (isEn) "Global Default Allow" else "全局默认允许")
     }
 
     private fun isExplicitlyProtectedByCleanup(stack: ItemStack, knownIds: Collection<String>): Boolean {

@@ -186,11 +186,7 @@ object PreviewScanner {
     private fun runRegionChunk(session: PreviewSession, ref: ChunkRef, cleanItems: Boolean, cleanEntities: Boolean) {
         try {
             if (!isCurrent(session)) return
-            val complete = processChunk(session.report, ref, cleanItems, cleanEntities)
-            if (!complete && isCurrent(session)) {
-                chunkQueue.add(ref)
-                remainingQueue.incrementAndGet()
-            }
+            processChunk(session.report, ref, cleanItems, cleanEntities)
         } catch (ex: Exception) {
             Cyuclear.instance.logger.warning("预演区块扫描失败：${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
         } finally {
@@ -203,21 +199,14 @@ object PreviewScanner {
         }
     }
 
-    private fun processChunk(report: PreviewReport, ref: ChunkRef, cleanItems: Boolean, cleanEntities: Boolean): Boolean {
-        if (!ref.world.isChunkLoaded(ref.x, ref.z)) return true
+    private fun processChunk(report: PreviewReport, ref: ChunkRef, cleanItems: Boolean, cleanEntities: Boolean) {
+        if (!ref.world.isChunkLoaded(ref.x, ref.z)) return
 
         val chunk = ref.world.getChunkAt(ref.x, ref.z)
         val entities = chunk.entities
-        val started = System.nanoTime()
-        val budgetNanos = Settings.scanMaxMillisPerTick * 1_000_000L
         var visited = 0
-        var complete = true
 
         for (entity in entities) {
-            if (visited > 0 && System.nanoTime() - started >= budgetNanos) {
-                complete = false
-                break
-            }
             visited++
             if (entity is Item) {
                 if (!cleanItems) continue
@@ -233,8 +222,7 @@ object PreviewScanner {
         }
 
         report.scanned.addAndGet(visited)
-        if (complete) report.chunks.incrementAndGet()
-        return complete
+        report.chunks.incrementAndGet()
     }
 
     private fun tryFinish(session: PreviewSession) {

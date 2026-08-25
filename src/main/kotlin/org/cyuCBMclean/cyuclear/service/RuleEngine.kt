@@ -235,14 +235,23 @@ object RuleEngine {
             val ruleSection = section.getConfigurationSection(name) ?: return@forEachIndexed
             if (!ruleSection.getBoolean("enabled", true)) return@forEachIndexed
             val path = "rules.$name"
+            val isEn = org.cyuCBMclean.cyuclear.config.Language.isEnglish
             val target = parseTarget(ruleSection.getString("target"))
             if (target == null) {
-                logger("Cyuclear 跳过了未识别目标的命名规则 $path")
+                if (isEn) {
+                    logger("CyuClear skipped named rule with unrecognized target: $path")
+                } else {
+                    logger("Cyuclear 跳过了未识别目标的命名规则 $path")
+                }
                 return@forEachIndexed
             }
             val action = parseAction(ruleSection.getString("action"))
             if (action == null) {
-                logger("Cyuclear 跳过了未识别动作的命名规则 $path")
+                if (isEn) {
+                    logger("CyuClear skipped named rule with unrecognized action: $path")
+                } else {
+                    logger("Cyuclear 跳过了未识别动作的命名规则 $path")
+                }
                 return@forEachIndexed
             }
             val conditions = ruleSection.getConfigurationSection("conditions") ?: ruleSection
@@ -261,15 +270,27 @@ object RuleEngine {
             val tags = loadMatcher(conditions, "scoreboard-tags", "$path.conditions.scoreboard-tags", logger)
             val states = EntityDetailRules.loadStates(conditions.getConfigurationSection("states"))
             if (ids == null && names == null && lore == null && worlds == null && height == null && age == null && tags == null && states == null) {
-                logger("Cyuclear 跳过了没有匹配条件的命名规则 $path")
+                if (isEn) {
+                    logger("CyuClear skipped named rule without match conditions: $path")
+                } else {
+                    logger("Cyuclear 跳过了没有匹配条件的命名规则 $path")
+                }
                 return@forEachIndexed
             }
             if (target == Target.ITEM && (tags != null || states != null)) {
-                logger("Cyuclear 跳过了物品命名规则 $path 中仅实体可用的条件")
+                if (isEn) {
+                    logger("CyuClear skipped entity-only conditions in item named rule: $path")
+                } else {
+                    logger("Cyuclear 跳过了物品命名规则 $path 中仅实体可用的条件")
+                }
                 return@forEachIndexed
             }
             if (target == Target.ENTITY && lore != null) {
-                logger("Cyuclear 跳过了实体命名规则 $path 中仅物品可用的 Lore 条件")
+                if (isEn) {
+                    logger("CyuClear skipped item-only lore condition in entity named rule: $path")
+                } else {
+                    logger("Cyuclear 跳过了实体命名规则 $path 中仅物品可用的 Lore 条件")
+                }
                 return@forEachIndexed
             }
             val idEntries = ids?.entries.orEmpty()

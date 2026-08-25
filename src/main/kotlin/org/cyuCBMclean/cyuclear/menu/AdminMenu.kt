@@ -110,55 +110,104 @@ object AdminMenu : Listener {
     }
 
     private fun drawState(inventory: Inventory) {
+        val isEn = Language.isEnglish
         val active = CleanupRunManager.activeView()
         val latest = CleanupRunManager.list(0, 1).first.firstOrNull()
         val hotspots = HotspotTracker.summary()
+        val runningText = if (isEn) {
+            if (WindowScanner.isRunning) "Running" else "Idle"
+        } else {
+            if (WindowScanner.isRunning) "进行中" else "空闲"
+        }
+        val noneText = if (isEn) "None" else "无"
         setLore(
             inventory,
             template.slots('H'),
-            listOf(
-                "&7当前清理: &f${if (WindowScanner.isRunning) "进行中" else "空闲"}",
-                "&7最近批次: &f${active?.id ?: latest?.id ?: "无"}",
-                "",
-                "&f左键查看记录与恢复物品"
-            )
+            if (isEn) {
+                listOf(
+                    "&7Current Scan: &f$runningText",
+                    "&7Recent Run: &f${active?.id ?: latest?.id ?: noneText}",
+                    "",
+                    "&fLeft-Click to view runs & recovery"
+                )
+            } else {
+                listOf(
+                    "&7当前清理: &f$runningText",
+                    "&7最近批次: &f${active?.id ?: latest?.id ?: noneText}",
+                    "",
+                    "&f左键查看记录与恢复物品"
+                )
+            }
         )
         setLore(
             inventory,
             template.slots('T'),
-            listOf(
-                "&7热点区块: &f${hotspots.total}",
-                "&7正在熔断: &f${hotspots.breakers}",
-                "",
-                "&f左键查看热点"
-            )
+            if (isEn) {
+                listOf(
+                    "&7Hotspot Chunks: &f${hotspots.total}",
+                    "&7Active Breakers: &f${hotspots.breakers}",
+                    "",
+                    "&fLeft-Click to view hotspots"
+                )
+            } else {
+                listOf(
+                    "&7热点区块: &f${hotspots.total}",
+                    "&7正在熔断: &f${hotspots.breakers}",
+                    "",
+                    "&f左键查看热点"
+                )
+            }
         )
         setLore(
             inventory,
             template.slots('A'),
-            listOf(
-                "&7立即清理所有已启用目标",
-                "",
-                if (holderConfirming(inventory, ConfirmAction.CLEANUP)) "&c再次左键确认清理" else "&f左键开始"
-            )
+            if (isEn) {
+                listOf(
+                    "&7Immediately sweep all active targets",
+                    "",
+                    if (holderConfirming(inventory, ConfirmAction.CLEANUP)) "&cClick again to confirm sweep" else "&fLeft-Click to start"
+                )
+            } else {
+                listOf(
+                    "&7立即清理所有已启用目标",
+                    "",
+                    if (holderConfirming(inventory, ConfirmAction.CLEANUP)) "&c再次左键确认清理" else "&f左键开始"
+                )
+            }
         )
         setLore(
             inventory,
             template.slots('K'),
-            listOf(
-                "&7停止当前清理任务",
-                "",
-                if (holderConfirming(inventory, ConfirmAction.CANCEL)) "&c再次左键确认停止" else "&f左键停止"
-            )
+            if (isEn) {
+                listOf(
+                    "&7Cancel active cleanup task",
+                    "",
+                    if (holderConfirming(inventory, ConfirmAction.CANCEL)) "&cClick again to confirm stop" else "&fLeft-Click to stop"
+                )
+            } else {
+                listOf(
+                    "&7停止当前清理任务",
+                    "",
+                    if (holderConfirming(inventory, ConfirmAction.CANCEL)) "&c再次左键确认停止" else "&f左键停止"
+                )
+            }
         )
         setLore(
             inventory,
             template.slots('D'),
-            listOf(
-                "&7检查配置、规则与菜单",
-                "",
-                "&f左键检查配置"
-            )
+            if (isEn) {
+                listOf(
+                    "&7Diagnose configs, rules & menus",
+                    "",
+                    "&fLeft-Click to diagnose"
+                )
+            } else {
+                listOf(
+                    "&7检查配置、规则与菜单",
+                    "",
+                    "&f左键检查配置"
+                )
+            }
         )
     }
 

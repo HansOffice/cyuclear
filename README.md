@@ -6,13 +6,13 @@ CyuClear 用于周期清理、规则检查、区块限流、恢复记录和虚�
 
 ## 运行包
 
-| 服务端 | 使用文件 |
-| --- | --- |
-| Bukkit / Spigot / Paper 1.13 及以上 | `cyuclear-paper-1.4.0.jar` |
-| Folia | `cyuclear-folia-1.4.0.jar` |
-| Bukkit / Spigot 1.8 至 1.12 | `cyuclear-legacy-1.4.0.jar` |
+| 服务端 | 使用文件 | 产物目录 |
+| --- | --- | --- |
+| Bukkit / Spigot / Paper 1.13 及以上 | `cyuclear-paper-1.4.1.jar` | `target/` |
+| Folia | `cyuclear-folia-1.4.1.jar` | `target/` |
+| Bukkit / Spigot 1.8 至 1.12 | `cyuclear-legacy-1.4.1.jar` | `target/` |
 
-每台服务端只放一个运行包到 `plugins`。首次启动后会生成配置文件；先完成规则检查与预演，再开启总开关
+每台服务端只放一个运行包到 `plugins`。首次启动后会生成配置文件；先完成规则检查与预演，再开启总开关。
 
 ## 常用入口
 
@@ -69,13 +69,15 @@ src/legacy/    Legacy 实现
 
 ## 构建
 
-Paper 与 Legacy 使用 JDK 8，Folia 使用 JDK 17
+Paper 与 Legacy 使用 JDK 8，Folia 使用 JDK 17。
 
 ```powershell
+# JDK 8 编译 Paper 与 Legacy
 $env:JAVA_HOME = '你的 JDK 8 目录'
 mvn -Ppaper package -DskipTests
 mvn -Plegacy package -DskipTests
 
+# JDK 17 编译 Folia
 $env:JAVA_HOME = '你的 JDK 17 目录'
 mvn -Pfolia package -DskipTests
 ```

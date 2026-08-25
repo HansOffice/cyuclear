@@ -20,12 +20,15 @@ import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicLongArray
 
 object CleanupRunManager {
-    enum class Status(val display: String) {
-        RUNNING("进行中"),
-        COMPLETED("已完成"),
-        PARTIAL("部分完成"),
-        CANCELLED("已停止"),
-        FAILED("已中断")
+    enum class Status(private val displayCn: String, private val displayEn: String) {
+        RUNNING("进行中", "RUNNING"),
+        COMPLETED("已完成", "COMPLETED"),
+        PARTIAL("部分完成", "PARTIAL"),
+        CANCELLED("已停止", "CANCELLED"),
+        FAILED("已中断", "FAILED");
+
+        val display: String
+            get() = if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) displayEn else displayCn
     }
 
     data class RunView(
@@ -482,10 +485,13 @@ object CleanupRunManager {
         return SimpleDateFormat("MM-dd HH:mm", Locale.CHINA).format(Date(time))
     }
 
-    fun originText(origin: CleanupOrigin): String = when (origin) {
-        CleanupOrigin.SCHEDULED -> "定时清理"
-        CleanupOrigin.MANUAL -> "手动清理"
-        CleanupOrigin.PANIC -> "紧急清理"
+    fun originText(origin: CleanupOrigin): String {
+        val isEn = org.cyuCBMclean.cyuclear.config.Language.isEnglish
+        return when (origin) {
+            CleanupOrigin.SCHEDULED -> if (isEn) "Scheduled" else "定时清理"
+            CleanupOrigin.MANUAL -> if (isEn) "Manual" else "手动清理"
+            CleanupOrigin.PANIC -> if (isEn) "Emergency Panic" else "紧急清理"
+        }
     }
 
     fun flush() {

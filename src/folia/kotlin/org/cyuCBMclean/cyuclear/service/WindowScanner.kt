@@ -253,7 +253,11 @@ object WindowScanner {
                 synchronized(stateLock) {
                     activeTasks.decrementAndGet()
                 }
-                Cyuclear.instance.logger.warning("区块清理派发失败：${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+                if (Language.isEnglish) {
+                    Cyuclear.instance.logger.warning("Chunk cleanup dispatch failed: ${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+                } else {
+                    Cyuclear.instance.logger.warning("区块清理派发失败：${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+                }
                 run.recordFailure(ref.world.name, ref.x, ref.z, ex.message)
             }
         }
@@ -269,26 +273,24 @@ object WindowScanner {
         run: CleanupRunManager.RunHandle,
         isRunCurrent: () -> Boolean
     ) {
-        var finishedChunk = true
         try {
             if (!isCurrent(generation)) return
             val result = processChunk(ref, cleanupPass, run, isRunCurrent)
             localItems.addAndGet(result.items)
             localEntities.addAndGet(result.entities)
             scannedEntities.addAndGet(result.scannedEntities)
-            if (!result.complete && isCurrent(generation)) {
-                finishedChunk = false
-                chunkQueue.add(ref)
-                remainingQueue.incrementAndGet()
-            }
         } catch (ex: Exception) {
-            Cyuclear.instance.logger.warning("区块清理失败：${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+            if (Language.isEnglish) {
+                Cyuclear.instance.logger.warning("Chunk cleanup failed: ${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+            } else {
+                Cyuclear.instance.logger.warning("区块清理失败：${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+            }
             run.recordFailure(ref.world.name, ref.x, ref.z, ex.message)
         } finally {
             synchronized(stateLock) {
                 activeTasks.decrementAndGet()
                 if (isCurrent(generation)) {
-                    if (finishedChunk) processedChunks.incrementAndGet()
+                    processedChunks.incrementAndGet()
                     tryFinish(generation, collectItemsForRecovery, run)
                 }
             }
@@ -307,10 +309,8 @@ object WindowScanner {
         }
 
         val chunkStart = System.nanoTime()
-        val budgetNanos = Settings.scanMaxMillisPerTick * 1_000_000L
-        val shouldContinue = { System.nanoTime() - chunkStart < budgetNanos }
         val chunk = ref.world.getChunkAt(ref.x, ref.z)
-        val result = CleanupChunkProcessor.processWhileCurrent(chunk, cleanupPass, run, isRunCurrent, shouldContinue)
+        val result = CleanupChunkProcessor.processWhileCurrent(chunk, cleanupPass, run, isRunCurrent)
 
         val chunkNanos = System.nanoTime() - chunkStart
         processNanos.addAndGet(chunkNanos)
@@ -358,6 +358,7 @@ object WindowScanner {
     private fun finishScan(generation: Long, collectItemsForRecovery: Boolean, run: CleanupRunManager.RunHandle) {
         synchronized(stateLock) {
             if (!isCurrent(generation)) return
+            scanRunning = false
             chunkQueue.clear()
             remainingQueue.set(0)
             collector = null
@@ -388,14 +389,11 @@ object WindowScanner {
                 VoidBinManager.openWindow(Settings.voidBinExpireSeconds)
                 if (VoidBinManager.expireTime > 0L) {
                     VoidBinNoticeManager.broadcastCleanupSummary(summaryMessage, Settings.voidBinExpireSeconds)
-                } else {
-                    VoidBinNoticeManager.broadcastCleanupSummary(summaryMessage, null)
+                    return
                 }
-            } else {
-                VoidBinNoticeManager.broadcastCleanupSummary(summaryMessage, null)
             }
 
-            scanRunning = false
+            VoidBinNoticeManager.broadcastCleanupSummary(summaryMessage, null)
         }
     }
 
@@ -411,8 +409,10 @@ object WindowScanner {
 
     private fun logDetailStats(timeCost: Long) {
         if (!Settings.cleanupDetailStats) return
+        val isEn = Language.isEnglish
+        val header = if (isEn) "Cleanup Performance Stats" else "清理性能统计"
         Cyuclear.instance.logger.info(
-            "清理性能统计: profile=${Settings.performanceProfile}, chunks=${processedChunks.get()}/$queuedChunks, " +
+            "$header: profile=${Settings.performanceProfile}, chunks=${processedChunks.get()}/$queuedChunks, " +
                 "dispatched=${dispatchedChunks.get()}, entitiesScanned=${scannedEntities.get()}, " +
                 "work=${TimeFormat.compactMillis(processNanos.get() / 1_000_000L)}, maxChunk=${TimeFormat.compactMillis(maxChunkNanos.get() / 1_000_000L)}, " +
                 "rounds=${tickRounds.get()}, total=${TimeFormat.compactMillis(timeCost)}, activeLimit=${Settings.foliaMaxActiveRegionTasks}, " +
@@ -420,7 +420,8 @@ object WindowScanner {
                 "pendingCandidates=${CandidateChunkIndex.size()}"
         )
         if (Settings.cleanupStageTimings) {
-            Cyuclear.instance.logger.info("清理阶段耗时: ${CleanupTimings.text(timeCost)}")
+            val stageHeader = if (isEn) "Cleanup Stage Breakdown" else "清理阶段耗时"
+            Cyuclear.instance.logger.info("$stageHeader: ${CleanupTimings.text(timeCost)}")
         }
     }
 

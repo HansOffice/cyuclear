@@ -32,24 +32,25 @@ object AreaRules {
         fun matchesClean(ids: Collection<String>): Boolean = clean.matchesAnyNormalized(ids)
 
         fun decide(ids: Collection<String>, areaName: String): Decision? {
+            val isEn = Language.isEnglish
             return when (mode) {
                 Mode.INHERIT -> null
-                Mode.KEEP_ALL -> Decision(false, "区域 $areaName 全部保留")
-                Mode.CLEAN_ALL -> Decision(true, "区域 $areaName 全部清理")
+                Mode.KEEP_ALL -> Decision(false, if (isEn) "Area $areaName Keep-All" else "区域 $areaName 全部保留")
+                Mode.CLEAN_ALL -> Decision(true, if (isEn) "Area $areaName Clean-All" else "区域 $areaName 全部清理")
                 Mode.BLACKLIST -> if (matchesKeep(ids)) {
-                    Decision(false, "区域 $areaName 保留名单")
+                    Decision(false, if (isEn) "Area $areaName Keep-List" else "区域 $areaName 保留名单")
                 } else {
-                    Decision(true, "区域 $areaName 默认清理")
+                    Decision(true, if (isEn) "Area $areaName Default Clean" else "区域 $areaName 默认清理")
                 }
                 Mode.WHITELIST -> if (matchesClean(ids)) {
-                    Decision(true, "区域 $areaName 清理名单")
+                    Decision(true, if (isEn) "Area $areaName Clean-List" else "区域 $areaName 清理名单")
                 } else {
-                    Decision(false, "区域 $areaName 默认保留")
+                    Decision(false, if (isEn) "Area $areaName Default Keep" else "区域 $areaName 默认保留")
                 }
                 Mode.PARALLEL -> when {
-                    matchesKeep(ids) -> Decision(false, "区域 $areaName 保留名单")
-                    matchesClean(ids) -> Decision(true, "区域 $areaName 清理名单")
-                    else -> Decision(false, "区域 $areaName 默认保留")
+                    matchesKeep(ids) -> Decision(false, if (isEn) "Area $areaName Keep-List" else "区域 $areaName 保留名单")
+                    matchesClean(ids) -> Decision(true, if (isEn) "Area $areaName Clean-List" else "区域 $areaName 清理名单")
+                    else -> Decision(false, if (isEn) "Area $areaName Default Keep" else "区域 $areaName 默认保留")
                 }
             }
         }
@@ -81,37 +82,38 @@ object AreaRules {
             hasCustomName: Boolean,
             loreTexts: List<String>
         ): Decision? {
+            val isEn = Language.isEnglish
             when (items.mode) {
-                Mode.KEEP_ALL -> return Decision(false, "区域 $name 全部保留")
-                Mode.CLEAN_ALL -> return Decision(true, "区域 $name 全部清理")
+                Mode.KEEP_ALL -> return Decision(false, if (isEn) "Area $name Keep-All" else "区域 $name 全部保留")
+                Mode.CLEAN_ALL -> return Decision(true, if (isEn) "Area $name Clean-All" else "区域 $name 全部清理")
                 else -> Unit
             }
 
             if (itemNames.canProtect(nameTexts, hasCustomName)) {
-                return Decision(false, "区域 $name 展示名保留")
+                return Decision(false, if (isEn) "Area $name Display Name Keep" else "区域 $name 展示名保留")
             }
             if (itemLores.canProtect(loreTexts, hasCustomName = false)) {
-                return Decision(false, "区域 $name Lore 保留")
+                return Decision(false, if (isEn) "Area $name Lore Keep" else "区域 $name Lore 保留")
             }
 
             val forceName = itemNames.forceClean
             val forceLore = itemLores.forceClean
             if (forceName && itemNames.canClean(nameTexts, hasCustomName)) {
-                return Decision(true, "区域 $name 展示名强制清理")
+                return Decision(true, if (isEn) "Area $name Display Name Force Clean" else "区域 $name 展示名强制清理")
             }
             if (forceLore && itemLores.canClean(loreTexts, hasCustomName = false)) {
-                return Decision(true, "区域 $name Lore 强制清理")
+                return Decision(true, if (isEn) "Area $name Lore Force Clean" else "区域 $name Lore 强制清理")
             }
 
             if (items.mode != Mode.INHERIT && items.matchesKeep(ids)) {
-                return Decision(false, "区域 $name 保留名单")
+                return Decision(false, if (isEn) "Area $name Keep-List" else "区域 $name 保留名单")
             }
 
             if (!forceName && itemNames.canClean(nameTexts, hasCustomName)) {
-                return Decision(true, "区域 $name 展示名清理")
+                return Decision(true, if (isEn) "Area $name Display Name Clean" else "区域 $name 展示名清理")
             }
             if (!forceLore && itemLores.canClean(loreTexts, hasCustomName = false)) {
-                return Decision(true, "区域 $name Lore 清理")
+                return Decision(true, if (isEn) "Area $name Lore Clean" else "区域 $name Lore 清理")
             }
 
             if (items.mode == Mode.INHERIT) {
@@ -119,12 +121,12 @@ object AreaRules {
             }
 
             if (items.matchesClean(ids)) {
-                return Decision(true, "区域 $name 清理名单")
+                return Decision(true, if (isEn) "Area $name Clean-List" else "区域 $name 清理名单")
             }
 
             return when (items.mode) {
-                Mode.BLACKLIST -> Decision(true, "区域 $name 默认清理")
-                Mode.WHITELIST, Mode.PARALLEL -> Decision(false, "区域 $name 默认保留")
+                Mode.BLACKLIST -> Decision(true, if (isEn) "Area $name Default Clean" else "区域 $name 默认清理")
+                Mode.WHITELIST, Mode.PARALLEL -> Decision(false, if (isEn) "Area $name Default Keep" else "区域 $name 默认保留")
                 else -> null
             }
         }
@@ -330,7 +332,11 @@ object AreaRules {
             "白名单", "whitelist" -> Mode.WHITELIST
             "并行名单", "parallel" -> Mode.PARALLEL
             else -> {
-                Cyuclear.instance.logger.warning("Cyuclear 在 $path 读取到未知值 '$raw'，已回退为继承")
+                if (Language.isEnglish) {
+                    Cyuclear.instance.logger.warning("CyuClear read unknown value '$raw' at $path, fallen back to inherit")
+                } else {
+                    Cyuclear.instance.logger.warning("Cyuclear 在 $path 读取到未知值 '$raw'，已回退为继承")
+                }
                 Mode.INHERIT
             }
         }
@@ -340,7 +346,11 @@ object AreaRules {
         if (!rule.isConfigurationSection("area")) return null
         val area = rule.getConfigurationSection("area") ?: return null
         if (!area.isConfigurationSection("min") || !area.isConfigurationSection("max")) {
-            Cyuclear.instance.logger.warning("Cyuclear 跳过了坐标不完整的区域范围 areas.rules.$name.area")
+            if (Language.isEnglish) {
+                Cyuclear.instance.logger.warning("CyuClear skipped incomplete area bounds at areas.rules.$name.area")
+            } else {
+                Cyuclear.instance.logger.warning("Cyuclear 跳过了坐标不完整的区域范围 areas.rules.$name.area")
+            }
             return null
         }
         return Bounds(

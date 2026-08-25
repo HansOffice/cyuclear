@@ -10,11 +10,14 @@ object HotspotTracker {
         ENTITY
     }
 
-    enum class State(val display: String, val weight: Int) {
-        WARNING("警告", 1),
-        THROTTLED("限流", 2),
-        BREAKER("熔断", 3),
-        OBSERVING("恢复观察", 0)
+    enum class State(private val displayCn: String, private val displayEn: String, val weight: Int) {
+        WARNING("警告", "WARNING", 1),
+        THROTTLED("限流", "THROTTLED", 2),
+        BREAKER("熔断", "BREAKER", 3),
+        OBSERVING("恢复观察", "OBSERVING", 0);
+
+        val display: String
+            get() = if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) displayEn else displayCn
     }
 
     data class HotspotView(

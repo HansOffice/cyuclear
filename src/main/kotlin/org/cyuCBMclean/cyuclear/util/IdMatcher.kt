@@ -79,7 +79,11 @@ class IdMatcher private constructor(
             for (entry in entries) {
                 val parsed = parseEntry(mode, entry)
                 if (parsed == null) {
-                    logger("Cyuclear 跳过了空的混合匹配规则 $groupName -> '$entry'")
+                    if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) {
+                        logger("CyuClear skipped empty match entry $groupName -> '$entry'")
+                    } else {
+                        logger("Cyuclear 跳过了空的混合匹配规则 $groupName -> '$entry'")
+                    }
                     continue
                 }
 
@@ -132,7 +136,11 @@ class IdMatcher private constructor(
             return try {
                 Pattern.compile(wildcardToRegex(entry.lowercase()), Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
             } catch (ex: PatternSyntaxException) {
-                logger("Cyuclear 跳过了无效通配规则 $groupName -> '$entry'：${ex.description}")
+                if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) {
+                    logger("CyuClear skipped invalid wildcard rule $groupName -> '$entry': ${ex.description}")
+                } else {
+                    logger("Cyuclear 跳过了无效通配规则 $groupName -> '$entry'：${ex.description}")
+                }
                 null
             }
         }
@@ -145,7 +153,11 @@ class IdMatcher private constructor(
             return try {
                 Pattern.compile(entry, Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
             } catch (ex: PatternSyntaxException) {
-                logger("Cyuclear 跳过了无效正则规则 $groupName -> '$entry'：${ex.description}")
+                if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) {
+                    logger("CyuClear skipped invalid regex rule $groupName -> '$entry': ${ex.description}")
+                } else {
+                    logger("Cyuclear 跳过了无效正则规则 $groupName -> '$entry'：${ex.description}")
+                }
                 null
             }
         }

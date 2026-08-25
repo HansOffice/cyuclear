@@ -19,8 +19,7 @@ object CleanupChunkProcessor {
     data class Result(
         val items: Int,
         val entities: Int,
-        val scannedEntities: Int,
-        val complete: Boolean = true
+        val scannedEntities: Int
     )
 
     private data class RecoveryPreparation(
@@ -31,29 +30,25 @@ object CleanupChunkProcessor {
     fun process(
         chunk: Chunk,
         pass: CleanupPass,
-        run: CleanupRunManager.RunHandle,
-        shouldContinue: (() -> Boolean)? = null
-    ): Result = process(chunk, pass, run, null, shouldContinue)
+        run: CleanupRunManager.RunHandle
+    ): Result = process(chunk, pass, run, null)
 
     fun processWhileCurrent(
         chunk: Chunk,
         pass: CleanupPass,
         run: CleanupRunManager.RunHandle,
-        isRunCurrent: () -> Boolean,
-        shouldContinue: (() -> Boolean)? = null
-    ): Result = process(chunk, pass, run, isRunCurrent, shouldContinue)
+        isRunCurrent: () -> Boolean
+    ): Result = process(chunk, pass, run, isRunCurrent)
 
     private fun process(
         chunk: Chunk,
         pass: CleanupPass,
         run: CleanupRunManager.RunHandle,
-        isRunCurrent: (() -> Boolean)?,
-        shouldContinue: (() -> Boolean)?
+        isRunCurrent: (() -> Boolean)?
     ): Result {
         var itemCount = 0
         var entityCount = 0
         var visited = 0
-        var complete = true
         val stageTimings = Settings.cleanupStageTimings
         val snapshotStart = if (stageTimings) System.nanoTime() else 0L
         val entities = chunk.entities
@@ -66,10 +61,6 @@ object CleanupChunkProcessor {
             if (!pass.cleanItems && pass.cleanEntities) {
                 for (entity in entities) {
                     if (isRunCurrent != null && !isRunCurrent()) break
-                    if (visited > 0 && shouldContinue != null && !shouldContinue()) {
-                        complete = false
-                        break
-                    }
                     visited++
                     val decision = explainEntity(entity, stageTimings)
                     if (!decision.remove) continue
@@ -84,10 +75,6 @@ object CleanupChunkProcessor {
             } else {
                 for (entity in entities) {
                     if (isRunCurrent != null && !isRunCurrent()) break
-                    if (visited > 0 && shouldContinue != null && !shouldContinue()) {
-                        complete = false
-                        break
-                    }
                     visited++
                     if (entity is Item) {
                         val decision = explainItem(entity, pass.honorItemGrace, stageTimings)
@@ -135,7 +122,7 @@ object CleanupChunkProcessor {
             }
         }
 
-        return Result(itemCount, entityCount, visited, complete)
+        return Result(itemCount, entityCount, visited)
     }
 
     private fun prepareRecovery(

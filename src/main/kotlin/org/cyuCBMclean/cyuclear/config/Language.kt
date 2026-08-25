@@ -40,6 +40,12 @@ object Language {
         return messages.containsKey(key)
     }
 
+    val isEnglish: Boolean
+        get() {
+            val sample = messages["reload-success"] ?: return false
+            return !sample.any { it in '\u4e00'..'\u9fa5' }
+        }
+
     fun getInt(key: String, def: Int = 0): Int {
         return config?.getInt(key, def) ?: def
     }

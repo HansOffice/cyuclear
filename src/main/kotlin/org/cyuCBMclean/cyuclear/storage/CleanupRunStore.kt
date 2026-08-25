@@ -87,7 +87,11 @@ internal object CleanupRunStore {
             true
         }.getOrElse {
             runCatching { Files.deleteIfExists(temporary.toPath()) }
-            Cyuclear.instance.logger.warning("保存清理批次 ${record.id} 失败：${it.message}")
+            if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) {
+                Cyuclear.instance.logger.warning("Failed to save cleanup run ${record.id}: ${it.message}")
+            } else {
+                Cyuclear.instance.logger.warning("保存清理批次 ${record.id} 失败：${it.message}")
+            }
             false
         }
     }
@@ -106,7 +110,11 @@ internal object CleanupRunStore {
             moveAtomically(temporary, target)
         }.onFailure {
             runCatching { Files.deleteIfExists(temporary.toPath()) }
-            Cyuclear.instance.logger.warning("保存清理批次索引失败：${it.message}")
+            if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) {
+                Cyuclear.instance.logger.warning("Failed to save cleanup run index: ${it.message}")
+            } else {
+                Cyuclear.instance.logger.warning("保存清理批次索引失败：${it.message}")
+            }
         }
     }
 
@@ -152,6 +160,7 @@ internal object CleanupRunStore {
             record.failureMessage = config.getString("failure-message")?.trim()?.takeIf { it.isNotEmpty() }
             loadReasons(config, "reasons.items", record.itemReasons)
             loadReasons(config, "reasons.entities", record.entityReasons)
+            val defaultReason = if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) "Captured" else "已保存"
             for (value in config.getMapList("recovery.entries")) {
                 val encoded = value["item"]?.toString()?.takeIf { it.isNotBlank() } ?: continue
                 val amount = value["amount"].toIntValue()?.takeIf { it > 0 } ?: continue
@@ -165,7 +174,7 @@ internal object CleanupRunStore {
                     x = value["x"].toIntValue() ?: 0,
                     y = value["y"].toIntValue() ?: 0,
                     z = value["z"].toIntValue() ?: 0,
-                    reason = value["reason"]?.toString().orEmpty().ifEmpty { "已保存" },
+                    reason = value["reason"]?.toString().orEmpty().ifEmpty { defaultReason },
                     claimedBy = claimedBy,
                     claimedAt = value["claimed-at"].toLongValue() ?: 0L
                 )
@@ -175,7 +184,11 @@ internal object CleanupRunStore {
             }
             record
         }.getOrElse {
-            Cyuclear.instance.logger.warning("读取清理批次 ${file.name} 失败：${it.message}")
+            if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) {
+                Cyuclear.instance.logger.warning("Failed to load cleanup run ${file.name}: ${it.message}")
+            } else {
+                Cyuclear.instance.logger.warning("读取清理批次 ${file.name} 失败：${it.message}")
+            }
             null
         }
     }

@@ -13,18 +13,25 @@ import java.util.Locale
 object RuleConfigEditor {
     enum class Target(
         val path: String,
-        val display: String,
+        private val displayCn: String,
+        private val displayEn: String,
         val entityInput: Boolean,
         val supportsParallel: Boolean
     ) {
-        ITEMS("targets.items", "掉落物规则", false, true),
-        ENTITIES("targets.entities", "实体规则", true, true),
-        REALTIME("limits.realtime", "实时拦截", true, false)
+        ITEMS("targets.items", "掉落物规则", "Item Rules", false, true),
+        ENTITIES("targets.entities", "实体规则", "Entity Rules", true, true),
+        REALTIME("limits.realtime", "实时拦截", "Realtime Throttling", true, false);
+
+        val display: String
+            get() = if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) displayEn else displayCn
     }
 
-    enum class ListKind(val path: String, val display: String) {
-        KEEP("keep-list.list", "保留名单"),
-        CLEAN("clean-list.list", "清理名单")
+    enum class ListKind(val path: String, private val displayCn: String, private val displayEn: String) {
+        KEEP("keep-list.list", "保留名单", "Keep List"),
+        CLEAN("clean-list.list", "清理名单", "Clean List");
+
+        val display: String
+            get() = if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) displayEn else displayCn
     }
 
     enum class ListDomain(
@@ -49,11 +56,12 @@ object RuleConfigEditor {
     fun enabled(target: Target): Boolean = ConfigFiles.rules().getBoolean("${target.path}.enabled", true)
 
     fun mode(target: Target): String {
+        val isEn = org.cyuCBMclean.cyuclear.config.Language.isEnglish
         val raw = ConfigFiles.rules().getString("${target.path}.mode").orEmpty().trim().lowercase(Locale.ROOT)
         return when (raw) {
-            "黑名单", "blacklist", "clean", "清理" -> "黑名单"
-            "并行名单", "parallel", "并行" -> if (target.supportsParallel) "并行名单" else "白名单"
-            "白名单", "whitelist", "keep", "保留" -> "白名单"
+            "黑名单", "blacklist", "clean", "清理" -> if (isEn) "BLACKLIST" else "黑名单"
+            "并行名单", "parallel", "并行" -> if (target.supportsParallel) (if (isEn) "PARALLEL" else "并行名单") else (if (isEn) "WHITELIST" else "白名单")
+            "白名单", "whitelist", "keep", "保留" -> if (isEn) "WHITELIST" else "白名单"
             else -> defaultMode(target)
         }
     }
@@ -70,9 +78,16 @@ object RuleConfigEditor {
         ConfigFiles.rules().getStringList(listPath(target, domain, kind))
 
     fun matchMode(target: Target, domain: ListDomain, kind: ListKind): String {
+        val isEn = org.cyuCBMclean.cyuclear.config.Language.isEnglish
         val path = matchModePath(target, domain, kind)
         val raw = ConfigFiles.rules().getString(path).orEmpty()
-        return matchModes.firstOrNull { it == raw || modeAlias(it) == raw.lowercase(Locale.ROOT) } ?: "精确"
+        val found = matchModes.firstOrNull { it == raw || modeAlias(it) == raw.lowercase(Locale.ROOT) } ?: "精确"
+        return when (found) {
+            "精确" -> if (isEn) "EXACT" else "精确"
+            "通配" -> if (isEn) "WILDCARD" else "通配"
+            "正则" -> if (isEn) "REGEX" else "正则"
+            else -> found
+        }
     }
 
     fun domainEnabled(target: Target, domain: ListDomain): Boolean {
@@ -81,10 +96,11 @@ object RuleConfigEditor {
     }
 
     fun listTitle(domain: ListDomain, kind: ListKind): String {
+        val isEn = org.cyuCBMclean.cyuclear.config.Language.isEnglish
         return when (domain) {
             ListDomain.MATERIAL -> kind.display
-            ListDomain.NAME -> "展示名 · ${kind.display}"
-            ListDomain.LORE -> "Lore · ${kind.display}"
+            ListDomain.NAME -> if (isEn) "Name · ${kind.display}" else "展示名 · ${kind.display}"
+            ListDomain.LORE -> if (isEn) "Lore · ${kind.display}" else "Lore · ${kind.display}"
         }
     }
 
@@ -101,15 +117,46 @@ object RuleConfigEditor {
     }
 
     fun cycleMode(target: Target) {
-        val modes = if (target.supportsParallel) listOf("黑名单", "白名单", "并行名单") else listOf("白名单", "黑名单")
-        val current = modes.indexOf(mode(target))
-        ConfigTextEditor.setScalar("${target.path}.mode", "\"${modes[(current + 1).mod(modes.size)]}\"")
+        val isEn = org.cyuCBMclean.cyuclear.config.Language.isEnglish
+        val raw = ConfigFiles.rules().getString("${target.path}.mode").orEmpty().trim().lowercase(Locale.ROOT)
+        val current = when (raw) {
+            "黑名单", "blacklist", "clean", "清理" -> 0
+            "白名单", "whitelist", "keep", "保留" -> 1
+            "并行名单", "parallel", "并行" -> if (target.supportsParallel) 2 else 1
+            else -> if (target == Target.REALTIME) 1 else 0
+        }
+        val next = if (target.supportsParallel) {
+            (current + 1).mod(3)
+        } else {
+            (current + 1).mod(2)
+        }
+        val nextValue = when (next) {
+            0 -> if (isEn) "BLACKLIST" else "黑名单"
+            1 -> if (isEn) "WHITELIST" else "白名单"
+            2 -> if (isEn) "PARALLEL" else "并行名单"
+            else -> if (isEn) "BLACKLIST" else "黑名单"
+        }
+        ConfigTextEditor.setScalar("${target.path}.mode", "\"$nextValue\"")
         Settings.load()
     }
 
     fun cycleMatchMode(target: Target, domain: ListDomain, kind: ListKind) {
-        val current = matchModes.indexOf(matchMode(target, domain, kind)).coerceAtLeast(0)
-        ConfigTextEditor.setScalar(matchModePath(target, domain, kind), "\"${matchModes[(current + 1).mod(matchModes.size)]}\"")
+        val isEn = org.cyuCBMclean.cyuclear.config.Language.isEnglish
+        val raw = ConfigFiles.rules().getString(matchModePath(target, domain, kind)).orEmpty().trim().lowercase(Locale.ROOT)
+        val current = when (raw) {
+            "精确", "exact" -> 0
+            "通配", "wildcard", "glob" -> 1
+            "正则", "regex", "regexp", "re" -> 2
+            else -> 0
+        }
+        val next = (current + 1).mod(3)
+        val nextValue = when (next) {
+            0 -> if (isEn) "EXACT" else "精确"
+            1 -> if (isEn) "WILDCARD" else "通配"
+            2 -> if (isEn) "REGEX" else "正则"
+            else -> if (isEn) "EXACT" else "精确"
+        }
+        ConfigTextEditor.setScalar(matchModePath(target, domain, kind), "\"$nextValue\"")
         Settings.load()
     }
 
