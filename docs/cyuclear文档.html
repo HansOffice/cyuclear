@@ -488,7 +488,11 @@
             <tr><td><code>plugins/cyuclear/sounds.yml</code></td><td>清理、过载和垃圾桶音效</td></tr>
             <tr>
               <td><code>plugins/cyuclear/messages.yml</code></td>
-              <td>命令帮助、倒计时、清理结果、垃圾桶提示和权限提示</td>
+              <td>当前生效的语言文件（包含命令帮助、倒计时、清理结果、垃圾桶提示和权限提示）</td>
+            </tr>
+            <tr>
+              <td><code>plugins/cyuclear/lang/</code></td>
+              <td>内置语言包目录（<code>messages_zh.yml</code>、<code>messages_en.yml</code>）</td>
             </tr>
             <tr>
               <td><code>plugins/cyuclear/menu/bin.yml</code></td>
@@ -613,6 +617,10 @@ cleanup:
             <tr>
               <td><code>enabled</code></td>
               <td>插件总开关；全新安装默认关闭，修改后执行 <code>/cc reload</code> 生效</td>
+            </tr>
+            <tr>
+              <td><code>language</code></td>
+              <td>插件语言：<code>zh_CN</code>（简体中文）、<code>en_US</code>（English）或 <code>auto</code>（自动识别）</td>
             </tr>
             <tr>
               <td><code>interval-seconds</code></td>
@@ -2184,6 +2192,11 @@ items:
               <td><code>/cyuclear history [玩家] [页码]</code></td>
               <td><code>cyuclear.admin</code></td>
               <td>分页查看虚空垃圾桶领取记录，可按玩家过滤</td>
+            </tr>
+            <tr>
+              <td><code>/cyuclear lang &lt;zh_CN|en_US&gt;</code></td>
+              <td><code>cyuclear.admin</code></td>
+              <td>切换插件语言（支持 <code>zh_CN</code>、<code>en_US</code>、<code>auto</code>）并保存</td>
             </tr>
             <tr>
               <td><code>/cyuclear reload</code></td>

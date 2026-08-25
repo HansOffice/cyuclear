@@ -1,0 +1,300 @@
+# ---------------------------------------------------
+# Basic System Messages
+# ---------------------------------------------------
+prefix: "&#4A90E2[&#5DADE2Cyuclear&#4A90E2] &f"
+reload-success: "&fConfiguration and language files have been reloaded."
+no-permission: "&#E74C3CYou do not have permission to execute this command."
+player-only: "&#E74C3CThis command can only be executed by players."
+language-changed: "&aLanguage switched to: &f{lang}"
+language-current: "&7Current language: &f{lang} &8(Available: &fzh_CN&8, &fen_US&8)"
+language-invalid: "&#E74C3CInvalid language code! Available: &fzh_CN&8, &fen_US"
+
+# ---------------------------------------------------
+# Help Messages
+# ---------------------------------------------------
+help-page-size: 8
+help-border: "&#3A4352&m┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+help-title: "<gradient:#58C7FF:#7DE2B8>&lCyuclear Help</gradient>"
+help-invalid-page: "&#E74C3C× Invalid page number, please enter a number."
+help-page-out-of-bounds: "&#8A96A8Help page out of range. Showing page &#D7DEE81 &#8A96A8of &#D7DEE8{total_pages}&#8A96A8."
+help-json-button-prev: "&#7DD3FC&l‹ Prev"
+help-json-button-next: "&#7DD3FC&lNext ›"
+help-json-hover-prev: "&#8A96A8Click to view page &#D7DEE8{page}"
+help-json-hover-next: "&#8A96A8Click to view page &#D7DEE8{page}"
+help-json-page-info: "&#8A96A8Page &#D7DEE8{current_page}/{total_pages}"
+help-json-hover-entry: "&#8A96A8Click to suggest command &#D7DEE8{command}"
+help-console-page-info: "&#8A96A8Page &#D7DEE8{current_page}/{total_pages} &#8A96A8| Use &#D7DEE8{command} &#8A96A8to turn pages"
+
+help-bin: "&#D7DEE8› /cyuclear bin &#8A96A8Open the Void Bin"
+help-items: "&#D7DEE8› /cyuclear items &#8A96A8Clean dropped items manually"
+help-entities: "&#D7DEE8› /cyuclear entities &#8A96A8Clean living entities manually"
+help-all: "&#D7DEE8› /cyuclear all &#8A96A8Run a full cleanup sweep"
+help-check: "&#D7DEE8› /cyuclear check &#8A96A8Inspect target entity/item decision trace"
+help-preview: "&#D7DEE8› /cyuclear preview &#8A96A8Simulate a cleanup without removing entities"
+help-status: "&#D7DEE8› /cyuclear status &#8A96A8View runtime performance and hook status"
+help-reload: "&#D7DEE8› /cyuclear reload &#8A96A8Reload configurations and apply main toggle"
+help-lang: "&#D7DEE8› /cyuclear lang <zh_CN|en_US> &#8A96A8Switch plugin language"
+help-cluster: "&#D7DEE8› /cyuclear cluster &#8A96A8View cross-server cluster status"
+help-menu: "&#D7DEE8› /cyuclear menu &#8A96A8Open management center"
+help-runs: "&#D7DEE8› /cyuclear runs [page] &#8A96A8View cleanup run history"
+help-run: "&#D7DEE8› /cyuclear run <id> [details|reasons] &#8A96A8View cleanup run details"
+help-recover: "&#D7DEE8› /cyuclear recover <id> &#8A96A8Open recovery inventory for a run"
+help-hotspots: "&#D7DEE8› /cyuclear hotspots [page] &#8A96A8View hotspot chunks"
+help-cancel: "&#D7DEE8› /cyuclear cancel &#8A96A8Stop the running cleanup task"
+help-doctor: "&#D7DEE8› /cyuclear doctor &#8A96A8Diagnose configuration and menu issues"
+help-snapshot: "&#D7DEE8› /cyuclear snapshot &#8A96A8Backup current configuration files"
+help-history: "&#D7DEE8› /cyuclear history [player] [page] &#8A96A8View void bin claim history"
+
+# ---------------------------------------------------
+# Status and Reload
+# ---------------------------------------------------
+startup-disabled-console: "&eSafe startup: Cleanup is disabled. Enable 'enabled: true' in config.yml, then run /cc reload."
+startup-disabled-admin: "&eCyuClear is safely disabled. Enable 'enabled: true' in config.yml, then run /cc reload."
+reload-enabled: "&aMain toggle is ENABLED: Cleanup tasks, chunk limits and cluster sync are active."
+reload-disabled: "&eMain toggle is DISABLED: Entities and items will not be cleaned or intercepted."
+plugin-disabled: "&#E74C3CPlugin is disabled. Please enable it in config.yml and run /cc reload."
+
+# ---------------------------------------------------
+# Rule List & Menu Interaction
+# ---------------------------------------------------
+menu-list-item-hint: "&7Click an item in inventory to add to list; click an entry to remove."
+menu-list-entity-hint: "&7Click a spawn egg in inventory to add entity; click an entry to remove."
+menu-list-name-hint: "&7Click an item with custom name to add stripped name; click an entry to remove."
+menu-list-lore-hint: "&7Click an item with lore to add stripped lore lines; click an entry to remove."
+menu-list-added: "&aAdded to the current list."
+menu-list-added-multi: "&aAdded &#5DADE2{count} &aentries to the current list."
+menu-list-removed: "&aRemoved from the current list."
+menu-list-changed: "&eList modified elsewhere, interface refreshed."
+menu-list-duplicate: "&eThis item is already in the list."
+menu-list-first-page: "&7Already on the first page."
+menu-list-last-page: "&7Already on the last page."
+menu-match-mode-changed: "&aMatching mode for {list} changed to &f{mode}"
+menu-rule-toggled: "&aRule {rule} is now {state}"
+menu-list-spawn-egg-only: "&#E74C3CEntity list only accepts recognizable spawn eggs."
+menu-list-no-display-name: "&#E74C3CThis item has no custom display name."
+menu-list-no-lore: "&#E74C3CThis item has no lore."
+menu-list-items-only: "&#E74C3CName and lore matching are only available for item rules."
+menu-save-failed: "&#E74C3CFailed to save config, check console and rules.yml."
+
+# ---------------------------------------------------
+# Countdown and Broadcast
+# ---------------------------------------------------
+countdown-warn: "&fEntity cleanup will begin in &#5DADE2{time} &fseconds!"
+countdown-warn-chat: "&fEntity cleanup will begin in &#5DADE2{time} &fseconds!"
+countdown-warn-actionbar: "&fCleanup in &#5DADE2{time} &fseconds"
+countdown-warn-bossbar: "&fCleanup in &#5DADE2{time} &fseconds"
+cleanup-summary: "&fCleanup finished in &#5DADE2{time_text}&f, cleared &#5DADE2{items} &fitems and &#5DADE2{entities} &fentities."
+panic-warn: "&#E74C3C[Emergency] &fEntity count exceeded hard limit &#E74C3C({count})&f! Forcing cross-chunk cleanup sweep..."
+
+# ---------------------------------------------------
+# Chunk Overload Protection
+# ---------------------------------------------------
+chunk-overload-warn: "&#E74C3CChunk Limit &8· &f{world} &7{x}, {y}, {z} &8· &7Blocked {type} &f{id} &8· &7{count}/{threshold}"
+overload-type-item: "Item"
+overload-type-item-type: "Specific Item"
+overload-type-entity: "Entity"
+overload-type-entity-type: "Specific Entity"
+overload-type-spawn-pressure: "Spawn Pressure"
+
+# ---------------------------------------------------
+# Void Bin & Personal Buffer
+# ---------------------------------------------------
+bin-not-enabled: "&#E74C3CVoid Bin feature is not enabled on this server."
+bin-empty: "&fVoid Bin is currently empty. Please wait for the next cleanup!"
+bin-expired: "&#E74C3CVoid Bin has expired and locked. &fPlease wait for the next cleanup!"
+bin-open-hint: "&fYou have &#5DADE2{time} &fseconds to run &#5DADE2/cc bin &fto recover items!"
+bin-open-click:
+  text: "&fYou have &#5DADE2{time} &fseconds to &#5DADE2[Click to open Void Bin]"
+  hover: "&f&#5DADE2{time} &fseconds left, click to run &#5DADE2/cc bin"
+bin-closing-warn: "&#E74C3C[Warning] &fVoid Bin items will be permanently destroyed in &#E74C3C{time} &fseconds!"
+bin-closing-warn-chat: "&#E74C3C[Warning] &fVoid Bin items will be permanently destroyed in &#E74C3C{time} &fseconds!"
+bin-closing-warn-actionbar: "&fVoid Bin expires in &#E74C3C{time} &fseconds!"
+bin-closing-warn-bossbar: "&fVoid Bin expires in &#E74C3C{time} &fseconds"
+bin-deposit-success: "&aItem successfully deposited into Void Bin!"
+bin-deposit-buffer-staged: "&fItem placed in personal staging buffer. Confirm in the menu to move to Void Bin."
+bin-deposit-cluster-disabled: "&#E74C3CManual deposits are disabled when cross-server cluster sync is active."
+bin-deposit-disabled: "&#E74C3CManual player deposits are disabled on this server."
+bin-deposit-no-permission: "&#E74C3CYou do not have permission to deposit items into Void Bin."
+bin-deposit-denied: "&#E74C3CThis item cannot be deposited: &f{reason}"
+bin-deposit-limit: "&#E74C3CVoid Bin has reached maximum item type capacity."
+bin-item-gone: "&7This item has already been claimed by another player."
+bin-sync-unavailable: "&#E74C3CCluster sync unavailable. Void Bin locked to prevent duplication/loss."
+bin-claim-pending: "&7Previous claim request is still processing, please wait."
+bin-claim-cooldown: "&#E74C3CPlease wait {time} seconds before claiming another item."
+bin-claim-success: "&fItem claimed! Next claim available in &#5DADE2{time} &fseconds."
+bin-claim-recovered: "&fRecovered &#5DADE2{amount} &fpending cluster Void Bin items."
+bin-buffer-empty: "&7Personal deposit buffer has no pending items."
+bin-buffer-confirmed: "&aDeposit confirmed. Items moved to Void Bin."
+bin-buffer-cancelled: "&7Deposit cancelled. Items returned to inventory."
+bin-buffer-returned: "&7Returned &#5DADE2{amount} &7items to inventory."
+bin-buffer-return-full: "&eInventory full! Unreturned items remain in staging buffer. Run &f/cc bin &eafter clearing space."
+bin-buffer-recovered: "&fRecovered &#5DADE2{amount} &fitems from personal buffer."
+bin-buffer-recovery-failed: "&#E74C3CFailed to load personal buffer. Item file preserved, check console."
+bin-buffer-persist-failed: "&#E74C3CFailed to save personal buffer. Items remain in inventory, try again later."
+bin-buffer-disabled: "&#E74C3CPersonal deposit buffer is disabled, contact administrator."
+bin-buffer-confirm-failed: "&#E74C3CConfirmation failed: {reason}"
+bin-buffer-item-returned: "&7Returned &#5DADE2{returned} &7items."
+bin-buffer-item-returned-partial: "&7Returned &#5DADE2{returned} &7items, &#5DADE2{remaining} &7pending."
+bin-buffer-item-return-full: "&eInventory full, this item remains in pending buffer."
+bin-buffer-item-gone: "&7This pending item is no longer in buffer."
+bin-buffer-item-persist-failed: "&#E74C3CFailed to save buffer. Item not retrieved, try again later."
+
+# ---------------------------------------------------
+# Task Scheduling & Module Status
+# ---------------------------------------------------
+scan-running: "&#E74C3CA cleanup task is already running, please wait!"
+scan-not-running: "&7No cleanup task is currently running."
+scan-cancelled: "&eCurrent cleanup task cancelled."
+cleanup-started: "&fCleanup started. Results will be broadcast on completion."
+module-items-disabled: "&#E74C3CItem cleanup module is disabled."
+module-entities-disabled: "&#E74C3CEntity cleanup module is disabled."
+module-all-disabled: "&#E74C3CBoth item and entity cleanup modules are disabled."
+cluster-local-cleanup-no-bin: "&eManual cleanup does not write to shared Void Bin in cluster mode."
+
+# ---------------------------------------------------
+# Status Reporter
+# ---------------------------------------------------
+status-header: "&#4A90E2&m----------&r &f&lRuntime Status &#4A90E2&m----------"
+status-runtime: "&7Platform &#5DADE2{platform} &8| &7Cleaning &f{running} &8| &7Profile &#5DADE2{profile}"
+status-activation: "&7Active State &#5DADE2{state}"
+status-scan: "&7Chunks/tick &#5DADE2{chunks} &8| &7Budget &#5DADE2{budget}ms &8| &7Candidate Index &f{candidate}"
+status-folia: "&7Folia Region Tasks &#5DADE2{active} &8| &7Dispatch &#5DADE2{dispatch}/tick"
+status-last: "&7Last Sweep &f{summary}"
+status-recovery: "&7Recovery &f{state} &8| &7Latest Run &#5DADE2{run} &8| &7Pending &#5DADE2{recovery}"
+status-hotspots: "&7Hotspots &#5DADE2{total} &8| &7Tripped Breakers &#E74C3C{breakers}"
+status-modules: "&7Modules Items &f{items} &7Entities &f{entities} &8| &7Mode &f{item_mode}/{entity_mode}"
+status-lists: "&7Item IDs Keep/Clean &f{item_keep}/{item_clean} &8| &7Names &f{name_keep}/{name_clean} &8| &7Lore &f{lore_keep}/{lore_clean} &8| &7Entities &f{entity_keep}/{entity_clean}"
+status-named-rules: "&7Named Rules &#5DADE2{total} &8| &7Items &#5DADE2{items} &8| &7Entities &#5DADE2{entities}"
+status-hooks: "&7Hooks Mythic &f{mythic} &8| &7CraftEngine &f{craftengine} &8| &7Pokemon &f{pokemon}"
+status-footer: "&#4A90E2&m-----------------------------"
+
+# ---------------------------------------------------
+# Void Bin Claim History
+# ---------------------------------------------------
+history-header: "&#4A90E2&m----------&r &f&lVoid Bin Claim History &#4A90E2&m----------"
+history-empty: "&7No matching claim records found."
+history-entry: "&7{time} &f{player} &8[{server}] &7claimed &#5DADE2{item} &fx{amount} &8{delivery}"
+history-footer: "&8Page &f{page}&8/&f{total}  &7/cc history [player] [page]"
+
+# ---------------------------------------------------
+# Runs & Recovery Center
+# ---------------------------------------------------
+runs-header: "&#4A90E2&m----------&r &f&lCleanup Runs &#4A90E2&m----------"
+runs-empty: "&7No cleanup runs recorded yet."
+runs-entry: "&7#{id} &f{origin} &8| &7{state} &8| &7Items &#5DADE2{items} &8| &7Entities &#5DADE2{entities} &8| &7Recovery &#5DADE2{recovery}"
+runs-footer: "&8Page &f{page}&8/&f{total}  &7/cc recover <id>"
+run-not-found: "&#E74C3CCleanup run not found."
+run-header: "&#4A90E2&m----------&r &f&lRun Details &#4A90E2&m----------"
+run-summary: "&7#{id} &f{origin} &8| &7{state}"
+run-counts: "&7Chunks &#5DADE2{chunks} &8| &7Items &#5DADE2{items} &8| &7Entities &#5DADE2{entities} &8| &7Recovery &#5DADE2{recovery}"
+run-slowest: "&7Slowest Chunk &#5DADE2{world} {x},{z} &8| &#5DADE2{millis}ms"
+run-failures: "&7Failed Chunks &#E74C3C{count} &8| &7{message}"
+run-reasons-empty: "&7No reason statistics available for this run."
+run-reason: "&8- &7{reason} &f{count}"
+run-footer: "&#4A90E2&m-----------------------------"
+recovery-confirm-hint: "&eLeft-Click the same item again to confirm claim."
+recovery-claimed: "&aPut &#5DADE2{amount} &aitems into your inventory."
+recovery-not-ready: "&#E74C3CThis run has not completed yet, cannot recover items."
+recovery-expired: "&#E74C3CRecoverable items for this run have expired."
+recovery-claimed-before: "&7This recoverable item has already been claimed."
+recovery-invalid-item: "&#E74C3CItem data corrupted, original log retained."
+recovery-no-space: "&#E74C3CInventory full, please clear space and try again."
+recovery-save-failed: "&#E74C3CFailed to write claim log, item not dispensed."
+
+# ---------------------------------------------------
+# Config Doctor
+# ---------------------------------------------------
+doctor-header: "&#4A90E2&m----------&r &f&lConfig Doctor &#4A90E2&m----------"
+doctor-entry: "&8[{level}] &7{file} &f{path} &8- &f{message}"
+doctor-more: "&7Check respective config files for remaining &#5DADE2{count} &7items."
+doctor-summary: "&7Diagnostics complete &8| &7Errors &#E74C3C{errors} &8| &7Warnings &#E6B422{warnings}"
+doctor-footer: "&#4A90E2&m-----------------------------"
+
+# ---------------------------------------------------
+# Config Snapshots
+# ---------------------------------------------------
+snapshot-success: "&aConfiguration saved! Total &#5DADE2{count} &afiles backed up."
+snapshot-failed: "&#E74C3CFailed to create config snapshot, check console."
+reload-snapshot: "&7Saved &#5DADE2{count} &7config files before reload."
+
+# ---------------------------------------------------
+# Hotspot Monitoring
+# ---------------------------------------------------
+hotspots-header: "&#4A90E2&m----------&r &f&lHotspot Chunks &#4A90E2&m----------"
+hotspots-empty: "&7No active hotspot chunks."
+hotspots-entry: "&7{index}. &f{world} &#5DADE2{x},{z} &8| &7{state} &8| &7Items &#5DADE2{items} &8| &7Entities &#5DADE2{entities} &8| &7Triggers &#5DADE2{triggers}"
+hotspots-footer: "&8Page &f{page}&8/&f{total}  &7/cc hotspots [page]"
+hotspot-not-found: "&#E74C3CThis hotspot chunk has returned to normal."
+hotspot-no-breaker: "&7This chunk is not currently tripped by circuit breaker."
+hotspot-release-confirm: "&eLeft-Click again to release this temporary breaker."
+hotspot-released: "&aReleased breaker for &f{world} {x},{z}"
+hotspot-cleanup-confirm: "&eLeft-Click again to sweep this chunk now."
+hotspot-cleanup-started: "&aStarted cleanup for chunk &f{world} {x},{z}"
+admin-cleanup-confirm: "&eLeft-Click again to confirm immediate cleanup."
+admin-cancel-confirm: "&eLeft-Click again to confirm stopping cleanup."
+
+# ---------------------------------------------------
+# Crosshair Inspection
+# ---------------------------------------------------
+check-no-target: "&7Please look at an entity or dropped item first."
+check-header: "&#4A90E2&m----------&r &f&lTarget Inspection &#4A90E2&m----------"
+check-entity-id: "&7Entity: &#5DADE2{id}"
+check-entity-name: "&7Custom Name: &f{name}"
+check-entity-name-none: "&7Custom Name: &8None"
+check-scoreboard-tags: "&7Scoreboard Tags: &f{tags}"
+check-scoreboard-tags-none: "&7Scoreboard Tags: &8None"
+check-ce-id: "&7CraftEngine: &#5DADE2{id}"
+check-item-id: "&7Item: &#5DADE2{id}"
+check-item-ids: "&7Resolved IDs: &#5DADE2{ids}"
+check-item-name: "&7Display Name: &f{name}"
+check-item-name-none: "&7Display Name: &8None"
+check-item-lore: "&7Lore: &f{lore}"
+check-item-lore-none: "&7Lore: &8None"
+check-world: "&7World: &f{world}"
+check-location: "&7Location: &#5DADE2{x}, {y}, {z} &8| &7Chunk: &#5DADE2{chunk_x}, {chunk_z}"
+check-age: "&7Age: &#5DADE2{seconds}s"
+check-hotspot: "&7Chunk State: &#5DADE2{state} &8| &7Items &#5DADE2{items} &8| &7Entities &#5DADE2{entities} &8| &7Triggers &#5DADE2{triggers}"
+check-hotspot-none: "&7Chunk State: &fNormal"
+check-named: "&7Named: &f{value}"
+check-persistent: "&7Persistent: &f{value}"
+check-no-despawn: "&7No Despawn: &f{value}"
+check-tamed: "&7Tamed: &f{value}"
+check-raid-event: "&7Raid Member: &f{value}"
+check-passengers: "&7Has Passengers: &f{value}"
+check-vehicle: "&7In Vehicle: &f{value}"
+check-detail-rule: "&7Detail Rule: &#5DADE2{rule}"
+check-named-rule: "&7Named Rule: &#5DADE2{rule}"
+check-rule-priority: "&7Rule Priority: &#5DADE2{priority}"
+check-bypasses: "&7Bypassed Protections: &f{protections}"
+check-reason: "&7Matched Reason: &#5DADE2{reason}"
+check-result: "&7Final Decision: &#5DADE2{result}"
+check-bin-recovery: "&7Bin Recovery: &#5DADE2{result} &8- &7{reason}"
+check-bin-deposit: "&7Player Deposit: &#5DADE2{result} &8- &7{reason}"
+check-trace: "&8- &7{stage}: &f{detail}"
+check-footer: "&#4A90E2&m--------------------------------"
+
+# ---------------------------------------------------
+# Cleanup Preview
+# ---------------------------------------------------
+preview-start: "&7Simulating cleanup run, report will display shortly."
+preview-disabled: "&#E74C3CNo active cleanup modules to preview."
+preview-header: "&#4A90E2&m----------&r &f&lCleanup Preview &#4A90E2&m----------"
+preview-summary: "&7Scanned &f{chunks} &7chunks, total &f{scanned} &7entities."
+preview-remove: "&7Estimated removals: &#5DADE2{items} &7items, &#5DADE2{entities} &7entities."
+preview-protected: "&7Protected: Named &f{named} &7Tamed &f{tamed} &7Persistent &f{persistent} &7NoDespawn &f{no_despawn} &7Event &f{event} &7KeepList &f{keep}"
+preview-reason: "&8- &7{reason}: &f{count}"
+preview-footer: "&#4A90E2&m-----------------------------"
+
+# ---------------------------------------------------
+# Menu Item Lore
+# ---------------------------------------------------
+bin-lore-amount: "&7Total: &a{amount}"
+bin-lore-left: "&aLeft-Click to take 1"
+bin-lore-right: "&aRight-Click to take half stack"
+bin-lore-shift: "&aShift+Left-Click to take full stack"
+bin-buffer-lore-amount: "&7Pending: &a{amount}"
+bin-buffer-lore-left: "&aLeft-Click to retrieve 1"
+bin-buffer-lore-right: "&aRight-Click to retrieve half stack"
+bin-buffer-lore-shift-stack: "&aShift+Left-Click to retrieve full stack"
+bin-buffer-lore-shift-all: "&aShift+Right-Click to retrieve all"
+bin-buffer-lore-hint: "&eItems enter Void Bin after confirmation"

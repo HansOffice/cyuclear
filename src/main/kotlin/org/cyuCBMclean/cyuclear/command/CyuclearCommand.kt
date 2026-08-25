@@ -40,11 +40,10 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
 
     private val adminCommands = listOf(
         "items", "entities", "all", "cluster", "menu", "runs", "run", "recover", "hotspots",
-        "cancel", "doctor", "validate", "snapshot", "history", "status", "reload", "check", "inspect", "preview"
+        "cancel", "doctor", "validate", "snapshot", "history", "status", "reload", "check", "inspect", "preview", "lang", "language"
     )
 
     private fun isAdminCommand(name: String): Boolean {
-        if (name == "cluster" && BuildInfo.isEnglishEdition) return false
         return name in adminCommands
     }
 
@@ -141,11 +140,16 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
                 )
             }
             "cluster" -> {
-                if (BuildInfo.isEnglishEdition) {
-                    sendHelp(sender, null)
+                ClusterManager.statusLines().forEach(sender::sendMessage)
+            }
+            "lang", "language" -> {
+                if (args.size < 2) {
+                    sender.sendMessage(Language.get("language-current", "lang" to Language.currentLanguageCode))
                     return true
                 }
-                ClusterManager.statusLines().forEach(sender::sendMessage)
+                val targetLang = args[1].trim()
+                Language.setLanguage(targetLang, true)
+                sender.sendMessage(Language.get("language-changed", "lang" to Language.currentLanguageCode))
             }
             "menu" -> {
                 if (sender !is Player) {
@@ -300,13 +304,10 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
             if (sender.hasPermission("cyuclear.admin")) {
                 subCommands.addAll(
                     listOf(
-                        "items", "entities", "all", "reload", "menu", "runs", "run", "recover",
+                        "items", "entities", "all", "reload", "lang", "cluster", "menu", "runs", "run", "recover",
                         "hotspots", "cancel", "doctor", "validate", "snapshot", "history", "check", "preview", "status"
                     )
                 )
-                if (!BuildInfo.isEnglishEdition) {
-                    subCommands.add("cluster")
-                }
             }
 
             return subCommands.filter { it.startsWith(args[0], ignoreCase = true) }
@@ -315,6 +316,10 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
         if (args.size == 2 && args[0].equals("help", ignoreCase = true)) {
             val total = getHelpTotalPages(sender)
             return (1..total).map { it.toString() }.filter { it.startsWith(args[1]) }
+        }
+
+        if (args.size == 2 && (args[0].equals("lang", ignoreCase = true) || args[0].equals("language", ignoreCase = true)) && sender.hasPermission("cyuclear.admin")) {
+            return listOf("zh_CN", "en_US", "auto").filter { it.startsWith(args[1], ignoreCase = true) }
         }
 
         if (args.size == 2 && (args[0].equals("recover", ignoreCase = true) || args[0].equals("run", ignoreCase = true)) && sender.hasPermission("cyuclear.admin")) {
@@ -347,6 +352,7 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
         HelpEntry("/cc preview", "help-preview", true),
         HelpEntry("/cc status", "help-status", true),
         HelpEntry("/cc reload", "help-reload", true),
+        HelpEntry("/cc lang <zh_CN|en_US>", "help-lang", true),
         HelpEntry("/cc cluster", "help-cluster", true),
         HelpEntry("/cc menu", "help-menu", true),
         HelpEntry("/cc runs", "help-runs", true),
@@ -362,7 +368,7 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
     private fun getAvailableEntries(sender: CommandSender): List<HelpEntry> {
         val hasAdmin = sender.hasPermission("cyuclear.admin")
         return allHelpEntries.filter { entry ->
-            (!entry.adminOnly || hasAdmin) && !(BuildInfo.isEnglishEdition && entry.key == "help-cluster")
+            !entry.adminOnly || hasAdmin
         }
     }
 

@@ -8,6 +8,9 @@ class IdMatcher private constructor(
     private val exactValues: Set<String>,
     private val patterns: List<Pattern>
 ) {
+    private val hasExact: Boolean = exactValues.isNotEmpty()
+    private val hasPatterns: Boolean = patterns.isNotEmpty()
+    private val patternArray: Array<Pattern> = patterns.toTypedArray()
 
     fun matches(input: String): Boolean {
         val normalized = input.trim().lowercase()
@@ -16,10 +19,11 @@ class IdMatcher private constructor(
 
     fun matchesNormalized(input: String): Boolean {
         if (input.isEmpty()) return false
-        if (exactValues.contains(input)) return true
+        if (hasExact && exactValues.contains(input)) return true
+        if (!hasPatterns) return false
 
-        for (pattern in patterns) {
-            if (pattern.matcher(input).matches()) {
+        for (i in patternArray.indices) {
+            if (patternArray[i].matcher(input).matches()) {
                 return true
             }
         }
@@ -28,13 +32,30 @@ class IdMatcher private constructor(
     }
 
     fun matchesAnyNormalized(values: Iterable<String>): Boolean {
+        if (isEmpty()) return false
+
+        // Fast-path 1: 常规精准名称直接进行 O(1) 哈希查询，无需触发任何正则或通配计算
+        if (hasExact) {
+            for (value in values) {
+                if (value.isNotEmpty() && exactValues.contains(value)) return true
+            }
+        }
+
+        // Fast-path 2: 若未配置正则/通配规则，直接快速短路返回
+        if (!hasPatterns) return false
+
         for (value in values) {
-            if (matchesNormalized(value)) return true
+            if (value.isEmpty()) continue
+            for (i in patternArray.indices) {
+                if (patternArray[i].matcher(value).matches()) {
+                    return true
+                }
+            }
         }
         return false
     }
 
-    fun isEmpty(): Boolean = exactValues.isEmpty() && patterns.isEmpty()
+    fun isEmpty(): Boolean = !hasExact && !hasPatterns
 
     companion object {
         private val EMPTY = IdMatcher(emptySet(), emptyList())

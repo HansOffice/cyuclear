@@ -10,37 +10,65 @@ import java.util.concurrent.atomic.AtomicLong
 
 object CandidateChunkIndex {
     data class Key(val worldId: UUID, val x: Int, val z: Int)
-    data class Selection(val candidates: Set<Key>, val fullScan: Boolean)
+    data class Selection(val candidates: List<ChunkCoord>, val fullScan: Boolean)
     data class ChunkCoord(val world: World, val x: Int, val z: Int)
 
-    private val candidates = ConcurrentHashMap.newKeySet<Key>()
+    // 64-bit 紧凑区块坐标打包算法：高32位为X坐标，低32位为Z坐标
+    @JvmStatic
+    fun packCoord(x: Int, z: Int): Long = (x.toLong() shl 32) or (z.toLong() and 0xFFFFFFFFL)
+
+    @JvmStatic
+    fun unpackX(packed: Long): Int = (packed shr 32).toInt()
+
+    @JvmStatic
+    fun unpackZ(packed: Long): Int = packed.toInt()
+
+    private val candidatesByWorld = ConcurrentHashMap<UUID, MutableSet<Long>>()
     private val scheduledCycles = AtomicLong(0L)
 
     fun mark(chunk: Chunk) {
-        if (Settings.candidateIndexEnabled) candidates.add(key(chunk))
+        if (!Settings.candidateIndexEnabled) return
+        val set = candidatesByWorld.computeIfAbsent(chunk.world.uid) { ConcurrentHashMap.newKeySet() }
+        set.add(packCoord(chunk.x, chunk.z))
+    }
+
+    fun mark(world: World, x: Int, z: Int) {
+        if (!Settings.candidateIndexEnabled) return
+        val set = candidatesByWorld.computeIfAbsent(world.uid) { ConcurrentHashMap.newKeySet() }
+        set.add(packCoord(x, z))
     }
 
     fun selection(origin: CleanupOrigin): Selection {
         if (!Settings.candidateIndexEnabled || origin != CleanupOrigin.SCHEDULED) {
-            return Selection(emptySet(), true)
+            return Selection(emptyList(), true)
         }
         val cycle = scheduledCycles.incrementAndGet()
         val fullScan = cycle == 1L || cycle % Settings.candidateFullScanEveryCycles == 0L
-        return if (fullScan) Selection(emptySet(), true) else Selection(candidates, false)
+        if (fullScan) {
+            return Selection(emptyList(), true)
+        }
+
+        val worlds = Bukkit.getWorlds()
+        val coords = ArrayList<ChunkCoord>(size().coerceAtMost(4096))
+        for (world in worlds) {
+            if (!Settings.isWorldEnabled(world.name)) continue
+            val set = candidatesByWorld[world.uid] ?: continue
+            for (packed in set) {
+                val x = unpackX(packed)
+                val z = unpackZ(packed)
+                if (world.isChunkLoaded(x, z)) {
+                    coords.add(ChunkCoord(world, x, z))
+                }
+            }
+        }
+        return Selection(coords, false)
     }
 
     class Collector internal constructor(
         val fullScan: Boolean,
         private val worlds: List<World>,
-        private val candidateKeys: List<Key>?
+        private val candidateCoords: List<ChunkCoord>?
     ) {
-        private val worldById = HashMap<UUID, World>(worlds.size)
-
-        init {
-            for (world in worlds) {
-                worldById[world.uid] = world
-            }
-        }
         private var worldIndex = 0
         private var snapshot: Array<Chunk>? = null
         private var snapshotIndex = 0
@@ -73,25 +101,24 @@ object CandidateChunkIndex {
                 }
                 val chunk = chunks[snapshotIndex++]
                 result += ChunkCoord(chunk.world, chunk.x, chunk.z)
-                candidates.remove(key(chunk))
+                consume(chunk.world.uid, chunk.x, chunk.z)
             }
         }
 
         private fun drainCandidates(limit: Int, result: ArrayList<ChunkCoord>) {
-            val keys = candidateKeys
-            if (keys == null) {
+            val coords = candidateCoords
+            if (coords == null) {
                 finished = true
                 return
             }
-            while (result.size < limit && candidateIndex < keys.size) {
-                val key = keys[candidateIndex++]
-                val world = worldById[key.worldId] ?: continue
-                if (!Settings.isWorldEnabled(world.name)) continue
-                if (!world.isChunkLoaded(key.x, key.z)) continue
-                result += ChunkCoord(world, key.x, key.z)
-                candidates.remove(key)
+            while (result.size < limit && candidateIndex < coords.size) {
+                val coord = coords[candidateIndex++]
+                if (!Settings.isWorldEnabled(coord.world.name)) continue
+                if (!coord.world.isChunkLoaded(coord.x, coord.z)) continue
+                result += coord
+                consume(coord.world.uid, coord.x, coord.z)
             }
-            if (candidateIndex >= keys.size) finished = true
+            if (candidateIndex >= coords.size) finished = true
         }
     }
 
@@ -100,20 +127,30 @@ object CandidateChunkIndex {
         return if (selection.fullScan) {
             Collector(true, worlds, null)
         } else {
-            Collector(false, worlds, selection.candidates.toList())
+            Collector(false, worlds, selection.candidates)
         }
     }
 
     fun fullScanCollector(): Collector = Collector(true, Bukkit.getWorlds(), null)
 
-    fun consume(key: Key) {
-        candidates.remove(key)
+    fun consume(worldUid: UUID, x: Int, z: Int) {
+        candidatesByWorld[worldUid]?.remove(packCoord(x, z))
     }
 
-    fun size(): Int = candidates.size
+    fun consume(key: Key) {
+        consume(key.worldId, key.x, key.z)
+    }
+
+    fun size(): Int {
+        var total = 0
+        for (set in candidatesByWorld.values) {
+            total += set.size
+        }
+        return total
+    }
 
     fun reset() {
-        candidates.clear()
+        candidatesByWorld.clear()
         scheduledCycles.set(0L)
     }
 

@@ -131,9 +131,11 @@ internal object CyuclearLifecycle {
         console.sendMessage("§f")
         console.sendMessage(if (isEn) "§7 ▸ §fVersion §b${plugin.description.version} §8| §fPlatform §b${platformName(plugin)}" else "§7 ▸ §f版本 §b${plugin.description.version} §8| §f平台 §b${platformName(plugin)}")
         console.sendMessage(if (isEn) "§7 ▸ §fModules §b${moduleText()}" else "§7 ▸ §f模块 §b${moduleText()}")
-        if (!BuildInfo.isEnglishEdition) {
-            console.sendMessage("§7 ▸ §f跨服 §b${if (Settings.clusterEnabled) "已开启 / ${Settings.clusterId} / ${Settings.clusterServerId.ifBlank { "未配置节点" }}" else "未开启"}")
-        }
+        console.sendMessage(if (isEn) {
+            "§7 ▸ §fCluster §b${if (Settings.clusterEnabled) "Enabled / ${Settings.clusterId} / ${Settings.clusterServerId.ifBlank { "No Node ID" }}" else "Disabled"}"
+        } else {
+            "§7 ▸ §f跨服 §b${if (Settings.clusterEnabled) "已开启 / ${Settings.clusterId} / ${Settings.clusterServerId.ifBlank { "未配置节点" }}" else "未开启"}"
+        })
         console.sendMessage(if (isEn) "§7 ▸ §fLists §b${listModeText()}" else "§7 ▸ §f名单 §b${listModeText()}")
         console.sendMessage(if (isEn) {
             "§7 ▸ §fPerformance §b${Settings.performanceProfile} §8| §fChunks §b${Settings.scanMaxChunksPerTick}/tick §8| §fBudget §b${Settings.scanMaxMillisPerTick}ms"

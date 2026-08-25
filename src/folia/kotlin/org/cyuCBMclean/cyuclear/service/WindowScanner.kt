@@ -239,58 +239,86 @@ object WindowScanner {
         val regionScheduler = Bukkit.getRegionScheduler()
 
         while (isCurrent(generation) && dispatchedThisTick < maxDispatch && activeTasks.get() < maxActive) {
-            val ref = chunkQueue.poll() ?: break
+            val first = chunkQueue.poll() ?: break
             remainingQueue.decrementAndGet()
+
+            // 同一 Folia Region (8x8 chunks) 的连续区块合并为一个 Region Task 执行
+            val batch = ArrayList<ChunkRef>(8)
+            batch.add(first)
+            val world = first.world
+            val rx = first.x shr 3
+            val rz = first.z shr 3
+
+            while (batch.size < 8 && dispatchedThisTick + batch.size < maxDispatch) {
+                val next = chunkQueue.peek() ?: break
+                if (next.world == world && (next.x shr 3) == rx && (next.z shr 3) == rz) {
+                    chunkQueue.poll()
+                    remainingQueue.decrementAndGet()
+                    batch.add(next)
+                } else {
+                    break
+                }
+            }
+
             activeTasks.incrementAndGet()
-            dispatchedChunks.incrementAndGet()
-            dispatchedThisTick++
+            dispatchedChunks.addAndGet(batch.size)
+            dispatchedThisTick += batch.size
 
             try {
-                regionScheduler.execute(Cyuclear.instance, ref.world, ref.x, ref.z, Runnable {
-                    runRegionChunk(generation, ref, cleanupPass, collectItemsForRecovery, run, isRunCurrent)
+                regionScheduler.execute(Cyuclear.instance, world, first.x, first.z, Runnable {
+                    runRegionBatch(generation, batch, cleanupPass, collectItemsForRecovery, run, isRunCurrent)
                 })
             } catch (ex: Exception) {
                 synchronized(stateLock) {
                     activeTasks.decrementAndGet()
                 }
                 if (Language.isEnglish) {
-                    Cyuclear.instance.logger.warning("Chunk cleanup dispatch failed: ${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+                    Cyuclear.instance.logger.warning("Chunk cleanup dispatch failed: ${world.name} ${first.x},${first.z} - ${ex.message}")
                 } else {
-                    Cyuclear.instance.logger.warning("区块清理派发失败：${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+                    Cyuclear.instance.logger.warning("区块清理派发失败：${world.name} ${first.x},${first.z} - ${ex.message}")
                 }
-                run.recordFailure(ref.world.name, ref.x, ref.z, ex.message)
+                for (ref in batch) {
+                    run.recordFailure(ref.world.name, ref.x, ref.z, ex.message)
+                }
             }
         }
 
         tryFinish(generation, collectItemsForRecovery, run)
     }
 
-    private fun runRegionChunk(
+    private fun runRegionBatch(
         generation: Long,
-        ref: ChunkRef,
+        batch: List<ChunkRef>,
         cleanupPass: CleanupChunkProcessor.CleanupPass,
         collectItemsForRecovery: Boolean,
         run: CleanupRunManager.RunHandle,
         isRunCurrent: () -> Boolean
     ) {
+        var processedCount = 0
         try {
-            if (!isCurrent(generation)) return
-            val result = processChunk(ref, cleanupPass, run, isRunCurrent)
-            localItems.addAndGet(result.items)
-            localEntities.addAndGet(result.entities)
-            scannedEntities.addAndGet(result.scannedEntities)
-        } catch (ex: Exception) {
-            if (Language.isEnglish) {
-                Cyuclear.instance.logger.warning("Chunk cleanup failed: ${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
-            } else {
-                Cyuclear.instance.logger.warning("区块清理失败：${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+            for (i in batch.indices) {
+                if (!isCurrent(generation)) break
+                val ref = batch[i]
+                try {
+                    val result = processChunk(ref, cleanupPass, run, isRunCurrent)
+                    localItems.addAndGet(result.items)
+                    localEntities.addAndGet(result.entities)
+                    scannedEntities.addAndGet(result.scannedEntities)
+                } catch (ex: Exception) {
+                    if (Language.isEnglish) {
+                        Cyuclear.instance.logger.warning("Chunk cleanup failed: ${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+                    } else {
+                        Cyuclear.instance.logger.warning("区块清理失败：${ref.world.name} ${ref.x},${ref.z} - ${ex.message}")
+                    }
+                    run.recordFailure(ref.world.name, ref.x, ref.z, ex.message)
+                }
+                processedCount++
             }
-            run.recordFailure(ref.world.name, ref.x, ref.z, ex.message)
         } finally {
             synchronized(stateLock) {
                 activeTasks.decrementAndGet()
                 if (isCurrent(generation)) {
-                    processedChunks.incrementAndGet()
+                    processedChunks.addAndGet(processedCount)
                     tryFinish(generation, collectItemsForRecovery, run)
                 }
             }

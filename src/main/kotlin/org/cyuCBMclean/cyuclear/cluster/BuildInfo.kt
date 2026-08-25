@@ -12,7 +12,7 @@ object BuildInfo {
         get() = if (isLegacyServer()) "legacy" else "modern"
 
     val isEnglishEdition: Boolean
-        get() = !Cyuclear.instance.description.description.orEmpty().any { it in '\u4e00'..'\u9fa5' }
+        get() = org.cyuCBMclean.cyuclear.config.Language.isEnglish
 
     private fun isLegacyServer(): Boolean {
         val version = Bukkit.getBukkitVersion().substringBefore('-')

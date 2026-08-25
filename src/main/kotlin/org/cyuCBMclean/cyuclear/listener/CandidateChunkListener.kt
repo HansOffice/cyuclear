@@ -11,11 +11,14 @@ object CandidateChunkListener : Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onSpawn(event: EntitySpawnEvent) {
-        CandidateChunkIndex.mark(event.location.chunk)
+        val loc = event.location
+        val world = loc.world ?: return
+        CandidateChunkIndex.mark(world, loc.blockX shr 4, loc.blockZ shr 4)
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onChunkUnload(event: ChunkUnloadEvent) {
-        CandidateChunkIndex.consume(CandidateChunkIndex.key(event.chunk))
+        val chunk = event.chunk
+        CandidateChunkIndex.consume(chunk.world.uid, chunk.x, chunk.z)
     }
 }

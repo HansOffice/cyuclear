@@ -70,6 +70,8 @@ object Settings {
 
     var enabled: Boolean = false
         private set
+    var language: String = "zh_CN"
+        private set
     var intervalSeconds: Int = 600
         private set
     var warningTimes: List<Int> = emptyList()
@@ -438,6 +440,7 @@ object Settings {
 
         configVersion = config.getInt("config-version", 0)
         enabled = config.getBoolean("enabled", false)
+        language = config.getString("language", "zh_CN")?.trim().orEmpty().ifBlank { "zh_CN" }
 
         clusterEnabled = config.getBoolean("cluster.enabled", false)
         clusterId = config.getString("cluster.id", "default")?.trim().orEmpty().ifBlank { "default" }
@@ -465,9 +468,6 @@ object Settings {
         clusterHeartbeatSeconds = config.getInt("cluster.heartbeat-seconds", 1).coerceIn(1, 5)
         clusterMemberTimeoutSeconds = config.getInt("cluster.member-timeout-seconds", 20)
             .coerceIn(clusterHeartbeatSeconds * 3, 120)
-        if (BuildInfo.isEnglishEdition) {
-            clusterEnabled = false
-        }
         intervalSeconds = config.getInt("cleanup.interval-seconds", 600).coerceAtLeast(10)
         warningTimes = config.getIntegerList("cleanup.warning-times")
         cleanupWarningChatEnabled = config.getBoolean("cleanup.warning-output.chat", true)

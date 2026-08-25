@@ -65,18 +65,21 @@ object ChunkLimitService {
     fun onItemSpawn(event: ItemSpawnEvent) {
         if (!ActivationService.isActive()) return
         if (!Settings.itemModuleEnabled) return
+        val threshold = Settings.chunkItemThreshold
+        val specificThresholds = Settings.itemSpecificThresholds
+        if (threshold <= 0 && specificThresholds.isEmpty()) return
+
         val world = event.location.world ?: return
         if (!Settings.isWorldEnabled(world.name)) return
 
         val chunk = event.location.chunk
-        val specificLimit = findSpecificItemLimit(event.entity)
+        val specificLimit = if (specificThresholds.isNotEmpty()) findSpecificItemLimit(event.entity) else null
         if (specificLimit != null && shouldCancelItemSpawn(event, chunk, specificLimit.first, specificLimit.second)) {
             return
         }
 
-        val key = ChunkLimitKey(chunk.world.name, chunk.x, chunk.z, LimitKind.ITEM)
-        val threshold = Settings.chunkItemThreshold
         if (threshold <= 0) return
+        val key = ChunkLimitKey(chunk.world.name, chunk.x, chunk.z, LimitKind.ITEM)
 
         if (shouldCancelFromCache(key)) {
             event.isCancelled = true
@@ -136,14 +139,18 @@ object ChunkLimitService {
     fun onEntitySpawn(event: EntitySpawnEvent) {
         if (!ActivationService.isActive()) return
         if (!Settings.entityModuleEnabled) return
-        val world = event.location.world ?: return
-        if (!Settings.isWorldEnabled(world.name)) return
+        if (Settings.chunkEntityLimitMode == Settings.ChunkEntityLimitMode.OFF) return
+        val entityThreshold = Settings.chunkEntityThreshold
+        val specificThresholds = Settings.entitySpecificThresholds
+        if (entityThreshold <= 0 && specificThresholds.isEmpty()) return
+
         if (event.entity is Item) return
         if (EntityUtils.shouldIgnoreForChunkLimit(event.entity)) return
-        if (Settings.chunkEntityLimitMode == Settings.ChunkEntityLimitMode.OFF) return
+        val world = event.location.world ?: return
+        if (!Settings.isWorldEnabled(world.name)) return
 
         val chunk = event.location.chunk
-        val specificLimit = findSpecificEntityLimit(event.entity)
+        val specificLimit = if (specificThresholds.isNotEmpty()) findSpecificEntityLimit(event.entity) else null
         if (specificLimit != null && shouldCancelEntitySpawn(
                 event = event,
                 chunk = chunk,
@@ -155,12 +162,12 @@ object ChunkLimitService {
             return
         }
 
-        if (shouldCancelEntitySpawn(
+        if (entityThreshold > 0 && shouldCancelEntitySpawn(
             event = event,
             chunk = chunk,
             kind = LimitKind.ENTITY,
             targetId = "",
-            threshold = Settings.chunkEntityThreshold
+            threshold = entityThreshold
         )) {
             return
         }
@@ -174,6 +181,9 @@ object ChunkLimitService {
         if (!ActivationService.isActive()) return
         if (!Settings.entityModuleEnabled) return
         if (Settings.chunkEntityLimitMode != Settings.ChunkEntityLimitMode.STRICT) return
+        val entityThreshold = Settings.chunkEntityThreshold
+        val specificThresholds = Settings.entitySpecificThresholds
+        if (entityThreshold <= 0 && specificThresholds.isEmpty()) return
 
         val projectile = event.entity
         if (EntityUtils.shouldIgnoreForChunkLimit(projectile)) return
@@ -183,7 +193,7 @@ object ChunkLimitService {
         val chunk = projectile.location.chunk
         if (consumeStrictSpawnAdmission(projectile, chunk)) return
 
-        val specificLimit = findSpecificEntityLimit(projectile)
+        val specificLimit = if (specificThresholds.isNotEmpty()) findSpecificEntityLimit(projectile) else null
         if (specificLimit != null && shouldCancelProjectileLaunch(
                 event = event,
                 chunk = chunk,
@@ -195,13 +205,15 @@ object ChunkLimitService {
             return
         }
 
-        shouldCancelProjectileLaunch(
-            event = event,
-            chunk = chunk,
-            kind = LimitKind.ENTITY,
-            targetId = "",
-            threshold = Settings.chunkEntityThreshold
-        )
+        if (entityThreshold > 0) {
+            shouldCancelProjectileLaunch(
+                event = event,
+                chunk = chunk,
+                kind = LimitKind.ENTITY,
+                targetId = "",
+                threshold = entityThreshold
+            )
+        }
     }
 
     private fun shouldCancelEntitySpawn(

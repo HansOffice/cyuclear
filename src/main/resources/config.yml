@@ -73,6 +73,10 @@ config-layout: 6
 # 关闭时停用清理与拦截
 enabled: false
 
+# 语言设置: zh_CN (简体中文) / en_US (English)
+# 也可以在游戏中通过 /cc lang <zh_CN|en_US> 随时切换
+language: "zh_CN"
+
 cleanup:
   # 自动清理循环间隔 (秒)
   interval-seconds: 600
