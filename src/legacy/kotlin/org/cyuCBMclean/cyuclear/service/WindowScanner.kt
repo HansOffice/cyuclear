@@ -71,7 +71,7 @@ object WindowScanner {
         usedFullScan = selection?.fullScan ?: false
         collector = selection?.let(CandidateChunkIndex::collector)
         val run = CleanupRunManager.begin(request, usedFullScan)
-        val collectItemsForRecovery = Settings.binEnabled && effectiveCleanItems && request.recoveryEnabled && !run.capturesRecovery
+        val collectItemsForRecovery = Settings.binEnabled && effectiveCleanItems
         val cleanupPass = CleanupChunkProcessor.CleanupPass(
             effectiveCleanItems,
             effectiveCleanEntities,
@@ -200,7 +200,7 @@ object WindowScanner {
         )
         SoundNoticeManager.broadcast(SoundNoticeManager.Event.CLEANUP_COMPLETE)
 
-        if (collectItemsForRecovery && clearedItems > 0 && VoidBinManager.hasItems()) {
+        if (collectItemsForRecovery && (clearedItems > 0 || Settings.binAlwaysOpen) && VoidBinManager.hasItems()) {
             VoidBinManager.openWindow(Settings.voidBinExpireSeconds)
             if (VoidBinManager.expireTime > 0L) {
                 VoidBinNoticeManager.broadcastCleanupSummary(summaryMessage, Settings.voidBinExpireSeconds)

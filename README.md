@@ -2,7 +2,7 @@
 
 CyuClear 用于周期清理、规则检查、区块限流、恢复记录和虚空垃圾桶
 
-这是 CyuClear 的源代码仓库。使用说明见 [`docs/cyuclear文档.html`](docs/cyuclear文档.html)
+这是 CyuClear 的源代码仓库。使用说明见 [`用户文档/cyuclear文档.html`](用户文档/cyuclear文档.html)
 
 ## 运行包
 

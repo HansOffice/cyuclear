@@ -27,16 +27,19 @@ object VoidBinNoticeManager {
             return
         }
 
-        val components = ArrayList<BaseComponent>()
-        components.addAll(TextComponent.fromLegacyText(summaryMessage))
-        components.add(TextComponent(" "))
-        components.addAll(createOpenButton(clickMessage.text, clickMessage.hover))
+        val prefixComponents = TextComponent.fromLegacyText(Language.prefix)
+        val buttonComponents = createOpenButton(clickMessage.text, clickMessage.hover)
+        val hintLine = ArrayList<BaseComponent>()
+        hintLine.addAll(prefixComponents)
+        hintLine.addAll(buttonComponents)
+        val hintArray = hintLine.toTypedArray()
 
         CyuScheduler.runTask(Cyuclear.instance, Runnable {
             Bukkit.getOnlinePlayers().forEach { player ->
                 CyuScheduler.runEntityTask(Cyuclear.instance, player, Runnable {
                     if (player.isOnline) {
-                        player.spigot().sendMessage(*components.toTypedArray())
+                        player.sendMessage(summaryMessage)
+                        player.spigot().sendMessage(*hintArray)
                     }
                 })
             }
@@ -54,12 +57,18 @@ object VoidBinNoticeManager {
             return
         }
 
-        val components = createOpenButton(clickMessage.text, clickMessage.hover)
+        val prefixComponents = TextComponent.fromLegacyText(Language.prefix)
+        val buttonComponents = createOpenButton(clickMessage.text, clickMessage.hover)
+        val components = ArrayList<BaseComponent>()
+        components.addAll(prefixComponents)
+        components.addAll(buttonComponents)
+        val componentArray = components.toTypedArray()
+
         CyuScheduler.runTask(Cyuclear.instance, Runnable {
             Bukkit.getOnlinePlayers().forEach { player ->
                 CyuScheduler.runEntityTask(Cyuclear.instance, player, Runnable {
                     if (player.isOnline) {
-                        player.spigot().sendMessage(*components)
+                        player.spigot().sendMessage(*componentArray)
                     }
                 })
             }

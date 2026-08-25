@@ -17,10 +17,13 @@ object Language {
 
     private val messages = HashMap<String, String>()
     private val fallbackMessages = HashMap<String, String>()
-    private var prefix = ""
+    private var prefixString = ""
     private var config: YamlConfiguration? = null
     var currentLanguageCode: String = "zh_CN"
         private set
+
+    val prefix: String
+        get() = prefixString
 
     fun load() {
         messages.clear()
@@ -51,10 +54,10 @@ object Language {
         val loadedConfig = config ?: return
 
         val rawPrefix = loadedConfig.getString("prefix") ?: fallbackMessages["prefix"] ?: "&8[&bCyuclear&8] &f"
-        prefix = ColorUtils.color(rawPrefix)
+        prefixString = ColorUtils.color(rawPrefix)
 
-        for (key in loadedConfig.getKeys(false)) {
-            if (key == "prefix") continue
+        for (key in loadedConfig.getKeys(true)) {
+            if (key == "prefix" || !loadedConfig.isString(key)) continue
             val rawStr = loadedConfig.getString(key) ?: continue
             messages[key] = ColorUtils.color(rawStr)
         }
@@ -114,7 +117,8 @@ object Language {
         val stream = Cyuclear.instance.getResource(resourcePath) ?: Cyuclear.instance.getResource("messages.yml") ?: return
         InputStreamReader(stream, StandardCharsets.UTF_8).use { reader ->
             val fallbackConfig = YamlConfiguration.loadConfiguration(reader)
-            for (key in fallbackConfig.getKeys(false)) {
+            for (key in fallbackConfig.getKeys(true)) {
+                if (!fallbackConfig.isString(key)) continue
                 val rawStr = fallbackConfig.getString(key) ?: continue
                 fallbackMessages[key] = ColorUtils.color(rawStr)
             }
@@ -155,7 +159,7 @@ object Language {
             text = text.replace("{$placeholder}", replacement)
         }
 
-        return prefix + text
+        return prefixString + text
     }
 
     fun getRaw(key: String, vararg placeholders: Pair<String, String>): String {
@@ -169,19 +173,17 @@ object Language {
     }
 
     fun getClickMessage(path: String, vararg placeholders: Pair<String, String>): ClickMessage {
-        val section = config?.getConfigurationSection(path)
-        if (section == null) {
-            val fallbackText = fallbackMessages["$path.text"] ?: ""
-            val fallbackHover = fallbackMessages["$path.hover"] ?: ""
-            return ClickMessage(
-                text = applyPlaceholders(fallbackText, placeholders),
-                hover = applyPlaceholders(fallbackHover, placeholders)
-            )
-        }
-
+        val textRaw = messages["$path.text"]
+            ?: config?.getString("$path.text")
+            ?: fallbackMessages["$path.text"]
+            ?: ""
+        val hoverRaw = messages["$path.hover"]
+            ?: config?.getString("$path.hover")
+            ?: fallbackMessages["$path.hover"]
+            ?: ""
         return ClickMessage(
-            text = applyPlaceholders(ColorUtils.color(section.getString("text", "") ?: ""), placeholders),
-            hover = applyPlaceholders(ColorUtils.color(section.getString("hover", "") ?: ""), placeholders)
+            text = applyPlaceholders(ColorUtils.color(textRaw), placeholders),
+            hover = applyPlaceholders(ColorUtils.color(hoverRaw), placeholders)
         )
     }
 
