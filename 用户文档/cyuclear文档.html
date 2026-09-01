@@ -450,11 +450,11 @@
         <div class="grid">
           <div class="card">
             <h4>选择文件</h4>
-            <p>1.13 及以上的普通 Bukkit / Paper 服务端使用 <code>cyuclear-paper-1.4.1.jar</code>；Folia 服务端使用 <code>cyuclear-folia-1.4.1.jar</code>；1.8 到 1.12 的老版本服务端使用 <code>cyuclear-legacy-1.4.1.jar</code></p>
+            <p>1.13 及以上的普通 Bukkit / Paper 服务端使用 <code>cyuclear-paper-1.4.3.jar</code>；Folia 服务端使用 <code>cyuclear-folia-1.4.3.jar</code>；1.8 到 1.12 的老版本服务端使用 <code>cyuclear-legacy-1.4.3.jar</code></p>
           </div>
           <div class="card">
             <h4>当前版本</h4>
-            <p>当前文档对应 <code>1.4.1</code>，配置文件以默认生成内容为准</p>
+            <p>当前文档对应 <code>1.4.3</code>，配置文件以默认生成内容为准</p>
           </div>
           <div class="card">
             <h4>软依赖</h4>
@@ -1350,7 +1350,7 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
 
         <section id="cluster">
           <h2>跨服同步</h2>
-          <p>CyuClear 1.4.1 由每台总开关已启用的子服直接连接同一个跨服存储，连接信息填写在 <code>storage.yml</code>。可选择 Redis 或 MySQL；Redis 更适合高频状态同步，MySQL 需要 8.0 或更高版本。清理周期和共享垃圾桶始终由子服与这份存储决定</p>
+          <p>CyuClear 1.4.3 由每台总开关已启用的子服直接连接同一个跨服存储，连接信息填写在 <code>storage.yml</code>。可选择 Redis 或 MySQL；Redis 更适合高频状态同步，MySQL 需要 8.0 或更高版本。清理周期和共享垃圾桶始终由子服与这份存储决定</p>
           <pre><code>cluster:
   enabled: true
   id: "survival"
@@ -1407,9 +1407,9 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
               </tr>
             </thead>
             <tbody>
-              <tr><td><code>cyuclear-paper-1.4.1.jar</code></td><td>每个普通后端服的 <code>plugins</code></td><td>Paper / Bukkit 后端清理本体</td></tr>
-              <tr><td><code>cyuclear-folia-1.4.1.jar</code></td><td>每个 Folia 后端服的 <code>plugins</code></td><td>Folia 后端清理本体</td></tr>
-              <tr><td><code>cyuclear-legacy-1.4.1.jar</code></td><td>1.8 至 1.12 后端服的 <code>plugins</code></td><td>Legacy 后端清理本体</td></tr>
+              <tr><td><code>cyuclear-paper-1.4.3.jar</code></td><td>每个普通后端服的 <code>plugins</code></td><td>Paper / Bukkit 后端清理本体</td></tr>
+              <tr><td><code>cyuclear-folia-1.4.3.jar</code></td><td>每个 Folia 后端服的 <code>plugins</code></td><td>Folia 后端清理本体</td></tr>
+              <tr><td><code>cyuclear-legacy-1.4.3.jar</code></td><td>1.8 至 1.12 后端服的 <code>plugins</code></td><td>Legacy 后端清理本体</td></tr>
               <tr><td><code>cyuclear-velocity-1.0.1.jar</code></td><td>Velocity 的 <code>plugins</code></td><td>代理端状态查看</td></tr>
               <tr><td><code>cyuclear-bungee-1.0.1.jar</code></td><td>BungeeCord 的 <code>plugins</code></td><td>代理端状态查看</td></tr>
             </tbody>
@@ -1722,6 +1722,31 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
         <div class="note orange">
           热点列表只记录触发过区块限制的区块，不会额外扫描全服已加载区块
         </div>
+
+        <h3>超载告警传送与现场清理</h3>
+        <p>当区块触发超载警报时，管理员（<code>cyuclear.admin</code>）收到的聊天提示会附带 <code>[前往查看]</code> 交互按钮；点击即可跨维度安全传送至现场，普通玩家接收纯文本广播。排查完成后可执行 <code>/cc here</code> 外科手术式清理当前区块，或通过 <code>/cc back</code> 原路返回出发点</p>
+        <pre><code>teleport:
+  landing-protection:
+    enabled: true
+    duration-seconds: 5
+    notify: true
+  back:
+    enabled: true
+    timeout-seconds: 300
+
+here-cleanup:
+  enabled: true</code></pre>
+        <table>
+          <thead><tr><th>配置</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><code>teleport.landing-protection.enabled</code></td><td>是否在传送到达后开启短暂免伤保护</td></tr>
+            <tr><td><code>teleport.landing-protection.duration-seconds</code></td><td>免伤持续秒数，默认 5 秒</td></tr>
+            <tr><td><code>teleport.landing-protection.notify</code></td><td>免伤期间抵消伤害时是否提示管理员</td></tr>
+            <tr><td><code>teleport.back.enabled</code></td><td>是否开启 <code>/cc back</code> 一键返回传送前原点功能</td></tr>
+            <tr><td><code>teleport.back.timeout-seconds</code></td><td>原点记录有效时长（秒），超时后自动失效</td></tr>
+            <tr><td><code>here-cleanup.enabled</code></td><td>是否允许使用 <code>/cc here</code> 现场单区块就地清理指令</td></tr>
+          </tbody>
+        </table>
       </section>
 
       <section id="menu">
@@ -2090,6 +2115,23 @@ items:
             <tr><td><code>%cyuclear_config_version%</code></td><td>配置版本</td></tr>
           </tbody>
         </table>
+        <h3>区块健康与热点监控</h3>
+        <table>
+          <thead><tr><th>变量</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><code>%cyuclear_chunk_x%</code></td><td>当前脚下区块 X 坐标</td></tr>
+            <tr><td><code>%cyuclear_chunk_z%</code></td><td>当前脚下区块 Z 坐标</td></tr>
+            <tr><td><code>%cyuclear_chunk_world%</code></td><td>当前所在世界名称</td></tr>
+            <tr><td><code>%cyuclear_chunk_state%</code></td><td>当前区块健康状态（正常、熔断、限流、警告、恢复观察）</td></tr>
+            <tr><td><code>%cyuclear_chunk_is_hotspot%</code></td><td>当前区块是否处于热点监控中</td></tr>
+            <tr><td><code>%cyuclear_chunk_is_breaker%</code></td><td>当前区块是否处于熔断拦截中</td></tr>
+            <tr><td><code>%cyuclear_chunk_triggers%</code></td><td>当前区块累计触发限制次数</td></tr>
+            <tr><td><code>%cyuclear_chunk_cleaned_total%</code></td><td>当前区块历史累计清理物品与实体总数</td></tr>
+            <tr><td><code>%cyuclear_hotspots_total%</code></td><td>全服当前活跃热点区块总数</td></tr>
+            <tr><td><code>%cyuclear_hotspots_breakers%</code></td><td>全服当前处于熔断状态的区块总数</td></tr>
+            <tr><td><code>%cyuclear_has_breakers%</code></td><td>全服当前是否存在熔断超载区块</td></tr>
+          </tbody>
+        </table>
       </section>
 
       <section id="commands">
@@ -2174,6 +2216,21 @@ items:
               <td>查看触发区块限制的热点区块</td>
             </tr>
             <tr>
+              <td><code>/cyuclear tp &lt;世界&gt; &lt;x&gt; [y] &lt;z&gt;</code></td>
+              <td><code>cyuclear.admin</code></td>
+              <td>安全传送至指定坐标或区块，着陆后附带短暂免伤保护</td>
+            </tr>
+            <tr>
+              <td><code>/cyuclear here [items|entities|all]</code></td>
+              <td><code>cyuclear.admin</code></td>
+              <td>现场就地快速清理当前脚下所在的单一区块，不进行全服广播</td>
+            </tr>
+            <tr>
+              <td><code>/cyuclear back</code></td>
+              <td><code>cyuclear.admin</code></td>
+              <td>一键安全返回上一次执行 <code>/cc tp</code> 前的出发点坐标</td>
+            </tr>
+            <tr>
               <td><code>/cyuclear cancel</code></td>
               <td><code>cyuclear.admin</code></td>
               <td>停止当前清理任务</td>
@@ -2219,7 +2276,7 @@ items:
       <section id="faq">
         <h2>常见问题</h2>
         <h3>刚安装后为什么没有开始清理</h3>
-         <p>全新安装的 1.4.1 默认使用 <code>enabled: false</code>。请按服务器实际情况调整配置，使用 <code>/cc check</code> 与 <code>/cc preview</code> 核对结果，再把总开关改为 <code>true</code> 并执行 <code>/cc reload</code>。升级已有数据目录时会迁移为已启用，严格实体总量模式需要在 <code>rules.yml</code> 中手动选择</p>
+         <p>全新安装的 1.4.3 默认使用 <code>enabled: false</code>。请按服务器实际情况调整配置，使用 <code>/cc check</code> 与 <code>/cc preview</code> 核对结果，再把总开关改为 <code>true</code> 并执行 <code>/cc reload</code>。升级已有数据目录时会迁移为已启用，严格实体总量模式需要在 <code>rules.yml</code> 中手动选择</p>
 
         <h3>代理端为什么看不到刚安装的子服</h3>
         <p>总开关关闭的后端不会连接代理端，也不会发送集群心跳。完成配置后把 <code>enabled</code> 改为 <code>true</code> 并执行 <code>/cc reload</code> 即可自动接入；随后可用 <code>/cc cluster</code> 查看连接状态</p>
@@ -2228,10 +2285,10 @@ items:
          <p>如果 <code>always-open</code> 为 <code>false</code>，只有清理后且有效期内才能打开确认上次清理确实清到了掉落物</p>
 
          <h3>菜单里的 CraftEngine 图标显示为石头</h3>
-         <p>确认菜单中的物品 ID 写成 <code>ce:命名空间:物品ID</code>，再执行 <code>/cc reload</code>。1.4.1 会在 CraftEngine 重载后重新读取菜单图标；仍显示石头时检查 ID 是否已在 CraftEngine 中注册，并查看服务器日志</p>
+         <p>确认菜单中的物品 ID 写成 <code>ce:命名空间:物品ID</code>，再执行 <code>/cc reload</code>。1.4.3 会在 CraftEngine 重载后重新读取菜单图标；仍显示石头时检查 ID 是否已在 CraftEngine 中注册，并查看服务器日志</p>
 
          <h3>潜影盒或收纳袋放进垃圾桶后会清空吗</h3>
-         <p>1.4.1 会保留容器物品的完整数据，菜单展示信息也不会写回真实物品。跨服回收在删除原掉落物前还会验证容器快照；验证失败时，原掉落物会留在世界中，不会进入垃圾桶</p>
+         <p>1.4.3 会保留容器物品的完整数据，菜单展示信息也不会写回真实物品。跨服回收在删除原掉落物前还会验证容器快照；验证失败时，原掉落物会留在世界中，不会进入垃圾桶</p>
 
         <h3>钻石被清理了怎么办</h3>
         <p>默认配置里钻石写在 <code>targets.items.keep-list.list</code>，正常不会被清理；若仍被清理，检查是否仍为 <code>minecraft:diamond</code>，以及掉落物是否仍为黑名单模式</p>
@@ -2246,7 +2303,7 @@ items:
         <p>在 <code>rules.yml</code> 的 <code>targets.entities.protections.named-bypass.entities</code> 填实体 ID，或在 <code>named-bypass.regions</code> 填世界和两个角坐标。它只跳过命名保护，实体仍按保留名单、清理名单和其他保护判断</p>
 
         <h3>有人说实体命名后还是被清</h3>
-         <p>先确认正在使用 1.4.1，再让管理员看着目标执行 <code>/cc check</code>。如果检查里显示“是否命名: 否”，说明那个名字不是 Bukkit 实体名，可能只是其他插件做的视觉显示</p>
+         <p>先确认正在使用 1.4.3，再让管理员看着目标执行 <code>/cc check</code>。如果检查里显示“是否命名: 否”，说明那个名字不是 Bukkit 实体名，可能只是其他插件做的视觉显示</p>
 
         <h3>袭击事件里的怪被清理了怎么办</h3>
         <p>确认 <code>targets.entities.protections.events.raid: true</code>。CyuClear 会保护正在参与袭击的灾厄实体，但不会保护普通野外掠夺者。管理员可以用 <code>/cc check</code> 看目标是否显示“是否参与袭击: 是”</p>
@@ -2255,7 +2312,7 @@ items:
         <p>说明某个区块实体或掉落物生成太快先查看提示坐标，再处理源头机器、刷怪塔、结构生成或模组实体。默认提示只发给管理员；需要安静运行时把 <code>limits.chunk.notice-target</code> 改为“不发送”，不要为了隐藏问题而直接关闭实体保护</p>
 
         <h3>Mohist 混合端出现主线程卡在 RadarListener</h3>
-         <p>1.4.1 的安全模式仍只记录短时间生成压力，不会在实体生成事件里读取 <code>chunk.entities</code>。如果要限制区块当前总量，请使用 <code>cyuclear-folia-1.4.1.jar</code> 并把 <code>limits.chunk.entities.mode</code> 改为“严格”；严格模式只在实体出生和抛射物发射入口读取当前区块</p>
+         <p>1.4.3 的安全模式仍只记录短时间生成压力，不会在实体生成事件里读取 <code>chunk.entities</code>。如果要限制区块当前总量，请使用 <code>cyuclear-folia-1.4.3.jar</code> 并把 <code>limits.chunk.entities.mode</code> 改为“严格”；严格模式只在实体出生和抛射物发射入口读取当前区块</p>
 
         <h3>我把实体阈值设成 350，为什么箭矢还是能到几千</h3>
         <p>如果模式仍是“安全”，350 表示一个统计窗口内允许的新增实体压力，不是区块里同时存在的实体总数；箭矢分散在多个窗口生成时可以继续累积。把 <code>mode</code> 改为“严格”，并按需要把 <code>soft-threshold</code> 设为 <code>0</code>，再执行 <code>/cc reload</code>。严格模式只拦截之后的新实体和抛射物，已经堆在区块里的箭矢仍需周期清理或手动清理</p>

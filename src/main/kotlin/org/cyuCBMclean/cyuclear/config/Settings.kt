@@ -433,6 +433,19 @@ object Settings {
     var panicCheckIntervalMillis: Long = 15_000L
         private set
 
+    var teleportLandingProtectionEnabled: Boolean = true
+        private set
+    var teleportLandingProtectionDurationSeconds: Int = 5
+        private set
+    var teleportLandingProtectionNotify: Boolean = true
+        private set
+    var teleportBackEnabled: Boolean = true
+        private set
+    var teleportBackTimeoutSeconds: Int = 300
+        private set
+    var hereCleanupEnabled: Boolean = true
+        private set
+
     fun load() {
         config = ConfigFiles.load()
         AreaRules.load(config)
@@ -777,6 +790,14 @@ object Settings {
                 pitch = config.getDouble("sounds.$key.pitch", fallback.pitch.toDouble()).toFloat().coerceIn(0.0f, 2.0f)
             )
         }
+
+        teleportLandingProtectionEnabled = config.getBoolean("teleport.landing-protection.enabled", true)
+        teleportLandingProtectionDurationSeconds = config.getInt("teleport.landing-protection.duration-seconds", 5).coerceIn(1, 60)
+        teleportLandingProtectionNotify = config.getBoolean("teleport.landing-protection.notify", true)
+        teleportBackEnabled = config.getBoolean("teleport.back.enabled", true)
+        teleportBackTimeoutSeconds = config.getInt("teleport.back.timeout-seconds", 300).coerceAtLeast(0)
+        hereCleanupEnabled = config.getBoolean("here-cleanup.enabled", true)
+
         BinEntryRules.load(config)
         filterRevision++
     }

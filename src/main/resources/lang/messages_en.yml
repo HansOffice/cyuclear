@@ -40,6 +40,9 @@ help-runs: "&#D7DEE8› /cyuclear runs [page] &#8A96A8View cleanup run history"
 help-run: "&#D7DEE8› /cyuclear run <id> [details|reasons] &#8A96A8View cleanup run details"
 help-recover: "&#D7DEE8› /cyuclear recover <id> &#8A96A8Open recovery inventory for a run"
 help-hotspots: "&#D7DEE8› /cyuclear hotspots [page] &#8A96A8View hotspot chunks"
+help-here: "&#D7DEE8› /cyuclear here [items|entities|all] &#8A96A8Clean up current chunk"
+help-tp: "&#D7DEE8› /cyuclear tp <world> <x> [y] <z> &#8A96A8Safely teleport to location"
+help-back: "&#D7DEE8› /cyuclear back &#8A96A8Return to location before last teleport"
 help-cancel: "&#D7DEE8› /cyuclear cancel &#8A96A8Stop the running cleanup task"
 help-doctor: "&#D7DEE8› /cyuclear doctor &#8A96A8Diagnose configuration and menu issues"
 help-snapshot: "&#D7DEE8› /cyuclear snapshot &#8A96A8Backup current configuration files"
@@ -90,11 +93,24 @@ panic-warn: "&#E74C3C[Emergency] &fEntity count exceeded hard limit &#E74C3C({co
 # Chunk Overload Protection
 # ---------------------------------------------------
 chunk-overload-warn: "&#E74C3CChunk Limit &8· &f{world} &7{x}, {y}, {z} &8· &7Blocked {type} &f{id} &8· &7{count}/{threshold}"
+chunk-overload-teleport-button: " &#5DADE2[Teleport]"
+chunk-overload-teleport-hover: "&7Click to safely teleport to overloaded chunk &f{world} &7({x}, {y}, {z})"
 overload-type-item: "Item"
 overload-type-item-type: "Specific Item"
 overload-type-entity: "Entity"
 overload-type-entity-type: "Specific Entity"
 overload-type-spawn-pressure: "Spawn Pressure"
+
+teleport-usage: "&#E74C3CUsage: &f/cc tp <world> <x> [y] <z> &7or &f/cc tp <world> <chunkX> <chunkZ>"
+teleport-world-not-found: "&#E74C3CTarget world not found or unloaded: &f{world}"
+teleport-invalid-coords: "&#E74C3CPlease provide valid coordinate numbers"
+teleport-success: "&aSuccessfully teleported to &f{world} &7({x}, {y}, {z})"
+teleport-failed: "&#E74C3CTeleportation failed: &f{reason}"
+teleport-no-back-location: "&#E74C3CNo previous teleport location recorded"
+teleport-back-disabled: "&#E74C3CTeleport back feature is not enabled on this server"
+teleport-back-expired: "&#E74C3CPrevious teleport location has expired"
+teleport-damage-protected: "&7[CyuClear] Damage prevented by landing protection"
+here-cleanup-disabled: "&#E74C3CHere chunk cleanup feature is disabled"
 
 # ---------------------------------------------------
 # Void Bin & Personal Buffer
@@ -230,6 +246,7 @@ hotspot-release-confirm: "&eLeft-Click again to release this temporary breaker."
 hotspot-released: "&aReleased breaker for &f{world} {x},{z}"
 hotspot-cleanup-confirm: "&eLeft-Click again to sweep this chunk now."
 hotspot-cleanup-started: "&aStarted cleanup for chunk &f{world} {x},{z}"
+here-cleanup-started: "&aStarted cleanup for current chunk &f{world} &7({x}, {z})"
 admin-cleanup-confirm: "&eLeft-Click again to confirm immediate cleanup."
 admin-cancel-confirm: "&eLeft-Click again to confirm stopping cleanup."
 

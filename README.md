@@ -8,9 +8,9 @@ CyuClear 用于周期清理、规则检查、区块限流、恢复记录和虚�
 
 | 服务端 | 使用文件 | 产物目录 |
 | --- | --- | --- |
-| Bukkit / Spigot / Paper 1.13 及以上 | `cyuclear-paper-1.4.1.jar` | `target/` |
-| Folia | `cyuclear-folia-1.4.1.jar` | `target/` |
-| Bukkit / Spigot 1.8 至 1.12 | `cyuclear-legacy-1.4.1.jar` | `target/` |
+| Bukkit / Spigot / Paper 1.13 及以上 | `cyuclear-paper-1.4.3.jar` | `target/` |
+| Folia | `cyuclear-folia-1.4.3.jar` | `target/` |
+| Bukkit / Spigot 1.8 至 1.12 | `cyuclear-legacy-1.4.3.jar` | `target/` |
 
 每台服务端只放一个运行包到 `plugins`。首次启动后会生成配置文件；先完成规则检查与预演，再开启总开关。
 

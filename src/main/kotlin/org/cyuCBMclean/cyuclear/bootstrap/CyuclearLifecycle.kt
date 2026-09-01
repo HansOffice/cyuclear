@@ -38,6 +38,7 @@ import org.cyuCBMclean.cyuclear.service.CleanupRunManager
 import org.cyuCBMclean.cyuclear.service.DepositBufferManager
 import org.cyuCBMclean.cyuclear.service.HotspotTracker
 import org.cyuCBMclean.cyuclear.service.SoundNoticeManager
+import org.cyuCBMclean.cyuclear.service.TeleportService
 import org.cyuCBMclean.cyuclear.service.VoidBinManager
 import org.cyuCBMclean.cyuclear.util.ItemIdentity
 
@@ -57,6 +58,7 @@ internal object CyuclearLifecycle {
         CandidateChunkIndex.reset()
         ChunkLimitService.reset()
         HotspotTracker.reset()
+        TeleportService.reset()
         BinNoticeManager.shutdown()
         CleanupNoticeManager.shutdown()
         CyuScheduler.cancelAll(plugin)
@@ -99,6 +101,7 @@ internal object CyuclearLifecycle {
         pluginManager.registerEvents(BinClaimRecoveryListener, plugin)
         pluginManager.registerEvents(DepositBufferRecoveryListener, plugin)
         pluginManager.registerEvents(ActivationReminderListener, plugin)
+        pluginManager.registerEvents(TeleportService, plugin)
         registerMenus(plugin)
 
         plugin.getCommand("cyuclear")?.let {

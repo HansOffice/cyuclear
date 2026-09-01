@@ -7,6 +7,7 @@ import org.cyuCBMclean.cyuclear.config.Settings
 import org.cyuCBMclean.cyuclear.service.ActivationService
 import org.cyuCBMclean.cyuclear.service.CandidateChunkIndex
 import org.cyuCBMclean.cyuclear.service.CleanupRunManager
+import org.cyuCBMclean.cyuclear.service.HotspotTracker
 import org.cyuCBMclean.cyuclear.service.VoidBinManager
 import org.cyuCBMclean.cyuclear.service.WindowScanner
 import org.cyuCBMclean.cyuclear.platform.PlatformInfo
@@ -78,6 +79,47 @@ class PapiHook : PlaceholderExpansion() {
             "platform" -> PlatformInfo.id
             "version" -> Cyuclear.instance.description.version
             "config_version" -> Settings.configVersion.toString()
+
+            "chunk_x" -> player?.location?.let { (it.blockX shr 4).toString() } ?: ""
+            "chunk_z" -> player?.location?.let { (it.blockZ shr 4).toString() } ?: ""
+            "chunk_world" -> player?.world?.name.orEmpty()
+            "chunk_state" -> {
+                if (player == null) ""
+                else {
+                    val view = HotspotTracker.find(player.world.name, player.location.blockX shr 4, player.location.blockZ shr 4)
+                    view?.state?.display ?: (if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) "NORMAL" else "正常")
+                }
+            }
+            "chunk_is_hotspot" -> {
+                if (player == null) "false"
+                else (HotspotTracker.find(player.world.name, player.location.blockX shr 4, player.location.blockZ shr 4) != null).toString()
+            }
+            "chunk_is_breaker" -> {
+                if (player == null) "false"
+                else {
+                    val view = HotspotTracker.find(player.world.name, player.location.blockX shr 4, player.location.blockZ shr 4)
+                    (view?.state == HotspotTracker.State.BREAKER).toString()
+                }
+            }
+            "chunk_triggers" -> {
+                if (player == null) "0"
+                else {
+                    val view = HotspotTracker.find(player.world.name, player.location.blockX shr 4, player.location.blockZ shr 4)
+                    (view?.triggerCount ?: 0L).toString()
+                }
+            }
+            "chunk_cleaned_total" -> {
+                if (player == null) "0"
+                else {
+                    val view = HotspotTracker.find(player.world.name, player.location.blockX shr 4, player.location.blockZ shr 4)
+                    if (view != null) (view.cleanedItems + view.cleanedEntities).toString() else "0"
+                }
+            }
+
+            "hotspots_total" -> HotspotTracker.summary().total.toString()
+            "hotspots_breakers" -> HotspotTracker.summary().breakers.toString()
+            "has_breakers" -> (HotspotTracker.summary().breakers > 0).toString()
+
             else -> ""
         }
     }

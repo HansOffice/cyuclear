@@ -48,6 +48,17 @@
 # %cyuclear_bin_item_types% - 虚空垃圾桶物品种类
 # %cyuclear_candidate_index% - 候选区块索引是否启用
 # %cyuclear_candidate_chunks% - 当前候选区块数量
+# %cyuclear_chunk_x% - 当前脚下区块 X
+# %cyuclear_chunk_z% - 当前脚下区块 Z
+# %cyuclear_chunk_world% - 当前所在世界名称
+# %cyuclear_chunk_state% - 当前区块健康或热点状态
+# %cyuclear_chunk_is_hotspot% - 当前区块是否为热点
+# %cyuclear_chunk_is_breaker% - 当前区块是否处于熔断拦截中
+# %cyuclear_chunk_triggers% - 当前区块累计触发次数
+# %cyuclear_chunk_cleaned_total% - 当前区块历史清理总量
+# %cyuclear_hotspots_total% - 全服活跃热点区块总数
+# %cyuclear_hotspots_breakers% - 全服处于熔断状态的区块总数
+# %cyuclear_has_breakers% - 全服是否存在熔断超载区块
 # %cyuclear_profile% - 性能档位
 # %cyuclear_scan_chunks_per_tick% - 单 tick 最大处理区块
 # %cyuclear_scan_budget_millis% - 单 tick 最大耗时毫秒
@@ -154,3 +165,24 @@ worlds:
   # 支持 "*" 或 "all"
   list:
     - "test_world"
+
+teleport:
+  # 传送着陆保护
+  landing-protection:
+    # 是否开启着陆免伤保护
+    enabled: true
+    # 免伤持续时长 (秒)
+    duration-seconds: 5
+    # 抵消伤害时是否提示管理员
+    notify: true
+  # 传送原点记忆与返回
+  back:
+    # 是否开启 /cc back 一键返回
+    enabled: true
+    # 原点记忆有效时长 (秒)，0 为永不过期直至玩家离线
+    timeout-seconds: 300
+
+# 现场单区块就地清理
+here-cleanup:
+  # 是否开启 /cc here 指令
+  enabled: true

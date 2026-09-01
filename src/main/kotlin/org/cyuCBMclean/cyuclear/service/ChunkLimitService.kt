@@ -13,6 +13,12 @@ import org.cyuCBMclean.cyuclear.config.Settings
 import org.cyuCBMclean.cyuclear.util.EntityUtils
 import org.cyuCBMclean.cyuclear.util.ItemIdentity
 import org.cyuCBMclean.cyuclear.bridge.StackerBridge
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.ClickEvent
+import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.TextComponent
+import org.cyuCBMclean.cyuclear.util.ColorUtils
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 
@@ -607,15 +613,39 @@ object ChunkLimitService {
                 "threshold" to threshold.toString(),
                 "duration" to Settings.limitOverloadCacheMillis.toString()
             )
+            val adminComponents = createAdminOverloadComponent(msg, chunk.world.name, x, y, z)
             when (Settings.overloadNoticeTarget) {
                 Settings.OverloadNoticeTarget.NONE -> Unit
-                Settings.OverloadNoticeTarget.ADMINS -> PlayerMessageDispatcher.broadcast(msg, "cyuclear.admin")
+                Settings.OverloadNoticeTarget.ADMINS -> PlayerMessageDispatcher.broadcast(adminComponents, "cyuclear.admin")
                 Settings.OverloadNoticeTarget.ALL -> {
-                    PlayerMessageDispatcher.broadcast(msg)
+                    PlayerMessageDispatcher.broadcastInteractive(msg, adminComponents, "cyuclear.admin")
                     SoundNoticeManager.broadcast(SoundNoticeManager.Event.CHUNK_OVERLOAD)
                 }
             }
         }
+    }
+
+    private fun createAdminOverloadComponent(baseMsg: String, worldName: String, x: Int, y: Int, z: Int): Array<BaseComponent> {
+        val baseComponents = TextComponent.fromLegacyText(baseMsg).toMutableList()
+        val btnText = if (Language.has("chunk-overload-teleport-button")) Language.getRaw("chunk-overload-teleport-button") else " &#5DADE2[前往查看]"
+        val hoverText = if (Language.has("chunk-overload-teleport-hover")) {
+            Language.get("chunk-overload-teleport-hover", "world" to worldName, "x" to x.toString(), "y" to y.toString(), "z" to z.toString())
+        } else {
+            ColorUtils.color("&7点击传送至 &f$worldName &7($x, $y, $z)")
+        }
+
+        val tpComponent = TextComponent(ColorUtils.color(btnText)).apply {
+            hoverEvent = HoverEvent(
+                HoverEvent.Action.SHOW_TEXT,
+                ComponentBuilder(hoverText).create()
+            )
+            clickEvent = ClickEvent(
+                ClickEvent.Action.RUN_COMMAND,
+                "/cyuclear tp $worldName $x $y $z"
+            )
+        }
+        baseComponents.add(tpComponent)
+        return baseComponents.toTypedArray()
     }
 
     private fun overloadType(kind: LimitKind): String {

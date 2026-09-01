@@ -16,6 +16,7 @@ import org.cyuCBMclean.cyuclear.service.ActivationService
 import org.cyuCBMclean.cyuclear.service.CleanupRequests
 import org.cyuCBMclean.cyuclear.service.HotspotTracker
 import org.cyuCBMclean.cyuclear.service.ChunkLimitService
+import org.cyuCBMclean.cyuclear.service.TeleportService
 import org.cyuCBMclean.cyuclear.service.WindowScanner
 import org.cyuCBMclean.cyuclear.util.ColorUtils
 import java.text.SimpleDateFormat
@@ -176,11 +177,19 @@ object HotspotMenu : Listener {
 
     private fun clickDetailDefault(player: Player, holder: Holder, entry: EntryKey, slot: Int) {
         when {
+            slot in detailTemplate.slots('T') -> teleportToChunk(player, entry)
             slot in detailTemplate.slots('C') -> cleanup(player, holder, entry)
             slot in detailTemplate.slots('R') -> release(player, holder, entry)
             slot in detailTemplate.slots('B') -> openList(player, holder.page)
             slot in detailTemplate.slots('X') -> player.closeInventory()
         }
+    }
+
+    private fun teleportToChunk(player: Player, entry: EntryKey) {
+        val blockX = (entry.chunkX * 16 + 8).toDouble()
+        val blockZ = (entry.chunkZ * 16 + 8).toDouble()
+        player.closeInventory()
+        TeleportService.teleport(player, entry.world, blockX, null, blockZ)
     }
 
     private fun release(player: Player, holder: Holder, entry: EntryKey) {

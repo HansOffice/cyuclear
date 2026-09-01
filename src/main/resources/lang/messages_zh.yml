@@ -40,6 +40,9 @@ help-runs: "&#D7DEE8› /cyuclear runs [页码] &#8A96A8查看历史清理批次
 help-run: "&#D7DEE8› /cyuclear run <批次> [details|reasons] &#8A96A8查看批次详情"
 help-recover: "&#D7DEE8› /cyuclear recover <批次> &#8A96A8打开指定批次的恢复物品"
 help-hotspots: "&#D7DEE8› /cyuclear hotspots [页码] &#8A96A8查看热点区块"
+help-here: "&#D7DEE8› /cyuclear here [items|entities|all] &#8A96A8清理当前脚下区块"
+help-tp: "&#D7DEE8› /cyuclear tp <世界> <x> [y] <z> &#8A96A8安全传送至指定坐标"
+help-back: "&#D7DEE8› /cyuclear back &#8A96A8返回上一次传送前的原点"
 help-cancel: "&#D7DEE8› /cyuclear cancel &#8A96A8停止当前清理"
 help-doctor: "&#D7DEE8› /cyuclear doctor &#8A96A8检查配置文件和菜单"
 help-snapshot: "&#D7DEE8› /cyuclear snapshot &#8A96A8备份当前配置"
@@ -90,11 +93,24 @@ panic-warn: "&#E74C3C[紧急中断] &f全服实体数量突破极限值 &#E74C3C
 # 区块超载保护
 # ---------------------------------------------------
 chunk-overload-warn: "&#E74C3C区块保护 &8· &f{world} &7{x}, {y}, {z} &8· &7已拦截 {type} &f{id} &8· &7{count}/{threshold}"
+chunk-overload-teleport-button: " &#5DADE2[前往查看]"
+chunk-overload-teleport-hover: "&7点击安全传送至超载区块 &f{world} &7({x}, {y}, {z})"
 overload-type-item: "掉落物"
 overload-type-item-type: "指定掉落物"
 overload-type-entity: "实体"
 overload-type-entity-type: "指定实体"
 overload-type-spawn-pressure: "生成压力"
+
+teleport-usage: "&#E74C3C用法: &f/cc tp <世界> <x> [y] <z> &7或 &f/cc tp <世界> <区块X> <区块Z>"
+teleport-world-not-found: "&#E74C3C目标世界不存在或未加载: &f{world}"
+teleport-invalid-coords: "&#E74C3C请输入有效的数字坐标"
+teleport-success: "&a已成功传送至 &f{world} &7({x}, {y}, {z})"
+teleport-failed: "&#E74C3C传送失败: &f{reason}"
+teleport-no-back-location: "&#E74C3C没有可返回的历史传送位置"
+teleport-back-disabled: "&#E74C3C本服务器未开启传送返回功能"
+teleport-back-expired: "&#E74C3C传送历史记录已超时失效"
+teleport-damage-protected: "&7[CyuClear] 已抵消着陆保护期间受到的伤害"
+here-cleanup-disabled: "&#E74C3C现场单区块清理功能已被禁用"
 
 # ---------------------------------------------------
 # 虚空垃圾桶与个人缓冲区
@@ -230,6 +246,7 @@ hotspot-release-confirm: "&e再次左键确认解除本次熔断"
 hotspot-released: "&a已解除 &f{world} {x},{z} &a的临时熔断"
 hotspot-cleanup-confirm: "&e再次左键确认清理这个区块"
 hotspot-cleanup-started: "&a已开始清理 &f{world} {x},{z} &a的当前区块"
+here-cleanup-started: "&a已开始清理当前所在区块 &f{world} &7({x}, {z})"
 admin-cleanup-confirm: "&e再次左键确认立即清理"
 admin-cancel-confirm: "&e再次左键确认停止当前清理"
 

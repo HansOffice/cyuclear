@@ -36,11 +36,13 @@ import org.cyuCBMclean.cyuclear.service.StatusReporter
 import org.cyuCBMclean.cyuclear.service.VoidBinManager
 import org.cyuCBMclean.cyuclear.service.WindowScanner
 
+import org.cyuCBMclean.cyuclear.service.TeleportService
+
 object CyuclearCommand : CommandExecutor, TabCompleter {
 
     private val adminCommands = listOf(
         "items", "entities", "all", "cluster", "menu", "runs", "run", "recover", "hotspots",
-        "cancel", "doctor", "validate", "snapshot", "history", "status", "reload", "check", "inspect", "preview", "lang", "language"
+        "cancel", "doctor", "validate", "snapshot", "history", "status", "reload", "check", "inspect", "preview", "lang", "language", "tp", "teleport", "goto", "here", "back"
     )
 
     private fun isAdminCommand(name: String): Boolean {
@@ -285,6 +287,120 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
                     sender.sendMessage(Language.get("preview-start"))
                 }
             }
+            "back" -> {
+                if (sender !is Player) {
+                    sender.sendMessage(Language.get("player-only"))
+                    return true
+                }
+                TeleportService.teleportBack(sender)
+            }
+            "tp", "teleport", "goto" -> {
+                if (sender !is Player) {
+                    sender.sendMessage(Language.get("player-only"))
+                    return true
+                }
+                if (args.size < 2) {
+                    sender.sendMessage(Language.get("teleport-usage"))
+                    return true
+                }
+                if (args.size == 2 && args[1].equals("back", ignoreCase = true)) {
+                    TeleportService.teleportBack(sender)
+                    return true
+                }
+                val worldName = args[1]
+                if (args.size == 3) {
+                    val x = args[2].toDoubleOrNull()
+                    if (x != null) {
+                        TeleportService.teleport(sender, worldName, x, null, 0.0)
+                    } else {
+                        sender.sendMessage(Language.get("teleport-invalid-coords"))
+                    }
+                } else if (args.size == 4) {
+                    val cx = args[2].toIntOrNull()
+                    val cz = args[3].toIntOrNull()
+                    if (cx != null && cz != null) {
+                        val blockX = (cx * 16 + 8).toDouble()
+                        val blockZ = (cz * 16 + 8).toDouble()
+                        TeleportService.teleport(sender, worldName, blockX, null, blockZ)
+                    } else {
+                        sender.sendMessage(Language.get("teleport-invalid-coords"))
+                    }
+                } else if (args.size >= 5) {
+                    val x = args[2].toDoubleOrNull()
+                    val y = args[3].toDoubleOrNull()
+                    val z = args[4].toDoubleOrNull()
+                    if (x != null && y != null && z != null) {
+                        TeleportService.teleport(sender, worldName, x, y, z)
+                    } else {
+                        sender.sendMessage(Language.get("teleport-invalid-coords"))
+                    }
+                } else {
+                    sender.sendMessage(Language.get("teleport-usage"))
+                }
+            }
+            "here" -> {
+                if (!requireActive(sender)) return true
+                if (sender !is Player) {
+                    sender.sendMessage(Language.get("player-only"))
+                    return true
+                }
+                if (!Settings.hereCleanupEnabled) {
+                    sender.sendMessage(Language.get("here-cleanup-disabled"))
+                    return true
+                }
+                if (WindowScanner.isRunning) {
+                    sender.sendMessage(Language.get("scan-running"))
+                    return true
+                }
+                if (!Settings.isWorldEnabled(sender.world.name)) {
+                    sender.sendMessage(Language.get("teleport-world-not-found", "world" to sender.world.name))
+                    return true
+                }
+
+                val mode = args.getOrNull(1)?.lowercase()
+                var cleanItems = when (mode) {
+                    "items", "item", "i", "drop", "drops" -> true
+                    "entities", "entity", "e", "mob", "mobs" -> false
+                    else -> true
+                }
+                var cleanEntities = when (mode) {
+                    "items", "item", "i", "drop", "drops" -> false
+                    "entities", "entity", "e", "mob", "mobs" -> true
+                    else -> true
+                }
+
+                if (cleanItems && !Settings.itemModuleEnabled) cleanItems = false
+                if (cleanEntities && !Settings.entityModuleEnabled) cleanEntities = false
+
+                if (!cleanItems && !cleanEntities) {
+                    sender.sendMessage(Language.get("module-all-disabled"))
+                    return true
+                }
+
+                val world = sender.world
+                val chunkX = sender.location.blockX shr 4
+                val chunkZ = sender.location.blockZ shr 4
+
+                val started = WindowScanner.startChunkScan(
+                    CleanupRequests.manual(cleanItems, cleanEntities),
+                    world,
+                    chunkX,
+                    chunkZ
+                )
+
+                if (started) {
+                    sender.sendMessage(
+                        Language.get(
+                            "here-cleanup-started",
+                            "world" to world.name,
+                            "x" to chunkX.toString(),
+                            "z" to chunkZ.toString()
+                        )
+                    )
+                } else {
+                    sender.sendMessage(Language.get("scan-running"))
+                }
+            }
             else -> {
                 sendHelp(sender, null)
             }
@@ -305,12 +421,20 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
                 subCommands.addAll(
                     listOf(
                         "items", "entities", "all", "reload", "lang", "cluster", "menu", "runs", "run", "recover",
-                        "hotspots", "cancel", "doctor", "validate", "snapshot", "history", "check", "preview", "status"
+                        "hotspots", "cancel", "doctor", "validate", "snapshot", "history", "check", "preview", "status", "tp", "here", "back"
                     )
                 )
             }
 
             return subCommands.filter { it.startsWith(args[0], ignoreCase = true) }
+        }
+
+        if (args.size == 2 && args[0].equals("here", ignoreCase = true) && sender.hasPermission("cyuclear.admin")) {
+            return listOf("items", "entities", "all").filter { it.startsWith(args[1], ignoreCase = true) }
+        }
+
+        if (args.size == 2 && (args[0].equals("tp", ignoreCase = true) || args[0].equals("teleport", ignoreCase = true) || args[0].equals("goto", ignoreCase = true)) && sender.hasPermission("cyuclear.admin")) {
+            return (listOf("back") + org.bukkit.Bukkit.getWorlds().map { it.name }).filter { it.startsWith(args[1], ignoreCase = true) }
         }
 
         if (args.size == 2 && args[0].equals("help", ignoreCase = true)) {
@@ -359,6 +483,9 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
         HelpEntry("/cc run ", "help-run", true),
         HelpEntry("/cc recover ", "help-recover", true),
         HelpEntry("/cc hotspots", "help-hotspots", true),
+        HelpEntry("/cc here [items|entities|all]", "help-here", true),
+        HelpEntry("/cc tp <世界> <x> [y] <z>", "help-tp", true),
+        HelpEntry("/cc back", "help-back", true),
         HelpEntry("/cc cancel", "help-cancel", true),
         HelpEntry("/cc doctor", "help-doctor", true),
         HelpEntry("/cc snapshot", "help-snapshot", true),

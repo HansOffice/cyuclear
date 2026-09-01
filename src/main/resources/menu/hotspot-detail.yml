@@ -4,12 +4,17 @@ layout:
   - "#########"
   - "####I####"
   - "#########"
-  - "##C#R#B#X"
+  - "#C#T#R#B#X"
 items:
   "#":
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
     name: "&r"
+  "T":
+    material: ENDER_PEARL
+    name: "&b前往该区块"
+    lore:
+      - "&7点击安全传送至该热点区块"
   "R":
     material: REDSTONE_BLOCK
     name: "&c解除熔断"
@@ -25,6 +30,6 @@ items:
     fallback-material: STAINED_GLASS_PANE
     name: "&b返回热点列表"
   "X":
-    material: CYAN_STAINED_GLASS_PANE
+    material: RED_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
     name: "&c关闭"
