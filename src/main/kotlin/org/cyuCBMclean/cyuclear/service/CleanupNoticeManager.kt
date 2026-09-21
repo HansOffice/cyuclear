@@ -28,7 +28,11 @@ object CleanupNoticeManager {
     }
 
     fun clearBossBar() {
-        CyuScheduler.runTask(Cyuclear.instance, Runnable { clearBossBarNow() })
+        if (Cyuclear.instance.isEnabled) {
+            CyuScheduler.runTask(Cyuclear.instance, Runnable { clearBossBarNow() })
+        } else {
+            clearBossBarNow()
+        }
     }
 
     fun shutdown() {

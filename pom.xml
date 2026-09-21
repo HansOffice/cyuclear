@@ -6,7 +6,7 @@
 
     <groupId>org.cyuCBMclean</groupId>
     <artifactId>cyuclear</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
     <packaging>jar</packaging>
 
     <properties>
