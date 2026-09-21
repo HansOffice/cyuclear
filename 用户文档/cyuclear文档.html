@@ -1410,8 +1410,8 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
               <tr><td><code>cyuclear-paper-1.4.4.jar</code></td><td>每个普通后端服的 <code>plugins</code></td><td>Paper / Bukkit 后端清理本体</td></tr>
               <tr><td><code>cyuclear-folia-1.4.4.jar</code></td><td>每个 Folia 后端服的 <code>plugins</code></td><td>Folia 后端清理本体</td></tr>
               <tr><td><code>cyuclear-legacy-1.4.4.jar</code></td><td>1.8 至 1.12 后端服的 <code>plugins</code></td><td>Legacy 后端清理本体</td></tr>
-              <tr><td><code>cyuclear-velocity-1.4.4.jar</code></td><td>Velocity 的 <code>plugins</code></td><td>代理端状态查看</td></tr>
-              <tr><td><code>cyuclear-bungee-1.4.4.jar</code></td><td>BungeeCord 的 <code>plugins</code></td><td>代理端状态查看</td></tr>
+              <tr><td><code>cyuclear-velocity-1.0.1.jar</code></td><td>Velocity 的 <code>plugins</code></td><td>代理端状态查看</td></tr>
+              <tr><td><code>cyuclear-bungee-1.0.1.jar</code></td><td>BungeeCord 的 <code>plugins</code></td><td>代理端状态查看</td></tr>
             </tbody>
           </table>
           <h4>代理端配置</h4>
@@ -1421,7 +1421,7 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
   storage: "redis"
   refresh-seconds: 10
   member-timeout-seconds: 20</code></pre>
-          <p>Velocity 使用 <code>cyuclear-velocity-1.4.4.jar</code>，需要 Java 21；BungeeCord 使用 <code>cyuclear-bungee-1.4.4.jar</code>，需要 Java 17。代理端版本独立于后端版本；每个网络只放与当前代理软件对应的一个代理端 jar，不要把代理端 jar 放进任一子服，也不要把后端 jar 放进代理端</p>
+          <p>Velocity 使用 <code>cyuclear-velocity-1.0.1.jar</code>，需要 Java 21；BungeeCord 使用 <code>cyuclear-bungee-1.0.1.jar</code>，需要 Java 17。代理端版本独立于后端版本；每个网络只放与当前代理软件对应的一个代理端 jar，不要把代理端 jar 放进任一子服，也不要把后端 jar 放进代理端</p>
           <h4>查看与重载</h4>
           <p>代理控制台或拥有 <code>cyuclear.proxy.admin</code> 的代理端管理员可使用 <code>/ccproxy status</code> 查看集群摘要，使用 <code>/ccproxy reload</code> 重载代理端配置和刷新间隔。代理端不参与领导者选举，不写入清理周期，也不写入共享垃圾桶物品</p>
           <p>总开关关闭的子服不会连接共享存储，因此不会出现在代理端活跃成员中。将子服的 <code>enabled</code> 改为 <code>true</code> 并执行 <code>/cc reload</code> 后才会加入集群</p>
