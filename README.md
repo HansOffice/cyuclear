@@ -79,7 +79,7 @@ mvn package -Pfolia -DskipTests
 mvn package -Plegacy -DskipTests
 ```
 
-构建产物位于 `target/`，发行归档以 `发行/` 目录为准
+构建产物位于 `target/`
 
 ## 许可
 
