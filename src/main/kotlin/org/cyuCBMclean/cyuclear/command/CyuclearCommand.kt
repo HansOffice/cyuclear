@@ -40,7 +40,7 @@ object CyuclearCommand : CommandExecutor {
 
     private val adminCommands = listOf(
         "items", "entities", "all", "cluster", "menu", "runs", "run", "recover", "hotspots",
-        "cancel", "doctor", "validate", "snapshot", "history", "status", "reload", "check", "inspect", "preview", "lang", "language", "tp", "teleport", "goto", "here", "back"
+        "cancel", "doctor", "validate", "snapshot", "history", "status", "metrics", "reload", "check", "inspect", "preview", "lang", "language", "tp", "teleport", "goto", "here", "back"
     )
 
     private fun isAdminCommand(name: String): Boolean {
@@ -254,6 +254,9 @@ object CyuclearCommand : CommandExecutor {
             }
             "status" -> {
                 StatusReporter.send(sender)
+            }
+            "metrics" -> {
+                sendMetricsStatus(sender)
             }
             "reload" -> {
                 val result = RuntimeReloadService.reload()
@@ -562,6 +565,20 @@ object CyuclearCommand : CommandExecutor {
             CyuScheduler.runEntityTask(Cyuclear.instance, sender, task)
         } else {
             CyuScheduler.runTask(Cyuclear.instance, task)
+        }
+    }
+
+    private fun sendMetricsStatus(sender: CommandSender) {
+        val port = Settings.metricsPort.toString()
+        sender.sendMessage(Language.get("metrics-title"))
+        if (Settings.metricsEnabled) {
+            sender.sendMessage(Language.get("metrics-enabled"))
+            sender.sendMessage(Language.get("metrics-port", "port" to port))
+            sender.sendMessage(Language.get("metrics-endpoint", "port" to port))
+        } else {
+            sender.sendMessage(Language.get("metrics-disabled"))
+            sender.sendMessage(Language.get("metrics-port", "port" to port))
+            sender.sendMessage(Language.get("metrics-hint-disabled"))
         }
     }
 }

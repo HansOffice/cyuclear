@@ -31,6 +31,7 @@ help-all: "&#D7DEE8› /cyuclear all &#8A96A8Run a full cleanup sweep"
 help-check: "&#D7DEE8› /cyuclear check &#8A96A8Inspect target entity/item decision trace"
 help-preview: "&#D7DEE8› /cyuclear preview &#8A96A8Simulate a cleanup without removing entities"
 help-status: "&#D7DEE8› /cyuclear status &#8A96A8View runtime performance and hook status"
+help-metrics: "&#D7DEE8› /cyuclear metrics &#8A96A8View Prometheus metrics exporter status"
 help-reload: "&#D7DEE8› /cyuclear reload &#8A96A8Reload configurations and apply main toggle"
 help-lang: "&#D7DEE8› /cyuclear lang <zh_cn|en_us> &#8A96A8Switch plugin language"
 help-cluster: "&#D7DEE8› /cyuclear cluster &#8A96A8View cross-server cluster status"
@@ -168,6 +169,14 @@ status-lists: "&#8A96A8Item IDs Keep/Clean &#D7DEE8{item_keep}/{item_clean} &#5B
 status-named-rules: "&#8A96A8Named Rules &#D7DEE8{total} &#5B6472| &#8A96A8Items &#D7DEE8{items} &#5B6472| &#8A96A8Entities &#D7DEE8{entities}"
 status-hooks: "&#8A96A8Hooks Mythic &#D7DEE8{mythic} &#5B6472| &#8A96A8CraftEngine &#D7DEE8{craftengine} &#5B6472| &#8A96A8Pokemon &#D7DEE8{pokemon}"
 status-footer: "&#3A4352&m┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+
+# Prometheus Metrics Endpoint
+metrics-title: "&#38BDF8&lCyuClear Prometheus Metrics Exporter"
+metrics-enabled: "&#8A96A8Status &#5B6472› &#34D399Enabled"
+metrics-disabled: "&#8A96A8Status &#5B6472› &#F87171Disabled"
+metrics-port: "&#8A96A8Port &#5B6472› &#D7DEE8{port}"
+metrics-endpoint: "&#8A96A8Endpoint &#5B6472› &#D7DEE8http://0.0.0.0:{port}/metrics"
+metrics-hint-disabled: "&#8A96A8To enable, set &#D7DEE8metrics.enabled: true &#8A96A8in &#D7DEE8config.yml &#8A96A8and run &#D7DEE8/cc reload"
 
 # Void Bin History
 history-header: "&#3A4352&m┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
