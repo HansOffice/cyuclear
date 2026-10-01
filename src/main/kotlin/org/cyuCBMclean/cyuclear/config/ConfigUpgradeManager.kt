@@ -24,7 +24,8 @@ object ConfigUpgradeManager {
         "storage.yml",
         "void-bin.yml",
         "sounds.yml",
-        "messages.yml",
+        "lang/zh_cn.yml",
+        "lang/en_us.yml",
         "menu/main.yml",
         "menu/target.yml",
         "menu/list.yml",
@@ -269,7 +270,7 @@ object ConfigUpgradeManager {
         val aliasedPath = pathAliases[sourcePath] ?: sourcePath
         val destinationFile = when {
             sourceFile != "config.yml" && sourceFile in managedFiles -> sourceFile
-            else -> rootFiles[aliasedPath.substringBefore('.')] ?: sourceFile.takeIf { it == "messages.yml" }
+            else -> rootFiles[aliasedPath.substringBefore('.')] ?: sourceFile.takeIf { it == "lang/zh_cn.yml" || it == "lang/en_us.yml" }
         } ?: return null
         val template = templates[destinationFile] ?: return null
         return if (template.contains(aliasedPath) || "$destinationFile:$aliasedPath" in emptyTemplatePaths) {

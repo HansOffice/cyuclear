@@ -10,7 +10,9 @@ import org.cyuCBMclean.cyuclear.menu.MenuReloadService
 import org.cyuCBMclean.cyuclear.service.ActivationService
 import org.cyuCBMclean.cyuclear.service.ChunkLimitService
 import org.cyuCBMclean.cyuclear.service.DepositBufferManager
+import org.cyuCBMclean.cyuclear.service.HeuristicProtection
 import org.cyuCBMclean.cyuclear.service.HotspotTracker
+import org.cyuCBMclean.cyuclear.service.MetricsService
 import org.cyuCBMclean.cyuclear.service.SoundNoticeManager
 import org.cyuCBMclean.cyuclear.util.ItemIdentity
 
@@ -28,6 +30,7 @@ internal object RuntimeReloadService {
         Settings.load()
         ChunkLimitService.reset()
         HotspotTracker.reset()
+        HeuristicProtection.reset()
         CraftEngineFurnitureHook.clearCache()
         MythicMobsHook.reset()
         ItemIdentity.reloadExternalResolvers()
@@ -36,6 +39,7 @@ internal object RuntimeReloadService {
         StackerBridge.reload()
         DepositBufferManager.onSettingsReload()
         ActivationService.reload()
+        MetricsService.reload()
         return Result(snapshot, ActivationService.isActive())
     }
 }

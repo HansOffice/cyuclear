@@ -1,29 +1,34 @@
-# 匹配：精确 / 通配 / 正则
-# 单条可写 通配: 或 正则:
+# CyuClear 实体与掉落物清理规则配置
+# 准星瞄准目标输入 /cc check 可即时查看清理判定，输入 /cc preview 可全服预演不删物
+# 匹配规则支持 精确 / 通配 / 正则，单条条目前可直接加 通配: 或 正则: 前缀覆盖
 
-# 高级规则
+# 高级规则配置字典，游戏内执行 /cc menu 可视化编辑或直接留空
 rules: {}
 
 targets:
-  # 掉落物规则
+  # 掉落物清理规则
   items:
-    # 清理开关
+    # 是否开启掉落物清理
     enabled: true
-    # 黑名单 / 白名单 / 并行名单
+    # 名单模式：黑名单 (默认清理全部，仅保留 keep-list 内物品) / 白名单 (默认全部保留，仅清理 clean-list 内物品) / 并行名单 (双名单同时比对，优先保留)
     mode: "黑名单"
 
-    # 掉落保护 (秒)
+    # 刚掉落物品保护时间配置
     grace:
+      # 普通掉落物保护时长 (秒)，掉落未达到该时长的物品不会被清理
       minimum-age-seconds: 10
+      # 贵重物品额外保护时长 (秒)
       high-value-minimum-age-seconds: 60
+      # 贵重物品列表，享受更长时间的防误清保护
       high-value-list:
         - "minecraft:diamond"
         - "minecraft:nether_star"
         - "minecraft:elytra"
         - "minecraft:netherite_ingot"
 
-    # 物品 ID：minecraft: / ia: / ce: / ox:
+    # 保留物品名单，支持原版与外部插件 (ia:/ce:/ox:) ID
     keep-list:
+      # 默认匹配方式：精确 / 通配 / 正则 (单条也可用 通配: 或 正则: 前缀单独指定)
       match-mode: "精确"
       list:
         - "minecraft:diamond"
@@ -43,22 +48,24 @@ targets:
         - "通配:minecraft:*_smithing_template"
         - "通配:minecraft:*_spawn_egg"
     clean-list:
-      # 白名单 / 并行名单清理项
+      # 指定清理物品名单，仅在白名单或并行名单模式下生效
       match-mode: "精确"
       list:
         # - "minecraft:stone"
         # - "minecraft:cobblestone"
 
-    # 展示名
+    # 按物品展示名过滤
     name-rules:
+      # 是否开启展示名过滤
       enabled: true
-      # 去色 / 保留颜色
+      # 颜色代码处理：strip (去除颜色代码后再匹配) / keep (保留颜色代码精确匹配)
       color-mode: strip
-      # 只匹配自定义名
+      # 是否仅对有自定义铁砧或插件重命名的物品生效 (忽略原版默认名称)
       require-custom-name: true
-      # 清理优先
+      # 是否优先于保留名单强制清理
       force-clean: false
       keep-list:
+        # 默认匹配方式：精确 / 通配 / 正则
         match-mode: "精确"
         list:
           # - "钻石斧"
@@ -70,14 +77,15 @@ targets:
           # - "垃圾"
           # - "通配:*测试*"
 
-    # Lore
+    # 按物品 Lore 描述过滤
     lore-rules:
+      # 是否开启 Lore 过滤
       enabled: true
-      # 去色 / 保留颜色
+      # 颜色代码处理：strip (去除颜色代码) / keep (保留颜色代码)
       color-mode: strip
-      # 任意行 / 每条均命中
+      # 匹配行数模式：any (任意一行命中即可) / all (所有行必须全部命中)
       line-mode: any
-      # 清理优先
+      # 是否优先于保留名单强制清理
       force-clean: false
       keep-list:
         match-mode: "精确"
@@ -90,15 +98,16 @@ targets:
           # - "一次性"
           # - "通配:*测试*"
 
-  # 实体规则
+  # 实体与生物清理规则
   entities:
-    # 清理开关
+    # 是否开启实体清理
     enabled: true
-    # 黑名单 / 白名单 / 并行名单
+    # 名单模式：黑名单 (默认清理全部，仅保留 keep-list 内实体) / 白名单 (默认全部保留，仅清理 clean-list 内实体)
     mode: "黑名单"
 
-    # 实体 ID：minecraft: / mythic: / ce: / pokemon:
+    # 免于清理的保留实体列表，支持原版、mythic:、ce: 与 pokemon: 前缀
     keep-list:
+      # 默认匹配方式：精确 / 通配 / 正则
       match-mode: "精确"
       list:
         - "minecraft:armor_stand"
@@ -133,48 +142,65 @@ targets:
         # - "pokemon:tag=legendary"
         # - "pokemon:shiny=true"
     clean-list:
-      # 白名单 / 并行名单清理项
+      # 指定清理实体列表，仅在白名单或并行名单模式下生效
       match-mode: "精确"
       list:
         # - "pokemon:mod=cobblemon"
         # - "pokemon:species=magikarp"
 
-    # 实体保护
+    # 生物特质保护配置
     protections:
-      # 命名实体
+      # 是否保护带有命名牌名字的生物
       named: true
-      # 已驯服宠物
+      # 是否保护已被玩家驯服的宠物 (如狼、猫、马)
       tamed: true
-      # 玩家放出的宝可梦
+      # 是否保护玩家放出的宝可梦实体 (Cobblemon / Pixelmon)
       player-owned-pokemon: true
-      # 持久实体
+      # 是否保护不会自然消失的持久实体 (persistent)
       persistent: false
-      # 不消失实体
+      # 是否保护持有不会刷没标记的实体 (no-despawn)
       no-despawn: true
       events:
-        # 袭击实体
+        # 是否保护袭击事件 (Raid) 中生成的劫掠者与灾厄村民
         raid: true
 
-      # 命名保护例外
+      # 命名保护例外名单
       named-bypass:
-        # 不受命名保护的实体
+        # 即使被命名也不受保护、依然会被清理的实体类型
         entities:
           # - "minecraft:armor_stand"
-        # 不受命名保护的区域
+        # 即使被命名也不受保护的特定立体空间区域
         regions:
           # display-area:
           #   world: "world"
           #   min: { x: 0, y: -64, z: 0 }
           #   max: { x: 100, y: 320, z: 100 }
 
-    # 实体名称
-    name-rules:
+    # 智能启发式免死保护
+    heuristics:
+      # 是否开启智能启发式免死保护总开关 (默认开启)
       enabled: true
-      # 去色 / 保留颜色
+      # 交易成熟村民保护：玩家交易过或有交易经验的村民免于被清
+      traded-villager: true
+      # 工位工作村民保护：村民交易所内拥有职业方块且空间被限位的村民免于被清
+      workstation-villager: true
+      # 刷铁机核心识别：聚集且处于恐慌状态或周围有床与恐吓生物的村民组合保护
+      iron-farm-villager: true
+      # 动力运输载具保护：位于激活动力铁轨或探测铁轨上的运输矿车免于被清
+      powered-vehicle: true
+      # 启发式判定缓存有效时长 (秒)
+      cache-seconds: 60
+
+    # 按实体名称过滤
+    name-rules:
+      # 是否启用名称匹配
+      enabled: true
+      # 颜色代码处理：去除 / 保留
       color-mode: "去除"
-      # 只匹配自定义名
+      # 是否只对有自定义名字的实体生效
       require-custom-name: true
       keep-list:
+        # 默认匹配方式：精确 / 通配 / 正则
         match-mode: "精确"
         list:
           # - "重要 NPC"
@@ -184,11 +210,11 @@ targets:
         list:
           # - "临时召唤物"
           # - "正则:^测试怪物\\d+$"
-      # 清理时可跳过的保护
+      # 清理时强制跳过的保护标签 (如 named 表示即使已命名也强制清理)
       clean-bypasses:
         - "named"
 
-    # 实体组合规则
+    # 实体组合条件规则母版示例
     detail-rules:
       # clean-temporary-display:
       #   action: "clean"
@@ -204,50 +230,50 @@ targets:
       #     has-passengers: false
       #   bypass-protections: ["named", "no-despawn"]
 
-# 特殊实体识别
+# 外部生态与特殊实体识别联动
 hooks:
-  # MythicMobs
+  # MythicMobs 怪物联动
   mythic-mobs:
-    # MythicMobs ID
+    # 是否开启 MythicMobs 怪物识别
     enabled: true
-    # 只匹配 mythic: ID
+    # 是否只允许以 mythic: 格式编写怪物 ID
     id-only: false
-    # 跳过实体保护
+    # 是否跳过实体特质保护强制应用规则
     bypass-protection-flags: false
-    # 不计入区块限制
+    # 是否从区块实体数量限制中排除 (避免误卡 Boss)
     exclude-from-chunk-limit: false
-    # 不计入紧急清理
+    # 是否从 Panic 紧急清理中排除
     exclude-from-panic-count: false
 
-  # CraftEngine
+  # CraftEngine 家具联动
   craft-engine:
-    # CraftEngine 家具
+    # 是否开启 CraftEngine 物品与家具识别
     enabled: true
-    # 保护家具部件
+    # 是否保护家具部件不被实体清理误扫
     protect-furniture: true
-    # 只匹配 ce: ID
+    # 是否只允许以 ce: 格式编写物品或家具 ID
     id-only: false
-    # 不计入区块限制
+    # 是否从区块实体限制中排除家具
     exclude-from-chunk-limit: true
-    # 不计入紧急清理
+    # 是否从 Panic 紧急清理中排除家具
     exclude-from-panic-count: true
 
-  # Cobblemon / Pixelmon
+  # 宝可梦模组联动 (Cobblemon / Pixelmon)
   pokemon:
-    # 宝可梦属性
+    # 是否开启宝可梦实体与属性识别
     enabled: true
 
-# 数量限制
+# 数量密度限制与熔断
 limits:
-  # 区块限制
+  # 单区块堆积限制
   chunk:
-    # 掉落物
+    # 掉落物数量限制
     items:
-      # 软限制
+      # 软限制阈值，达到时记录警报
       soft-threshold: 1000
-      # 硬限制，0 关闭
+      # 硬限制阈值，超出部分拒绝新掉落物进入 (填 0 为关闭)
       threshold: 1600
-      # 指定物品限制
+      # 指定物品单区块独立数量上限 (格式: 物品ID: 最大数量)
       specific:
         # minecraft:stone: 80
         # minecraft:diamond: 10
@@ -255,41 +281,43 @@ limits:
         # "ce:default:ruby": 20
         # "ox:ruby": 20
 
-    # 实体
+    # 实体数量限制
     entities:
-      # 安全 / 严格 / 关闭
+      # 限制模式：安全 (SAFE，仅统计高频生怪压力，零卡顿推荐) / 严格 (STRICT，实时硬上限拦截) / 关闭 (OFF)
       mode: "安全"
-      # 软限制
+      # 软限制阈值，达到时记录热点分析
       soft-threshold: 300
-      # 硬限制，0 关闭
+      # 硬限制阈值，超出时阻止新生物生成 (填 0 为关闭)
       threshold: 500
-      # 统计窗口 (毫秒)
+      # 高频生成统计时间窗口 (毫秒)
       spawn-window-millis: 1000
-      # 指定实体限制
+      # 指定实体单区块独立数量上限 (格式: 实体ID: 最大数量)
       specific:
         # minecraft:armor_stand: 30
         # mythic:example_mob: 10
 
-    # 过载提示：管理员 / 全服 / 不发送
+    # 超载警报发送目标：管理员 (仅向 OP 发送) / 全服 (全服广播) / 不发送
     notice-target: "管理员"
-    # 提示冷却 (秒)
+    # 警报发送冷却时间 (秒)，避免刷屏
     notice-cooldown-seconds: 60
-    # 计数缓存 (毫秒)
+    # 实体数量计数缓存有效时长 (毫秒)
     count-cache-millis: 250
-    # 熔断时长 (毫秒)
+    # 熔断冷却锁定时长 (毫秒)
     overload-cache-millis: 2000
+    # 热点区块追踪分析
     hotspot:
-      # 热点记录
+      # 是否记录密集热点区块
       enabled: true
-      # 保留时长 (秒)
+      # 热点数据保留时长 (秒)
       retention-seconds: 300
-      # 最大记录数
+      # 内存中最大保留的热点区块记录数
       max-records: 80
 
-  # 实时出生拦截
+  # 高频射弹与实体生成实时拦截
   realtime:
+    # 是否开启生成事件实时拦截
     enabled: false
-    # 白名单 / 黑名单
+    # 拦截模式：白名单 (仅拦截 clean-list 内实体) / 黑名单 (除 keep-list 外全拦截)
     mode: "白名单"
     keep-list:
       match-mode: "精确"
@@ -307,12 +335,13 @@ limits:
         - "minecraft:spectral_arrow"
         - "minecraft:trident"
 
-  # 全服紧急清理
+  # 全服 TPS 紧急暴跌过载熔断保护
   panic:
+    # 是否开启全服应急保护
     enabled: false
-    # 全服 / 管理员 / 关闭
+    # 应急触发通知目标：全服 / 管理员 / 关闭
     notice-target: "全服"
-    # 实体上限
+    # 全服允许的最大实体总数上限
     max-global-entities: 5000
-    # 每个世界的普查间隔 (秒)
+    # 每个世界的全局实体普查间隔 (秒)
     check-interval-seconds: 15

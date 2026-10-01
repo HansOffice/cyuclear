@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.ClickType
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
@@ -171,65 +172,68 @@ class BinMenu(requestedPage: Int = 0) : InventoryHolder, Listener {
 
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
-        val holder = event.inventory.holder
-        if (holder !is BinMenu) return
-
-        event.isCancelled = true
+        val top = event.view.topInventory
+        val holder = top.holder as? BinMenu ?: return
         val player = event.whoClicked as? Player ?: return
 
-        if (event.clickedInventory == event.view.bottomInventory) {
-            if (event.click != ClickType.LEFT && event.click != ClickType.RIGHT && event.click != ClickType.SHIFT_LEFT && event.click != ClickType.SHIFT_RIGHT) return
-            val cursor: ItemStack? = event.cursor
-            if (cursor != null && cursor.type != Material.AIR) return
-
-            if (Settings.clusterEnabled) {
-                if (!ClusterManager.isActive()) {
-                    player.sendMessage(Language.get("bin-sync-unavailable"))
-                } else {
-                    player.sendMessage(Language.get("bin-deposit-cluster-disabled"))
-                }
-                return
-            }
-            val clickedItem = event.currentItem ?: return
-            if (clickedItem.type == Material.AIR) return
-
-            val decision = PlayerDepositService.check(player, clickedItem)
-            if (!decision.allowed) {
-                val reason = if (decision.messageKey == "bin-deposit-denied") decision.reason else ""
-                player.sendMessage(Language.get(decision.messageKey, "reason" to reason))
-                return
-            }
-            if (Settings.binDepositBufferEnabled) {
-                when (DepositBufferManager.stage(player, clickedItem.clone())) {
-                    DepositBufferManager.StageStatus.STAGED -> {
-                        event.clickedInventory?.setItem(event.slot, ItemStack(Material.AIR))
-                        if (Settings.binDepositFeedbackEnabled) {
-                            player.sendMessage(Language.get("bin-deposit-buffer-staged"))
-                        }
-                        SoundNoticeManager.play(player, SoundNoticeManager.Event.BIN_DEPOSIT)
-                        DepositBufferMenu.open(player)
-                    }
-                    DepositBufferManager.StageStatus.LIMIT -> player.sendMessage(Language.get("bin-deposit-limit"))
-                    DepositBufferManager.StageStatus.PERSIST_FAILED -> player.sendMessage(Language.get("bin-buffer-persist-failed"))
-                    DepositBufferManager.StageStatus.INVALID -> Unit
-                }
-                return
-            }
-            if (!VoidBinManager.storeManual(clickedItem.clone())) {
-                player.sendMessage(Language.get("bin-deposit-limit"))
-                return
-            }
-            event.clickedInventory?.setItem(event.slot, ItemStack(Material.AIR))
-            if (Settings.binDepositFeedbackEnabled) {
-                player.sendMessage(Language.get("bin-deposit-success"))
-            }
-            SoundNoticeManager.play(player, SoundNoticeManager.Event.BIN_DEPOSIT)
-
+        if (event.action == InventoryAction.COLLECT_TO_CURSOR || event.click == ClickType.DOUBLE_CLICK) {
+            event.isCancelled = true
             return
         }
 
+        if (event.clickedInventory == event.view.bottomInventory) {
+            if (event.isShiftClick) {
+                event.isCancelled = true
+                val clickedItem = event.currentItem ?: return
+                if (clickedItem.type == Material.AIR) return
+
+                if (Settings.clusterEnabled) {
+                    if (!ClusterManager.isActive()) {
+                        player.sendMessage(Language.get("bin-sync-unavailable"))
+                    } else {
+                        player.sendMessage(Language.get("bin-deposit-cluster-disabled"))
+                    }
+                    return
+                }
+                val decision = PlayerDepositService.check(player, clickedItem)
+                if (!decision.allowed) {
+                    val reason = if (decision.messageKey == "bin-deposit-denied") decision.reason else ""
+                    player.sendMessage(Language.get(decision.messageKey, "reason" to reason))
+                    return
+                }
+                if (Settings.binDepositBufferEnabled) {
+                    when (DepositBufferManager.stage(player, clickedItem.clone())) {
+                        DepositBufferManager.StageStatus.STAGED -> {
+                            event.clickedInventory?.setItem(event.slot, ItemStack(Material.AIR))
+                            if (Settings.binDepositFeedbackEnabled) {
+                                player.sendMessage(Language.get("bin-deposit-buffer-staged"))
+                            }
+                            SoundNoticeManager.play(player, SoundNoticeManager.Event.BIN_DEPOSIT)
+                            DepositBufferMenu.open(player)
+                        }
+                        DepositBufferManager.StageStatus.LIMIT -> player.sendMessage(Language.get("bin-deposit-limit"))
+                        DepositBufferManager.StageStatus.PERSIST_FAILED -> player.sendMessage(Language.get("bin-buffer-persist-failed"))
+                        DepositBufferManager.StageStatus.INVALID -> Unit
+                    }
+                    return
+                }
+                if (!VoidBinManager.storeManual(clickedItem.clone())) {
+                    player.sendMessage(Language.get("bin-deposit-limit"))
+                    return
+                }
+                event.clickedInventory?.setItem(event.slot, ItemStack(Material.AIR))
+                if (Settings.binDepositFeedbackEnabled) {
+                    player.sendMessage(Language.get("bin-deposit-success"))
+                }
+                SoundNoticeManager.play(player, SoundNoticeManager.Event.BIN_DEPOSIT)
+                return
+            }
+            return
+        }
+
+        event.isCancelled = true
         val slot = event.rawSlot
-        if (slot < 0 || slot >= holder.inventory.size) return
+        if (slot < 0 || slot >= top.size) return
 
         if (holder.customButtonSlots.containsKey(slot)) {
             val button = holder.customButtonSlots[slot]!!
@@ -333,7 +337,7 @@ class BinMenu(requestedPage: Int = 0) : InventoryHolder, Listener {
     @EventHandler
     fun onDrag(event: InventoryDragEvent) {
         val holder = event.inventory.holder
-        if (holder is BinMenu) {
+        if (holder is BinMenu && event.rawSlots.any { it < event.view.topInventory.size }) {
             event.isCancelled = true
         }
     }

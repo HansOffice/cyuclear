@@ -1,51 +1,57 @@
+# CyuClear 跨服数据同步与共享存储配置
+# 用于在多子服之间共享垃圾桶内容与清理状态，支持 Redis 与 MySQL
+# 单服运营保持 enabled: false 即可，修改后执行 /cc reload 生效
+
 cluster:
-  # 跨服同步总开关
+  # 是否开启跨服数据同步
   enabled: false
-  # 同一组子服填写相同名称
+  # 集群标识，同一组跨服网络填写相同名称
   id: "default"
-  # 当前子服名称，同一集群内不能重复
+  # 当前子服唯一节点名，同一集群内各子服必须唯一不可重复
   server-id: ""
-  # 在线状态上报间隔 (秒)
+  # 子服心跳与在线状态上报周期 (秒)
   heartbeat-seconds: 1
-  # 子服离线判定时间 (秒)
+  # 判定其他子服离线的超时时长 (秒)
   member-timeout-seconds: 20
-  # 跨服存储方式: redis / mysql
+  # 跨服存储后端类型：redis (推荐，高频同步延迟极低) / mysql (需要 8.0+)
   storage: "redis"
 
+  # Redis 连接参数
   redis:
-    # Redis 地址
+    # Redis 服务器 IP 或域名
     host: "127.0.0.1"
     # Redis 端口
     port: 6379
-    # Redis ACL 用户名，未使用时留空
+    # Redis ACL 认证用户名，无则留空
     username: ""
-    # Redis 密码，未设置时留空
+    # Redis 认证密码，无则留空
     password: ""
-    # Redis 数据库编号
+    # Redis 数据库编号 (默认 0)
     database: 0
-    # SSL 连接
+    # 是否启用 SSL 安全加密连接
     ssl: false
-    # 连接超时时间 (毫秒)
+    # TCP 连接握手超时时长 (毫秒)
     connect-timeout-millis: 3000
-    # 读写超时时间 (毫秒)
+    # 数据读写网络超时时长 (毫秒)
     socket-timeout-millis: 3000
 
+  # MySQL 连接参数
   mysql:
-    # MySQL 地址
+    # 数据库主机 IP 或域名
     host: "127.0.0.1"
-    # MySQL 端口
+    # 数据库端口
     port: 3306
-    # 数据库名称
+    # 数据库名
     database: "minecraft"
-    # 数据库用户名
+    # 数据库登录账号
     username: "root"
-    # 数据库密码，未设置时留空
+    # 数据库登录密码
     password: ""
-    # SSL 连接
+    # 是否启用 SSL 加密连接
     ssl: false
-    # 连接超时时间 (毫秒)
+    # 数据库连接建立超时时长 (毫秒)
     connect-timeout-millis: 3000
-    # 读写超时时间 (毫秒)
+    # 数据库查询读写超时时长 (毫秒)
     socket-timeout-millis: 3000
-    # 数据表前缀，只能使用英文、数字和下划线
+    # 数据表名前缀，仅限使用英文字母、数字和下划线
     table-prefix: "cyuclear_"

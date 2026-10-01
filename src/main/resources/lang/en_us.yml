@@ -1,17 +1,13 @@
-# ---------------------------------------------------
 # Basic System Messages
-# ---------------------------------------------------
 prefix: "&#4A90E2[&#5DADE2Cyuclear&#4A90E2] &f"
 reload-success: "&fConfiguration and language files have been reloaded."
 no-permission: "&#E74C3CYou do not have permission to execute this command."
 player-only: "&#E74C3CThis command can only be executed by players."
 language-changed: "&aLanguage switched to: &f{lang}"
-language-current: "&7Current language: &f{lang} &8(Available: &fzh_CN&8, &fen_US&8)"
-language-invalid: "&#E74C3CInvalid language code! Available: &fzh_CN&8, &fen_US"
+language-current: "&7Current language: &f{lang} &8(Available: &fzh_cn&8, &fen_us&8)"
+language-invalid: "&#E74C3CInvalid language code! Available: &fzh_cn&8, &fen_us"
 
-# ---------------------------------------------------
 # Help Messages
-# ---------------------------------------------------
 help-page-size: 8
 help-border: "&#3A4352&m┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
 help-title: "<gradient:#58C7FF:#7DE2B8>&lCyuclear Help</gradient>"
@@ -33,7 +29,7 @@ help-check: "&#D7DEE8› /cyuclear check &#8A96A8Inspect target entity/item deci
 help-preview: "&#D7DEE8› /cyuclear preview &#8A96A8Simulate a cleanup without removing entities"
 help-status: "&#D7DEE8› /cyuclear status &#8A96A8View runtime performance and hook status"
 help-reload: "&#D7DEE8› /cyuclear reload &#8A96A8Reload configurations and apply main toggle"
-help-lang: "&#D7DEE8› /cyuclear lang <zh_CN|en_US> &#8A96A8Switch plugin language"
+help-lang: "&#D7DEE8› /cyuclear lang <zh_cn|en_us> &#8A96A8Switch plugin language"
 help-cluster: "&#D7DEE8› /cyuclear cluster &#8A96A8View cross-server cluster status"
 help-menu: "&#D7DEE8› /cyuclear menu &#8A96A8Open management center"
 help-runs: "&#D7DEE8› /cyuclear runs [page] &#8A96A8View cleanup run history"
@@ -48,22 +44,18 @@ help-doctor: "&#D7DEE8› /cyuclear doctor &#8A96A8Diagnose configuration and me
 help-snapshot: "&#D7DEE8› /cyuclear snapshot &#8A96A8Backup current configuration files"
 help-history: "&#D7DEE8› /cyuclear history [player] [page] &#8A96A8View void bin claim history"
 
-# ---------------------------------------------------
 # Status and Reload
-# ---------------------------------------------------
 startup-disabled-console: "&eSafe startup: Cleanup is disabled. Enable 'enabled: true' in config.yml, then run /cc reload."
 startup-disabled-admin: "&eCyuClear is safely disabled. Enable 'enabled: true' in config.yml, then run /cc reload."
 reload-enabled: "&aMain toggle is ENABLED: Cleanup tasks, chunk limits and cluster sync are active."
 reload-disabled: "&eMain toggle is DISABLED: Entities and items will not be cleaned or intercepted."
 plugin-disabled: "&#E74C3CPlugin is disabled. Please enable it in config.yml and run /cc reload."
 
-# ---------------------------------------------------
 # Rule List & Menu Interaction
-# ---------------------------------------------------
-menu-list-item-hint: "&7Click an item in inventory to add to list; click an entry to remove."
-menu-list-entity-hint: "&7Click a spawn egg in inventory to add entity; click an entry to remove."
-menu-list-name-hint: "&7Click an item with custom name to add stripped name; click an entry to remove."
-menu-list-lore-hint: "&7Click an item with lore to add stripped lore lines; click an entry to remove."
+menu-list-item-hint: "&7Shift-Click an item in inventory to add to list; click an entry to remove."
+menu-list-entity-hint: "&7Shift-Click a spawn egg in inventory to add entity; click an entry to remove."
+menu-list-name-hint: "&7Shift-Click an item with custom name to add stripped name; click an entry to remove."
+menu-list-lore-hint: "&7Shift-Click an item with lore to add stripped lore lines; click an entry to remove."
 menu-list-added: "&aAdded to the current list."
 menu-list-added-multi: "&aAdded &#5DADE2{count} &aentries to the current list."
 menu-list-removed: "&aRemoved from the current list."
@@ -79,9 +71,7 @@ menu-list-no-lore: "&#E74C3CThis item has no lore."
 menu-list-items-only: "&#E74C3CName and lore matching are only available for item rules."
 menu-save-failed: "&#E74C3CFailed to save config, check console and rules.yml."
 
-# ---------------------------------------------------
 # Countdown and Broadcast
-# ---------------------------------------------------
 countdown-warn: "&fEntity cleanup will begin in &#5DADE2{time} &fseconds!"
 countdown-warn-chat: "&fEntity cleanup will begin in &#5DADE2{time} &fseconds!"
 countdown-warn-actionbar: "&fCleanup in &#5DADE2{time} &fseconds"
@@ -89,9 +79,7 @@ countdown-warn-bossbar: "&fCleanup in &#5DADE2{time} &fseconds"
 cleanup-summary: "&fCleanup finished in &#5DADE2{time_text}&f, cleared &#5DADE2{items} &fitems and &#5DADE2{entities} &fentities."
 panic-warn: "&#E74C3C[Emergency] &fEntity count exceeded hard limit &#E74C3C({count})&f! Forcing cross-chunk cleanup sweep..."
 
-# ---------------------------------------------------
 # Chunk Overload Protection
-# ---------------------------------------------------
 chunk-overload-warn: "&#E74C3CChunk Limit &8· &f{world} &7{x}, {y}, {z} &8· &7Blocked {type} &f{id} &8· &7{count}/{threshold}"
 chunk-overload-teleport-button: " &#5DADE2[Teleport]"
 chunk-overload-teleport-hover: "&7Click to safely teleport to overloaded chunk &f{world} &7({x}, {y}, {z})"
@@ -112,9 +100,7 @@ teleport-back-expired: "&#E74C3CPrevious teleport location has expired"
 teleport-damage-protected: "&7[CyuClear] Damage prevented by landing protection"
 here-cleanup-disabled: "&#E74C3CHere chunk cleanup feature is disabled"
 
-# ---------------------------------------------------
 # Void Bin & Personal Buffer
-# ---------------------------------------------------
 bin-not-enabled: "&#E74C3CVoid Bin feature is not enabled on this server."
 bin-empty: "&fVoid Bin is currently empty. Please wait for the next cleanup!"
 bin-expired: "&#E74C3CVoid Bin has expired and locked. &fPlease wait for the next cleanup!"
@@ -155,9 +141,7 @@ bin-buffer-item-return-full: "&eInventory full, this item remains in pending buf
 bin-buffer-item-gone: "&7This pending item is no longer in buffer."
 bin-buffer-item-persist-failed: "&#E74C3CFailed to save buffer. Item not retrieved, try again later."
 
-# ---------------------------------------------------
 # Task Scheduling & Module Status
-# ---------------------------------------------------
 scan-running: "&#E74C3CA cleanup task is already running, please wait!"
 scan-not-running: "&7No cleanup task is currently running."
 scan-cancelled: "&eCurrent cleanup task cancelled."
@@ -167,9 +151,7 @@ module-entities-disabled: "&#E74C3CEntity cleanup module is disabled."
 module-all-disabled: "&#E74C3CBoth item and entity cleanup modules are disabled."
 cluster-local-cleanup-no-bin: "&eManual cleanup does not write to shared Void Bin in cluster mode."
 
-# ---------------------------------------------------
 # Status Reporter
-# ---------------------------------------------------
 status-header: "&#4A90E2&m----------&r &f&lRuntime Status &#4A90E2&m----------"
 status-runtime: "&7Platform &#5DADE2{platform} &8| &7Cleaning &f{running} &8| &7Profile &#5DADE2{profile}"
 status-activation: "&7Active State &#5DADE2{state}"
@@ -184,17 +166,13 @@ status-named-rules: "&7Named Rules &#5DADE2{total} &8| &7Items &#5DADE2{items} &
 status-hooks: "&7Hooks Mythic &f{mythic} &8| &7CraftEngine &f{craftengine} &8| &7Pokemon &f{pokemon}"
 status-footer: "&#4A90E2&m-----------------------------"
 
-# ---------------------------------------------------
 # Void Bin Claim History
-# ---------------------------------------------------
 history-header: "&#4A90E2&m----------&r &f&lVoid Bin Claim History &#4A90E2&m----------"
 history-empty: "&7No matching claim records found."
 history-entry: "&7{time} &f{player} &8[{server}] &7claimed &#5DADE2{item} &fx{amount} &8{delivery}"
 history-footer: "&8Page &f{page}&8/&f{total}  &7/cc history [player] [page]"
 
-# ---------------------------------------------------
 # Runs & Recovery Center
-# ---------------------------------------------------
 runs-header: "&#4A90E2&m----------&r &f&lCleanup Runs &#4A90E2&m----------"
 runs-empty: "&7No cleanup runs recorded yet."
 runs-entry: "&7#{id} &f{origin} &8| &7{state} &8| &7Items &#5DADE2{items} &8| &7Entities &#5DADE2{entities} &8| &7Recovery &#5DADE2{recovery}"
@@ -217,25 +195,19 @@ recovery-invalid-item: "&#E74C3CItem data corrupted, original log retained."
 recovery-no-space: "&#E74C3CInventory full, please clear space and try again."
 recovery-save-failed: "&#E74C3CFailed to write claim log, item not dispensed."
 
-# ---------------------------------------------------
 # Config Doctor
-# ---------------------------------------------------
 doctor-header: "&#4A90E2&m----------&r &f&lConfig Doctor &#4A90E2&m----------"
 doctor-entry: "&8[{level}] &7{file} &f{path} &8- &f{message}"
 doctor-more: "&7Check respective config files for remaining &#5DADE2{count} &7items."
 doctor-summary: "&7Diagnostics complete &8| &7Errors &#E74C3C{errors} &8| &7Warnings &#E6B422{warnings}"
 doctor-footer: "&#4A90E2&m-----------------------------"
 
-# ---------------------------------------------------
 # Config Snapshots
-# ---------------------------------------------------
 snapshot-success: "&aConfiguration saved! Total &#5DADE2{count} &afiles backed up."
 snapshot-failed: "&#E74C3CFailed to create config snapshot, check console."
 reload-snapshot: "&7Saved &#5DADE2{count} &7config files before reload."
 
-# ---------------------------------------------------
 # Hotspot Monitoring
-# ---------------------------------------------------
 hotspots-header: "&#4A90E2&m----------&r &f&lHotspot Chunks &#4A90E2&m----------"
 hotspots-empty: "&7No active hotspot chunks."
 hotspots-entry: "&7{index}. &f{world} &#5DADE2{x},{z} &8| &7{state} &8| &7Items &#5DADE2{items} &8| &7Entities &#5DADE2{entities} &8| &7Triggers &#5DADE2{triggers}"
@@ -250,9 +222,7 @@ here-cleanup-started: "&aStarted cleanup for current chunk &f{world} &7({x}, {z}
 admin-cleanup-confirm: "&eLeft-Click again to confirm immediate cleanup."
 admin-cancel-confirm: "&eLeft-Click again to confirm stopping cleanup."
 
-# ---------------------------------------------------
 # Crosshair Inspection
-# ---------------------------------------------------
 check-no-target: "&7Please look at an entity or dropped item first."
 check-header: "&#4A90E2&m----------&r &f&lTarget Inspection &#4A90E2&m----------"
 check-entity-id: "&7Entity: &#5DADE2{id}"
@@ -290,9 +260,7 @@ check-bin-deposit: "&7Player Deposit: &#5DADE2{result} &8- &7{reason}"
 check-trace: "&8- &7{stage}: &f{detail}"
 check-footer: "&#4A90E2&m--------------------------------"
 
-# ---------------------------------------------------
 # Cleanup Preview
-# ---------------------------------------------------
 preview-start: "&7Simulating cleanup run, report will display shortly."
 preview-disabled: "&#E74C3CNo active cleanup modules to preview."
 preview-header: "&#4A90E2&m----------&r &f&lCleanup Preview &#4A90E2&m----------"
@@ -302,9 +270,7 @@ preview-protected: "&7Protected: Named &f{named} &7Tamed &f{tamed} &7Persistent 
 preview-reason: "&8- &7{reason}: &f{count}"
 preview-footer: "&#4A90E2&m-----------------------------"
 
-# ---------------------------------------------------
 # Menu Item Lore
-# ---------------------------------------------------
 bin-lore-amount: "&7Total: &a{amount}"
 bin-lore-left: "&aLeft-Click to take 1"
 bin-lore-right: "&aRight-Click to take half stack"

@@ -19,7 +19,7 @@ object Language {
     private val fallbackMessages = HashMap<String, String>()
     private var prefixString = ""
     private var config: YamlConfiguration? = null
-    var currentLanguageCode: String = "zh_CN"
+    var currentLanguageCode: String = "zh_cn"
         private set
 
     val prefix: String
@@ -29,29 +29,25 @@ object Language {
         messages.clear()
         fallbackMessages.clear()
 
-        val dataFolder = Cyuclear.instance.dataFolder
-        val langDir = File(dataFolder, "lang")
-        if (!langDir.exists()) {
-            langDir.mkdirs()
-        }
+        val plugin = Cyuclear.instance
+        val dataFolder = plugin.dataFolder
 
-        saveLangResource("lang/messages_zh.yml", File(langDir, "messages_zh.yml"))
-        saveLangResource("lang/messages_en.yml", File(langDir, "messages_en.yml"))
+        ensureResource("lang/zh_cn.yml")
+        ensureResource("lang/en_us.yml")
 
         val configFile = File(dataFolder, "config.yml")
-        var configuredLang = "zh_CN"
+        var configuredLang = "zh_cn"
         if (configFile.exists()) {
             val cfg = YamlConfiguration.loadConfiguration(configFile)
-            configuredLang = cfg.getString("language", "zh_CN")?.trim().orEmpty().ifBlank { "zh_CN" }
+            configuredLang = cfg.getString("language", "zh_cn")?.trim().orEmpty().ifBlank { "zh_cn" }
         }
 
         currentLanguageCode = normalizeLanguage(configuredLang)
-
         loadFallback(currentLanguageCode)
 
-        val activeFile = resolveActiveFile(dataFolder, langDir, currentLanguageCode)
-        config = YamlConfiguration.loadConfiguration(activeFile)
-        val loadedConfig = config ?: return
+        val activeFile = ensureResource("lang/$currentLanguageCode.yml")
+        val loadedConfig = YamlConfiguration.loadConfiguration(activeFile)
+        config = loadedConfig
 
         val rawPrefix = loadedConfig.getString("prefix") ?: fallbackMessages["prefix"] ?: "&8[&bCyuclear&8] &f"
         prefixString = ColorUtils.color(rawPrefix)
@@ -72,49 +68,36 @@ object Language {
             if (configFile.exists()) {
                 val cfg = YamlConfiguration.loadConfiguration(configFile)
                 cfg.set("language", normalized)
-                runCatching { cfg.save(configFile) }
+                try {
+                    cfg.save(configFile)
+                } catch (ex: Exception) {
+                    Cyuclear.instance.logger.warning("无法保存 language 到 config.yml: ${ex.message}")
+                    return false
+                }
             }
-        }
-
-        val dataFolder = Cyuclear.instance.dataFolder
-        val langDir = File(dataFolder, "lang")
-        val activeFile = File(dataFolder, "messages.yml")
-        val sourceBundle = if (normalized == "en_US") File(langDir, "messages_en.yml") else File(langDir, "messages_zh.yml")
-        if (sourceBundle.exists()) {
-            runCatching { sourceBundle.copyTo(activeFile, overwrite = true) }
         }
 
         load()
         return true
     }
 
-    private fun resolveActiveFile(dataFolder: File, langDir: File, lang: String): File {
-        val messagesFile = File(dataFolder, "messages.yml")
-        if (messagesFile.exists()) {
-            return messagesFile
-        }
-        val bundleFile = if (lang == "en_US") File(langDir, "messages_en.yml") else File(langDir, "messages_zh.yml")
-        if (bundleFile.exists()) {
-            runCatching { bundleFile.copyTo(messagesFile, overwrite = false) }
-            return messagesFile
-        }
-        Cyuclear.instance.saveResource("messages.yml", false)
-        return messagesFile
-    }
-
-    private fun saveLangResource(resourcePath: String, targetFile: File) {
-        if (targetFile.exists()) return
-        val stream = Cyuclear.instance.getResource(resourcePath) ?: return
-        stream.use { input ->
-            targetFile.outputStream().use { output ->
-                input.copyTo(output)
+    private fun ensureResource(path: String): File {
+        val file = File(Cyuclear.instance.dataFolder, path)
+        if (!file.exists()) {
+            val parent = file.parentFile
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs()
+            }
+            if (Cyuclear.instance.getResource(path) != null) {
+                Cyuclear.instance.saveResource(path, false)
             }
         }
+        return file
     }
 
     private fun loadFallback(lang: String) {
-        val resourcePath = if (lang == "en_US") "lang/messages_en.yml" else "lang/messages_zh.yml"
-        val stream = Cyuclear.instance.getResource(resourcePath) ?: Cyuclear.instance.getResource("messages.yml") ?: return
+        val resourcePath = "lang/$lang.yml"
+        val stream = Cyuclear.instance.getResource(resourcePath) ?: Cyuclear.instance.getResource("lang/zh_cn.yml") ?: return
         InputStreamReader(stream, StandardCharsets.UTF_8).use { reader ->
             val fallbackConfig = YamlConfiguration.loadConfiguration(reader)
             for (key in fallbackConfig.getKeys(true)) {
@@ -127,14 +110,20 @@ object Language {
 
     private fun normalizeLanguage(input: String): String {
         val clean = input.trim().lowercase(Locale.ROOT)
-        return when {
-            clean == "auto" -> {
-                val sysLang = Locale.getDefault().language.lowercase(Locale.ROOT)
-                if (sysLang == "zh") "zh_CN" else "en_US"
-            }
-            clean in listOf("en", "en_us", "en-us", "english", "us") -> "en_US"
-            else -> "zh_CN"
+        if (clean == "auto") {
+            val sysLang = Locale.getDefault().language.lowercase(Locale.ROOT)
+            return if (sysLang == "zh") "zh_cn" else "en_us"
         }
+        val standardized = when (clean) {
+            "en", "en-us", "english", "us" -> "en_us"
+            "zh", "zh-cn", "chinese", "cn" -> "zh_cn"
+            else -> clean
+        }
+        val file = File(Cyuclear.instance.dataFolder, "lang/$standardized.yml")
+        if (file.exists() || Cyuclear.instance.getResource("lang/$standardized.yml") != null) {
+            return standardized
+        }
+        return "zh_cn"
     }
 
     fun has(key: String): Boolean {

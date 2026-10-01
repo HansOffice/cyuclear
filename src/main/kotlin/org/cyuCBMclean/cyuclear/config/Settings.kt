@@ -446,6 +446,24 @@ object Settings {
     var hereCleanupEnabled: Boolean = true
         private set
 
+    var heuristicsEnabled: Boolean = true
+        private set
+    var heuristicTradedVillager: Boolean = true
+        private set
+    var heuristicWorkstationVillager: Boolean = true
+        private set
+    var heuristicIronFarmVillager: Boolean = true
+        private set
+    var heuristicPoweredVehicle: Boolean = true
+        private set
+    var heuristicCacheMillis: Long = 60_000L
+        private set
+
+    var metricsEnabled: Boolean = false
+        private set
+    var metricsPort: Int = 9527
+        private set
+
     fun load() {
         config = ConfigFiles.load()
         AreaRules.load(config)
@@ -797,6 +815,16 @@ object Settings {
         teleportBackEnabled = config.getBoolean("teleport.back.enabled", true)
         teleportBackTimeoutSeconds = config.getInt("teleport.back.timeout-seconds", 300).coerceAtLeast(0)
         hereCleanupEnabled = config.getBoolean("here-cleanup.enabled", true)
+
+        heuristicsEnabled = config.getBoolean("targets.entities.heuristics.enabled", true)
+        heuristicTradedVillager = config.getBoolean("targets.entities.heuristics.traded-villager", true)
+        heuristicWorkstationVillager = config.getBoolean("targets.entities.heuristics.workstation-villager", true)
+        heuristicIronFarmVillager = config.getBoolean("targets.entities.heuristics.iron-farm-villager", true)
+        heuristicPoweredVehicle = config.getBoolean("targets.entities.heuristics.powered-vehicle", true)
+        heuristicCacheMillis = config.getLong("targets.entities.heuristics.cache-seconds", 60L).coerceIn(1L, 3600L) * 1000L
+
+        metricsEnabled = config.getBoolean("metrics.enabled", false)
+        metricsPort = config.getInt("metrics.port", 9527).coerceIn(1, 65535)
 
         BinEntryRules.load(config)
         filterRevision++

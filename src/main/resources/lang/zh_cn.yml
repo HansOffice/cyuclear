@@ -1,17 +1,13 @@
-# ---------------------------------------------------
 # 基础系统提示
-# ---------------------------------------------------
 prefix: "&#4A90E2[&#5DADE2Cyuclear&#4A90E2] &f"
 reload-success: "&f配置文件与语言包已重新加载。"
 no-permission: "&#E74C3C你没有权限执行此命令。"
 player-only: "&#E74C3C这个命令只能由玩家执行。"
 language-changed: "&a语言已切换为: &f{lang}"
-language-current: "&7当前语言: &f{lang} &8(可选: &fzh_CN&8, &fen_US&8)"
-language-invalid: "&#E74C3C无效的语言代码！可选: &fzh_CN&8, &fen_US"
+language-current: "&7当前语言: &f{lang} &8(可选: &fzh_cn&8, &fen_us&8)"
+language-invalid: "&#E74C3C无效的语言代码！可选: &fzh_cn&8, &fen_us"
 
-# ---------------------------------------------------
 # 帮助信息
-# ---------------------------------------------------
 help-page-size: 8
 help-border: "&#3A4352&m┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
 help-title: "<gradient:#58C7FF:#7DE2B8>&lCyuclear 帮助</gradient>"
@@ -33,7 +29,7 @@ help-check: "&#D7DEE8› /cyuclear check &#8A96A8显示准星目标的判定过�
 help-preview: "&#D7DEE8› /cyuclear preview &#8A96A8预演本次清理，不删除实体"
 help-status: "&#D7DEE8› /cyuclear status &#8A96A8查看性能参数、名单规模与 Hook 状态"
 help-reload: "&#D7DEE8› /cyuclear reload &#8A96A8重载配置并应用总开关"
-help-lang: "&#D7DEE8› /cyuclear lang <zh_CN|en_US> &#8A96A8切换插件语言"
+help-lang: "&#D7DEE8› /cyuclear lang <zh_cn|en_us> &#8A96A8切换插件语言"
 help-cluster: "&#D7DEE8› /cyuclear cluster &#8A96A8查看跨服连接与严格版本身份"
 help-menu: "&#D7DEE8› /cyuclear menu &#8A96A8打开管理中心"
 help-runs: "&#D7DEE8› /cyuclear runs [页码] &#8A96A8查看历史清理批次"
@@ -48,22 +44,18 @@ help-doctor: "&#D7DEE8› /cyuclear doctor &#8A96A8检查配置文件和菜单"
 help-snapshot: "&#D7DEE8› /cyuclear snapshot &#8A96A8备份当前配置"
 help-history: "&#D7DEE8› /cyuclear history [玩家] [页码] &#8A96A8查看虚空桶领取记录"
 
-# ---------------------------------------------------
 # 状态与重载提示
-# ---------------------------------------------------
 startup-disabled-console: "&e当前处于安全关闭。请调整配置，将 config.yml 中的 enabled 改为 true，再执行 /cc reload"
 startup-disabled-admin: "&eCyuClear 当前处于安全关闭。请调整配置，将 config.yml 中的 enabled 改为 true，再执行 /cc reload"
 reload-enabled: "&a总开关已启用，清理任务、区块限制和跨服连接已经启动"
 reload-disabled: "&e总开关仍为关闭，不会清理或拦截实体与掉落物"
 plugin-disabled: "&#E74C3C插件总开关尚未启用，请先修改 config.yml 并执行 /cc reload"
 
-# ---------------------------------------------------
 # 名单与菜单交互
-# ---------------------------------------------------
-menu-list-item-hint: "&7点击背包里的物品添加到当前名单，点击菜单中的条目移除"
-menu-list-entity-hint: "&7点击背包里的刷怪蛋添加实体，点击菜单中的条目移除"
-menu-list-name-hint: "&7点击背包里带展示名的物品，写入去色后的名字；点击菜单条目移除"
-menu-list-lore-hint: "&7点击背包里有描述的物品，写入全部去色 lore 行；点击菜单条目移除"
+menu-list-item-hint: "&7Shift+点击背包里的物品添加到当前名单，点击菜单中的条目移除"
+menu-list-entity-hint: "&7Shift+点击背包里的刷怪蛋添加实体，点击菜单中的条目移除"
+menu-list-name-hint: "&7Shift+点击背包里带展示名的物品写入去色名字，点击菜单条目移除"
+menu-list-lore-hint: "&7Shift+点击背包里有描述的物品写入去色描述，点击菜单条目移除"
 menu-list-added: "&a已添加到当前名单"
 menu-list-added-multi: "&a已添加 &#5DADE2{count} &a条到当前名单"
 menu-list-removed: "&a已从当前名单移除"
@@ -79,9 +71,7 @@ menu-list-no-lore: "&#E74C3C这件物品没有 lore 描述"
 menu-list-items-only: "&#E74C3C展示名与 lore 名单仅掉落物规则可用"
 menu-save-failed: "&#E74C3C配置保存失败，请查看控制台并检查 rules.yml"
 
-# ---------------------------------------------------
 # 倒计时与清理广播
-# ---------------------------------------------------
 countdown-warn: "&f全服实体清理将在 &#5DADE2{time} &f秒后开始！"
 countdown-warn-chat: "&f全服实体清理将在 &#5DADE2{time} &f秒后开始！"
 countdown-warn-actionbar: "&f全服清理剩余 &#5DADE2{time} &f秒"
@@ -89,9 +79,7 @@ countdown-warn-bossbar: "&f全服清理剩余 &#5DADE2{time} &f秒"
 cleanup-summary: "&f大扫除完毕，用时 &#5DADE2{time_text}&f，共清理 &#5DADE2{items} &f个掉落物与 &#5DADE2{entities} &f个游荡实体。"
 panic-warn: "&#E74C3C[紧急中断] &f全服实体数量突破极限值 &#E74C3C({count})&f！正在强制执行跨区块大扫除..."
 
-# ---------------------------------------------------
 # 区块超载保护
-# ---------------------------------------------------
 chunk-overload-warn: "&#E74C3C区块保护 &8· &f{world} &7{x}, {y}, {z} &8· &7已拦截 {type} &f{id} &8· &7{count}/{threshold}"
 chunk-overload-teleport-button: " &#5DADE2[前往查看]"
 chunk-overload-teleport-hover: "&7点击安全传送至超载区块 &f{world} &7({x}, {y}, {z})"
@@ -112,9 +100,7 @@ teleport-back-expired: "&#E74C3C传送历史记录已超时失效"
 teleport-damage-protected: "&7[CyuClear] 已抵消着陆保护期间受到的伤害"
 here-cleanup-disabled: "&#E74C3C现场单区块清理功能已被禁用"
 
-# ---------------------------------------------------
 # 虚空垃圾桶与个人缓冲区
-# ---------------------------------------------------
 bin-not-enabled: "&#E74C3C本服务器未开启虚空垃圾桶功能。"
 bin-empty: "&f虚空垃圾桶当前为空，请等待下一次大扫除！"
 bin-expired: "&#E74C3C虚空垃圾桶已超时锁定，&f请等待下一次大扫除！"
@@ -155,9 +141,7 @@ bin-buffer-item-return-full: "&e背包空间不足，这件物品仍保留在待
 bin-buffer-item-gone: "&7这件待确认物品已不在缓冲区"
 bin-buffer-item-persist-failed: "&#E74C3C个人投放缓冲区保存失败，物品没有取回，请稍后重试"
 
-# ---------------------------------------------------
 # 任务调度与模块状态
-# ---------------------------------------------------
 scan-running: "&#E74C3C当前已有清理任务正在运行，请等待其处理完毕！"
 scan-not-running: "&7当前没有正在运行的清理任务"
 scan-cancelled: "&e已停止当前清理任务"
@@ -167,9 +151,7 @@ module-entities-disabled: "&#E74C3C实体清理模块当前已关闭。"
 module-all-disabled: "&#E74C3C掉落物与实体清理模块当前都已关闭。"
 cluster-local-cleanup-no-bin: "&e跨服同步开启时，手动清理不会写入共享虚空垃圾桶。"
 
-# ---------------------------------------------------
 # 运行状态
-# ---------------------------------------------------
 status-header: "&#4A90E2&m----------&r &f&l运行状态 &#4A90E2&m----------"
 status-runtime: "&7平台 &#5DADE2{platform} &8| &7清理 &f{running} &8| &7档位 &#5DADE2{profile}"
 status-activation: "&7启用状态 &#5DADE2{state}"
@@ -184,17 +166,13 @@ status-named-rules: "&7命名规则 &#5DADE2{total} &8| &7掉落物 &#5DADE2{ite
 status-hooks: "&7Hook Mythic &f{mythic} &8| &7CraftEngine &f{craftengine} &8| &7宝可梦 &f{pokemon}"
 status-footer: "&#4A90E2&m-----------------------------"
 
-# ---------------------------------------------------
 # 虚空桶记录
-# ---------------------------------------------------
 history-header: "&#4A90E2&m----------&r &f&l虚空桶领取记录 &#4A90E2&m----------"
 history-empty: "&7暂无符合条件的领取记录。"
 history-entry: "&7{time} &f{player} &8[{server}] &7取回 &#5DADE2{item} &fx{amount} &8{delivery}"
 history-footer: "&8第 &f{page}&8/&f{total} &8页  &7/cc history [玩家] [页码]"
 
-# ---------------------------------------------------
 # 批次详情与恢复中心
-# ---------------------------------------------------
 runs-header: "&#4A90E2&m----------&r &f&l清理批次 &#4A90E2&m----------"
 runs-empty: "&7当前还没有清理批次。"
 runs-entry: "&7#{id} &f{origin} &8| &7{state} &8| &7掉落物 &#5DADE2{items} &8| &7实体 &#5DADE2{entities} &8| &7待恢复 &#5DADE2{recovery}"
@@ -217,25 +195,19 @@ recovery-invalid-item: "&#E74C3C恢复物品无法读取，原始记录已保留
 recovery-no-space: "&#E74C3C背包空间不足，请整理后再试。"
 recovery-save-failed: "&#E74C3C领取记录写入失败，物品没有发放。"
 
-# ---------------------------------------------------
 # 配置自检
-# ---------------------------------------------------
 doctor-header: "&#4A90E2&m----------&r &f&l配置检查 &#4A90E2&m----------"
 doctor-entry: "&8[{level}] &7{file} &f{path} &8- &f{message}"
 doctor-more: "&7其余 &#5DADE2{count} &7项请检查对应配置。"
 doctor-summary: "&7检查完成 &8| &7错误 &#E74C3C{errors} &8| &7注意 &#E6B422{warnings}"
 doctor-footer: "&#4A90E2&m-----------------------------"
 
-# ---------------------------------------------------
 # 配置快照
-# ---------------------------------------------------
 snapshot-success: "&a已保存当前配置，共 &#5DADE2{count} &a个文件。"
 snapshot-failed: "&#E74C3C配置快照创建失败，请查看控制台。"
 reload-snapshot: "&7重载前已保存 &#5DADE2{count} &7个配置文件。"
 
-# ---------------------------------------------------
 # 热点区块监控
-# ---------------------------------------------------
 hotspots-header: "&#4A90E2&m----------&r &f&l热点区块 &#4A90E2&m----------"
 hotspots-empty: "&7当前没有热点区块"
 hotspots-entry: "&7{index}. &f{world} &#5DADE2{x},{z} &8| &7{state} &8| &7掉落物 &#5DADE2{items} &8| &7实体 &#5DADE2{entities} &8| &7触发 &#5DADE2{triggers}"
@@ -250,9 +222,7 @@ here-cleanup-started: "&a已开始清理当前所在区块 &f{world} &7({x}, {z}
 admin-cleanup-confirm: "&e再次左键确认立即清理"
 admin-cancel-confirm: "&e再次左键确认停止当前清理"
 
-# ---------------------------------------------------
 # 准星规则检查
-# ---------------------------------------------------
 check-no-target: "&7请看向一个实体或掉落物后再执行此命令。"
 check-header: "&#4A90E2&m----------&r &f&l清理规则检查 &#4A90E2&m----------"
 check-entity-id: "&7实体: &#5DADE2{id}"
@@ -290,9 +260,7 @@ check-bin-deposit: "&7玩家投放: &#5DADE2{result} &8- &7{reason}"
 check-trace: "&8- &7{stage}: &f{detail}"
 check-footer: "&#4A90E2&m--------------------------------"
 
-# ---------------------------------------------------
 # 清理预演
-# ---------------------------------------------------
 preview-start: "&7正在预演本次清理，结果稍后显示。"
 preview-disabled: "&#E74C3C当前没有启用可预演的清理模块。"
 preview-header: "&#4A90E2&m----------&r &f&l清理预演 &#4A90E2&m----------"
@@ -302,9 +270,7 @@ preview-protected: "&7保护统计 命名 &f{named} &7驯服 &f{tamed} &7持久 
 preview-reason: "&8- &7{reason}: &f{count}"
 preview-footer: "&#4A90E2&m-----------------------------"
 
-# ---------------------------------------------------
 # 界面物品 Lore 提示
-# ---------------------------------------------------
 bin-lore-amount: "&7共 &a{amount} &7个"
 bin-lore-left: "&a左键点击拿取一个"
 bin-lore-right: "&a右键点击拿取半组"

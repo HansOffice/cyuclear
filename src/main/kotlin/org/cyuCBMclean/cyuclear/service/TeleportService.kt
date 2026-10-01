@@ -20,6 +20,14 @@ import java.util.concurrent.ConcurrentHashMap
 
 object TeleportService : Listener {
 
+    private val teleportAsyncMethod: java.lang.reflect.Method? = runCatching {
+        Player::class.java.getMethod("teleportAsync", Location::class.java)
+    }.getOrNull()
+
+    private val minHeightMethod: java.lang.reflect.Method? = runCatching {
+        World::class.java.getMethod("getMinHeight")
+    }.getOrNull()
+
     private data class OriginRecord(
         val location: Location,
         val timestamp: Long
@@ -80,9 +88,7 @@ object TeleportService : Listener {
         }
 
         val targetZ = z ?: 0.0
-        val asyncMethod = runCatching {
-            player.javaClass.getMethod("teleportAsync", Location::class.java)
-        }.getOrNull()
+        val asyncMethod = teleportAsyncMethod
 
         if (asyncMethod != null) {
             val initialY = y ?: when (world.environment) {
@@ -218,10 +224,11 @@ object TeleportService : Listener {
         val blockX = targetX.toInt()
         val blockZ = (targetZ ?: 0.0).toInt()
 
-        val minHeight: Int = runCatching {
-            val method = world.javaClass.getMethod("getMinHeight")
-            (method.invoke(world) as? Number)?.toInt() ?: 0
-        }.getOrDefault(0)
+        val minHeight: Int = if (minHeightMethod != null) {
+            (minHeightMethod.invoke(world) as? Number)?.toInt() ?: 0
+        } else {
+            0
+        }
         val maxHeight: Int = world.maxHeight
 
         var chosenY: Double

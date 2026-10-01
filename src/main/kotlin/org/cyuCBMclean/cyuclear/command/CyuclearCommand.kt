@@ -1,17 +1,14 @@
 package org.cyuCBMclean.cyuclear.command
 
-import net.md_5.bungee.api.chat.ClickEvent
-import net.md_5.bungee.api.chat.HoverEvent
-import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
-import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 import org.cyuCBMclean.cyuclear.Cyuclear
 import org.cyuCBMclean.cyuclear.bootstrap.RuntimeReloadService
 import org.cyuCBMclean.cyuclear.cluster.BuildInfo
 import org.cyuCBMclean.cyuclear.cluster.ClusterManager
+import org.cyuCBMclean.cyuclear.command.sub.HelpRenderer
 import org.cyuCBMclean.cyuclear.config.ConfigDoctor
 import org.cyuCBMclean.cyuclear.config.ConfigSnapshotManager
 import org.cyuCBMclean.cyuclear.config.Language
@@ -35,10 +32,11 @@ import org.cyuCBMclean.cyuclear.service.SoundNoticeManager
 import org.cyuCBMclean.cyuclear.service.StatusReporter
 import org.cyuCBMclean.cyuclear.service.VoidBinManager
 import org.cyuCBMclean.cyuclear.service.WindowScanner
-
 import org.cyuCBMclean.cyuclear.service.TeleportService
 
-object CyuclearCommand : CommandExecutor, TabCompleter {
+object CyuclearCommand : CommandExecutor {
+
+    private val helpRenderer = HelpRenderer()
 
     private val adminCommands = listOf(
         "items", "entities", "all", "cluster", "menu", "runs", "run", "recover", "hotspots",
@@ -150,8 +148,11 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
                     return true
                 }
                 val targetLang = args[1].trim()
-                Language.setLanguage(targetLang, true)
-                sender.sendMessage(Language.get("language-changed", "lang" to Language.currentLanguageCode))
+                if (Language.setLanguage(targetLang, true)) {
+                    sender.sendMessage(Language.get("language-changed", "lang" to Language.currentLanguageCode))
+                } else {
+                    sender.sendMessage(Language.get("language-invalid"))
+                }
             }
             "menu" -> {
                 if (sender !is Player) {
@@ -178,7 +179,8 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
                 if (sender is Player) {
                     CleanupRunMenu.openRecovery(sender, run.id, 0)
                 } else {
-                    sendRun(sender, run, args.getOrNull(2)?.equals("reasons", ignoreCase = true) == true)
+                    val showReasons = args.getOrNull(2)?.let { it.equals("reasons", ignoreCase = true) || it == "原因" } == true
+                    sendRun(sender, run, showReasons)
                 }
             }
             "recover" -> {
@@ -303,7 +305,7 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
                     sender.sendMessage(Language.get("teleport-usage"))
                     return true
                 }
-                if (args.size == 2 && args[1].equals("back", ignoreCase = true)) {
+                if (args.size == 2 && (args[1].equals("back", ignoreCase = true) || args[1] == "返回")) {
                     TeleportService.teleportBack(sender)
                     return true
                 }
@@ -359,13 +361,13 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
 
                 val mode = args.getOrNull(1)?.lowercase()
                 var cleanItems = when (mode) {
-                    "items", "item", "i", "drop", "drops" -> true
-                    "entities", "entity", "e", "mob", "mobs" -> false
+                    "items", "item", "i", "drop", "drops", "掉落物", "物品" -> true
+                    "entities", "entity", "e", "mob", "mobs", "实体", "生物" -> false
                     else -> true
                 }
                 var cleanEntities = when (mode) {
-                    "items", "item", "i", "drop", "drops" -> false
-                    "entities", "entity", "e", "mob", "mobs" -> true
+                    "items", "item", "i", "drop", "drops", "掉落物", "物品" -> false
+                    "entities", "entity", "e", "mob", "mobs", "实体", "生物" -> true
                     else -> true
                 }
 
@@ -409,195 +411,16 @@ object CyuclearCommand : CommandExecutor, TabCompleter {
         return true
     }
 
-    override fun onTabComplete(sender: CommandSender, command: Command, alias: String, args: Array<out String>): List<String> {
-        if (args.size == 1) {
-            val subCommands = ArrayList<String>()
-
-            if (canUse(sender)) {
-                subCommands.add("help")
-                subCommands.add("bin")
-            }
-            if (sender.hasPermission("cyuclear.admin")) {
-                subCommands.addAll(
-                    listOf(
-                        "items", "entities", "all", "reload", "lang", "cluster", "menu", "runs", "run", "recover",
-                        "hotspots", "cancel", "doctor", "validate", "snapshot", "history", "check", "preview", "status", "tp", "here", "back"
-                    )
-                )
-            }
-
-            return subCommands.filter { it.startsWith(args[0], ignoreCase = true) }
-        }
-
-        if (args.size == 2 && args[0].equals("here", ignoreCase = true) && sender.hasPermission("cyuclear.admin")) {
-            return listOf("items", "entities", "all").filter { it.startsWith(args[1], ignoreCase = true) }
-        }
-
-        if (args.size == 2 && (args[0].equals("tp", ignoreCase = true) || args[0].equals("teleport", ignoreCase = true) || args[0].equals("goto", ignoreCase = true)) && sender.hasPermission("cyuclear.admin")) {
-            return (listOf("back") + org.bukkit.Bukkit.getWorlds().map { it.name }).filter { it.startsWith(args[1], ignoreCase = true) }
-        }
-
-        if (args.size == 2 && args[0].equals("help", ignoreCase = true)) {
-            val total = getHelpTotalPages(sender)
-            return (1..total).map { it.toString() }.filter { it.startsWith(args[1]) }
-        }
-
-        if (args.size == 2 && (args[0].equals("lang", ignoreCase = true) || args[0].equals("language", ignoreCase = true)) && sender.hasPermission("cyuclear.admin")) {
-            return listOf("zh_CN", "en_US", "auto").filter { it.startsWith(args[1], ignoreCase = true) }
-        }
-
-        if (args.size == 2 && (args[0].equals("recover", ignoreCase = true) || args[0].equals("run", ignoreCase = true)) && sender.hasPermission("cyuclear.admin")) {
-            return CleanupRunManager.list(0, 54).first
-                .map { it.id }
-                .filter { it.startsWith(args[1], ignoreCase = true) }
-        }
-
-        if (args.size == 3 && args[0].equals("run", ignoreCase = true) && sender.hasPermission("cyuclear.admin")) {
-            return listOf("details", "reasons").filter { it.startsWith(args[2], ignoreCase = true) }
-        }
-
-        return emptyList()
-    }
-
-    private fun getHelpPageSize(): Int = Language.getInt("help-page-size", 8).coerceAtLeast(1)
-
-    private data class HelpEntry(
-        val command: String,
-        val key: String,
-        val adminOnly: Boolean
-    )
-
-    private val allHelpEntries = listOf(
-        HelpEntry("/cc bin", "help-bin", false),
-        HelpEntry("/cc items", "help-items", true),
-        HelpEntry("/cc entities", "help-entities", true),
-        HelpEntry("/cc all", "help-all", true),
-        HelpEntry("/cc check", "help-check", true),
-        HelpEntry("/cc preview", "help-preview", true),
-        HelpEntry("/cc status", "help-status", true),
-        HelpEntry("/cc reload", "help-reload", true),
-        HelpEntry("/cc lang <zh_CN|en_US>", "help-lang", true),
-        HelpEntry("/cc cluster", "help-cluster", true),
-        HelpEntry("/cc menu", "help-menu", true),
-        HelpEntry("/cc runs", "help-runs", true),
-        HelpEntry("/cc run ", "help-run", true),
-        HelpEntry("/cc recover ", "help-recover", true),
-        HelpEntry("/cc hotspots", "help-hotspots", true),
-        HelpEntry("/cc here [items|entities|all]", "help-here", true),
-        HelpEntry("/cc tp <世界> <x> [y] <z>", "help-tp", true),
-        HelpEntry("/cc back", "help-back", true),
-        HelpEntry("/cc cancel", "help-cancel", true),
-        HelpEntry("/cc doctor", "help-doctor", true),
-        HelpEntry("/cc snapshot", "help-snapshot", true),
-        HelpEntry("/cc history", "help-history", true)
-    )
-
-    private fun getAvailableEntries(sender: CommandSender): List<HelpEntry> {
-        val hasAdmin = sender.hasPermission("cyuclear.admin")
-        return allHelpEntries.filter { entry ->
-            !entry.adminOnly || hasAdmin
-        }
-    }
-
-    private fun getHelpTotalPages(sender: CommandSender): Int {
-        val count = getAvailableEntries(sender).size
-        val pageSize = getHelpPageSize()
-        return maxOf(1, (count + pageSize - 1) / pageSize)
-    }
-
     private fun sendHelp(sender: CommandSender, pageArg: String? = null) {
-        val hasUse = canUse(sender)
-        if (!hasUse) {
+        if (!canUse(sender)) {
             sender.sendMessage(Language.get("no-permission"))
             return
         }
-
-        val entries = getAvailableEntries(sender)
-        val pageSize = getHelpPageSize()
-        val totalPages = maxOf(1, (entries.size + pageSize - 1) / pageSize)
-
-        val parsed = pageArg?.toIntOrNull()
-        if (pageArg != null && parsed == null) {
-            sender.sendMessage(Language.get("help-invalid-page"))
-            return
-        }
-
-        val page = if (parsed == null || parsed in 1..totalPages) parsed ?: 1 else {
-            sender.sendMessage(Language.get("help-page-out-of-bounds", "total_pages" to totalPages.toString()))
-            1
-        }
-
-        val start = (page - 1) * pageSize
-        val end = minOf(start + pageSize, entries.size)
-        val pageEntries = entries.subList(start, end)
-
-        sender.sendMessage(Language.getRaw("help-border"))
-        sender.sendMessage(Language.getRaw("help-title"))
-
-        if (sender is Player) {
-            for (entry in pageEntries) {
-                val lineText = Language.getRaw(entry.key)
-                val click = ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, entry.command)
-                val hover = HoverEvent(
-                    HoverEvent.Action.SHOW_TEXT,
-                    TextComponent.fromLegacyText(Language.getRaw("help-json-hover-entry", "command" to entry.command))
-                )
-                sender.spigot().sendMessage(clickableLegacy(lineText, click, hover))
-            }
-            if (totalPages > 1) {
-                val prevPage = if (page > 1) page - 1 else totalPages
-                val nextPage = if (page < totalPages) page + 1 else 1
-
-                val footerComp = TextComponent("")
-                val prevBtn = clickableLegacy(
-                    Language.getRaw("help-json-button-prev"),
-                    ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cc help $prevPage"),
-                    HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        TextComponent.fromLegacyText(Language.getRaw("help-json-hover-prev", "page" to prevPage.toString()))
-                    )
-                )
-                val info = TextComponent("")
-                TextComponent.fromLegacyText(
-                    " " + Language.getRaw(
-                        "help-json-page-info",
-                        "current_page" to page.toString(),
-                        "total_pages" to totalPages.toString()
-                    ) + " "
-                ).forEach { info.addExtra(it) }
-                val nextBtn = clickableLegacy(
-                    Language.getRaw("help-json-button-next"),
-                    ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cc help $nextPage"),
-                    HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        TextComponent.fromLegacyText(Language.getRaw("help-json-hover-next", "page" to nextPage.toString()))
-                    )
-                )
-                footerComp.addExtra(prevBtn)
-                footerComp.addExtra(info)
-                footerComp.addExtra(nextBtn)
-                sender.spigot().sendMessage(footerComp)
-            }
-        } else {
-            for (entry in pageEntries) {
-                sender.sendMessage(Language.getRaw(entry.key))
-            }
-            if (totalPages > 1) {
-                val cmdExample = if (Language.isEnglish) "/cc help <page>" else "/cc help <页码>"
-                sender.sendMessage(Language.getRaw("help-console-page-info", "current_page" to page.toString(), "total_pages" to totalPages.toString(), "command" to cmdExample))
-            }
-        }
-        sender.sendMessage(Language.getRaw("help-border"))
-    }
-
-    private fun clickableLegacy(text: String, click: ClickEvent, hover: HoverEvent): TextComponent {
-        val root = TextComponent("")
-        TextComponent.fromLegacyText(text).forEach { part ->
-            part.clickEvent = click
-            part.hoverEvent = hover
-            root.addExtra(part)
-        }
-        return root
+        helpRenderer.render(
+            sender = sender,
+            rawPage = pageArg,
+            pageCommand = "/cc help"
+        )
     }
 
     private fun startManualCleanup(sender: CommandSender, cleanItems: Boolean, cleanEntities: Boolean) {

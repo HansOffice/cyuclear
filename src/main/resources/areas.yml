@@ -1,17 +1,107 @@
-# 世界与区域规则
+# 世界与区域独立清理规则，不填 area 坐标则对全界生效
+# 弄不清楚填错没就用 /cc doctor 扫一眼
+
 areas:
-  # 总开关
+  # 是否开启世界与区域独立规则
   enabled: false
-  # priority 越大越优先
   rules:
-    # football-field:
-    #   enabled: true
-    #   priority: 100
-    #   worlds: ["world"]
-    #   area:
-    #     min: { x: -50, y: -64, z: -50 }
-    #     max: { x: 50, y: 320, z: 50 }
-    #   items:
-    #     mode: "全部保留"
-    #   entities:
-    #     mode: "全部保留"
+    # 区域规则名称，仅作为配置标识
+    spawn-zone:
+      # 是否启用本条规则
+      enabled: true
+      # 优先级，数字越大越优先匹配
+      priority: 100
+      # 适用的世界列表
+      worlds:
+        - "world"
+      # 空间立体坐标范围，不写本段则对整界生效
+      area:
+        # 最小角坐标
+        min: { x: -100, y: -64, z: -100 }
+        # 最大角坐标
+        max: { x: 100, y: 320, z: 100 }
+      # 掉落物清理规则
+      items:
+        # 模式：inherit (继承全局) / keep_all (全部保留) / clean_all (全部清理) / blacklist (保留名单以外全清) / whitelist (清理名单才清) / parallel (双名单)
+        mode: blacklist
+        # 保留名单，支持物品材质、Mythic/ItemsAdder/Oraxen 标识符
+        keep:
+          - "DIAMOND"
+          - "NETHERITE_INGOT"
+        # 清理名单，仅 whitelist 或 parallel 模式生效
+        clean:
+          - "COBBLESTONE"
+          - "DIRT"
+        # 物品展示名过滤规则
+        name-rules:
+          # 是否优先于保留规则强制清理
+          force-clean: false
+          # 展示名保留关键词，支持通配符 *
+          keep:
+            - "*神器*"
+          # 展示名清理关键词
+          clean:
+            - "*垃圾*"
+        # 物品 Lore 描述过滤规则
+        lore-rules:
+          # 是否优先于保留规则强制清理
+          force-clean: false
+          # Lore 保留关键词
+          keep:
+            - "*专属绑定*"
+          # Lore 清理关键词
+          clean:
+            - "*限时体验*"
+      # 实体清理规则
+      entities:
+        # 模式：inherit / keep_all / clean_all / blacklist / whitelist / parallel
+        mode: keep_all
+        # 实体保留名单，支持原生物种名与 Mythic 怪物 ID
+        keep:
+          - "VILLAGER"
+          - "IRON_GOLEM"
+        # 实体清理名单
+        clean:
+          - "ZOMBIE"
+          - "SKELETON"
+      # 虚空垃圾桶区域独立过滤策略
+      void-bin:
+        # 清理入桶策略
+        cleanup-recovery:
+          # 模式：inherit (继承全局) / keep_all (全进垃圾桶) / clean_all (全销毁不进桶) / whitelist / blacklist / parallel
+          mode: inherit
+          # 进桶白名单
+          keep: []
+          # 销毁名单
+          clean: []
+        # 玩家主动投放策略
+        player-deposit:
+          # 模式：inherit / keep_all (允许投放) / clean_all (禁止投放) / whitelist / blacklist / parallel
+          mode: inherit
+          # 允许投放名单
+          keep: []
+          # 禁止投放名单
+          clean: []
+
+    mining-world:
+      enabled: false
+      priority: 50
+      worlds:
+        - "world_nether"
+      items:
+        mode: clean_all
+        keep: []
+        clean: []
+      entities:
+        mode: inherit
+        keep: []
+        clean: []
+      void-bin:
+        cleanup-recovery:
+          mode: inherit
+          keep: []
+          clean: []
+        player-deposit:
+          mode: inherit
+          keep: []
+          clean: []

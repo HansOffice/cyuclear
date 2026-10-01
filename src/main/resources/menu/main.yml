@@ -1,35 +1,38 @@
-# 所有菜单按钮材质
-# material             - 原版材质、ia:、ox:、ce: 或 craftengine:
-# fallback-material    - 图标无法使用时的回退材质
-# data                 - 旧版材质数据值
-# custom-model-data    - 资源包模型编号
-# head                 - 玩家名、UUID、变量或 basehead-纹理
-# head-base64          - Base64 头颅纹理
-# basehead64            - head-base64 的兼容写法
-# head-player          - 玩家名、UUID 或变量
-# head-owner           - head-player 的兼容写法
+# CyuClear - 菜单配置
 #
-# 所有菜单按钮动作
-# actions              - 从上到下执行
-# [default]            - 执行按钮原有功能
+# 结构字段
+# title                - 菜单标题，支持颜色代码与占位符
+# layout               - 字符画界面，每行 9 格，行数即高度，字符与 items 内的按钮对应
+# items                - 每个字符对应的按键材质、名称与点击动作
+# material             - 原版材质名（如 HOPPER）或外部物品标识（ia: / ox: / ce: / craftengine:）
+# fallback-material    - material 不可用时的安全回退材质
+# custom-model-data    - 资源包自定义模型数值
+# head                 - 玩家名、UUID 或 base64 皮肤纹理
+# name / lore          - 按钮悬浮名称与详细说明行
+#
+# 标准按键约定
+# #                    - 边框装饰板
+# P / N                - 上一页 / 下一页
+# B                    - 返回上一级菜单
+# X                    - 关闭当前菜单
+# *                    - 列表动态内容填充槽位（不配置 actions）
+#
+# 按钮执行动作
+# actions              - 点击时从上到下依次执行
+# [default]            - 执行该界面的默认物理业务
 # [close]              - 关闭当前菜单
-# [refresh]            - 刷新当前菜单
-# [prev_page]          - 上一页
-# [next_page]          - 下一页
-# [open] 入口          - 打开内置菜单
-# [message] 文本       - 发送聊天消息
-# [actionbar] 文本     - 发送快捷提示
-# [title] 主标题;副标题 - 发送标题
-# [sound] 音效 音量 音调 - 播放音效
-# [player] 指令        - 玩家执行指令
-# [console] 指令       - 控制台执行指令
-# 入口                 - bin、buffer、deposit-buffer、admin、rules、runs、hotspots
-# %player_name%        - 当前玩家名
-# %player_uuid%        - 当前玩家 UUID
-# %其他变量%            - 已安装 PlaceholderAPI 后可直接使用
-# *                    - 动态内容格，不写 actions
+# [refresh]            - 刷新当前界面数据
+# [prev_page]          - 翻到上一页
+# [next_page]          - 翻到下一页
+# [open] <入口>        - 打开其他菜单 (bin / deposit-buffer / admin / rules / runs / hotspots)
+# [player] <指令>      - 让玩家以自身权限执行指令
+# [console] <指令>     - 让后台控制台执行指令
+# [message] <文本>     - 向玩家聊天栏发送消息
+# [actionbar] <文本>   - 向玩家底部操作栏发送快捷提示
+# [title] 主标题;副标题 - 在玩家屏幕中央显示标题
+# [sound] 音效 音量 音调 - 为玩家播放指定音效
 
-# 清理规则菜单
+# 清理规则主菜单
 title: "&8CYUCLEAR | 清理设置"
 layout:
   - "#########"

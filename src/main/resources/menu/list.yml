@@ -1,4 +1,6 @@
-# 名单内容菜单
+# CyuClear - 规则名单内容菜单
+# 浏览与管理指定规则下的具体物品与实体过滤名单
+
 title: "&8{target} | {list} · {match-mode} ({page}/{total})"
 layout:
   - "#########"

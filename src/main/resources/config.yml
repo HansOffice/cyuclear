@@ -1,7 +1,7 @@
 # 欢迎使用 CyuClear
-# 需要获取帮助请在 minebbs 关注我的账号
-# https://www.minebbs.com/members/hansoffice.59149
-
+# MineBBS: https://www.minebbs.com/
+# QQ群聊：331910315
+#
 # --- 配置文件 ---
 # config.yml   - 清理周期、性能、审计、恢复中心、紧急保护、世界范围
 # rules.yml    - 掉落物、实体、实时清理与区块限制
@@ -9,180 +9,189 @@
 # storage.yml  - 跨服同步、Redis 与 MySQL
 # void-bin.yml - 虚空垃圾桶、入桶规则与领取设置
 # sounds.yml   - 提示音效
+# lang/        - 双语语言文件（zh_cn.yml / en_us.yml）
 # menu/        - 菜单布局
-
+#
 # --- 权限节点 ---
-# cyuclear.use      - 允许使用 /cc bin 打开虚空垃圾桶
-# cyuclear.bin.deposit - 允许向本地虚空垃圾桶手动投放物品
-# cyuclear.admin    - 允许重载 / 手动清理 / 预演 / 管理与检查指令
-
+# cyuclear.use         - 允许使用 /cc bin 打开虚空垃圾桶
+# cyuclear.bin.deposit - 允许向虚空垃圾桶手动投放暂存物品
+# cyuclear.admin       - 允许重载 / 手动清理 / 预演 / 管理与排查指令
+#
 # --- PlaceholderAPI 变量 ---
-# %cyuclear_enabled% - 配置总开关
-# %cyuclear_active% - 清理任务是否启用
-# %cyuclear_interval_seconds% - 自动清理间隔 (秒)
-# %cyuclear_countdown% - 距离下次清理剩余秒数
-# %cyuclear_countdown_text% - 距离下次清理剩余时间
-# %cyuclear_is_running% - 当前是否正在清理
-# %cyuclear_run_id% - 当前批次编号
-# %cyuclear_run_origin% - 当前批次来源
-# %cyuclear_run_status% - 当前批次状态
-# %cyuclear_run_queued_chunks% - 当前批次区块总数
-# %cyuclear_run_processed_chunks% - 当前批次已处理区块
-# %cyuclear_run_failed_chunks% - 当前批次失败区块
-# %cyuclear_run_scanned_entities% - 当前批次已扫描实体
-# %cyuclear_run_items% - 当前批次已清理掉落物
-# %cyuclear_run_entities% - 当前批次已清理实体
-# %cyuclear_last_items% - 上次清理掉落物数量
-# %cyuclear_last_entities% - 上次清理实体数量
-# %cyuclear_last_total% - 上次清理总数量
-# %cyuclear_last_time% - 上次清理耗时毫秒
-# %cyuclear_last_time_text% - 上次清理耗时
-# %cyuclear_bin_enabled% - 虚空垃圾桶是否启用
-# %cyuclear_bin_open% - 虚空垃圾桶是否开放
-# %cyuclear_bin_always_open% - 虚空垃圾桶是否常开
-# %cyuclear_bin_stacked% - 虚空垃圾桶是否合并显示
-# %cyuclear_bin_countdown% - 虚空垃圾桶剩余秒数
-# %cyuclear_bin_countdown_text% - 虚空垃圾桶剩余时间
-# %cyuclear_bin_claim_cooldown% - 当前玩家取回冷却秒数
-# %cyuclear_bin_has_items% - 虚空垃圾桶是否有物品
-# %cyuclear_bin_item_types% - 虚空垃圾桶物品种类
-# %cyuclear_candidate_index% - 候选区块索引是否启用
-# %cyuclear_candidate_chunks% - 当前候选区块数量
-# %cyuclear_chunk_x% - 当前脚下区块 X
-# %cyuclear_chunk_z% - 当前脚下区块 Z
-# %cyuclear_chunk_world% - 当前所在世界名称
-# %cyuclear_chunk_state% - 当前区块健康或热点状态
-# %cyuclear_chunk_is_hotspot% - 当前区块是否为热点
-# %cyuclear_chunk_is_breaker% - 当前区块是否处于熔断拦截中
-# %cyuclear_chunk_triggers% - 当前区块累计触发次数
-# %cyuclear_chunk_cleaned_total% - 当前区块历史清理总量
-# %cyuclear_hotspots_total% - 全服活跃热点区块总数
-# %cyuclear_hotspots_breakers% - 全服处于熔断状态的区块总数
-# %cyuclear_has_breakers% - 全服是否存在熔断超载区块
-# %cyuclear_profile% - 性能档位
-# %cyuclear_scan_chunks_per_tick% - 单 tick 最大处理区块
-# %cyuclear_scan_budget_millis% - 单 tick 最大耗时毫秒
-# %cyuclear_items_enabled% - 掉落物模块是否启用
-# %cyuclear_entities_enabled% - 实体模块是否启用
-# %cyuclear_realtime_enabled% - 实时拦截是否启用
-# %cyuclear_recovery_enabled% - 恢复中心是否启用
-# %cyuclear_cluster_enabled% - 跨服同步是否启用
-# %cyuclear_cluster_active% - 跨服同步是否已连接
-# %cyuclear_rules_total% - 规则总数
-# %cyuclear_rules_items% - 掉落物规则数量
-# %cyuclear_rules_entities% - 实体规则数量
-# %cyuclear_platform% - 当前运行包
-# %cyuclear_version% - 插件版本
-# %cyuclear_config_version% - 配置版本
+# %cyuclear_enabled%               - 配置总开关状态
+# %cyuclear_active%                - 自动清理任务是否处于运行调度中
+# %cyuclear_interval_seconds%      - 自动清理间隔 (秒)
+# %cyuclear_countdown%             - 距离下次清理剩余秒数
+# %cyuclear_countdown_text%        - 距离下次清理剩余时间格式化文本
+# %cyuclear_is_running%            - 当前是否正在执行清理
+# %cyuclear_run_id%                - 当前批次编号
+# %cyuclear_run_origin%            - 当前批次来源 (定时/手动/过载)
+# %cyuclear_run_status%            - 当前批次状态
+# %cyuclear_run_queued_chunks%     - 当前批次待处理区块总数
+# %cyuclear_run_processed_chunks%  - 当前批次已处理区块
+# %cyuclear_run_failed_chunks%     - 当前批次失败区块
+# %cyuclear_run_scanned_entities%  - 当前批次已扫描实体总数
+# %cyuclear_run_items%             - 当前批次已清理掉落物
+# %cyuclear_run_entities%          - 当前批次已清理实体
+# %cyuclear_last_items%            - 上次清理掉落物数量
+# %cyuclear_last_entities%         - 上次清理实体数量
+# %cyuclear_last_total%            - 上次清理总数量
+# %cyuclear_last_time%             - 上次清理耗时毫秒
+# %cyuclear_last_time_text%        - 上次清理耗时格式化文本
+# %cyuclear_bin_enabled%           - 虚空垃圾桶是否启用
+# %cyuclear_bin_open%              - 虚空垃圾桶当前是否处于开放状态
+# %cyuclear_bin_always_open%       - 虚空垃圾桶是否常开
+# %cyuclear_bin_stacked%           - 虚空垃圾桶是否合并堆叠显示
+# %cyuclear_bin_countdown%         - 虚空垃圾桶剩余开放秒数
+# %cyuclear_bin_countdown_text%    - 虚空垃圾桶剩余开放时间
+# %cyuclear_bin_claim_cooldown%    - 玩家取回物品剩余冷却秒数
+# %cyuclear_bin_has_items%         - 虚空垃圾桶内是否有物品
+# %cyuclear_bin_item_types%        - 虚空垃圾桶物品种类数量
+# %cyuclear_candidate_index%       - 活跃区块索引是否开启
+# %cyuclear_candidate_chunks%      - 当前候选活跃区块数量
+# %cyuclear_chunk_x%               - 当前脚下区块 X 坐标
+# %cyuclear_chunk_z%               - 当前脚下区块 Z 坐标
+# %cyuclear_chunk_world%           - 当前脚下世界名称
+# %cyuclear_chunk_state%           - 当前区块健康状态或热点标识
+# %cyuclear_chunk_is_hotspot%      - 当前区块是否为高负载热点
+# %cyuclear_chunk_is_breaker%      - 当前区块是否处于熔断拦截中
+# %cyuclear_chunk_triggers%        - 当前区块累计超载触发次数
+# %cyuclear_chunk_cleaned_total%   - 当前区块历史清理总量
+# %cyuclear_hotspots_total%        - 全服活跃热点区块总数
+# %cyuclear_hotspots_breakers%     - 全服熔断状态区块总数
+# %cyuclear_has_breakers%          - 全服是否存在熔断超载区块
+# %cyuclear_profile%               - 当前吞吐性能档位
+# %cyuclear_scan_chunks_per_tick%  - 单 Tick 最大处理区块数
+# %cyuclear_scan_budget_millis%    - 单 Tick 最大扫描时间预算 (毫秒)
+# %cyuclear_items_enabled%         - 掉落物清理模块是否启用
+# %cyuclear_entities_enabled%      - 实体清理模块是否启用
+# %cyuclear_realtime_enabled%      - 实时高频生成拦截是否启用
+# %cyuclear_recovery_enabled%      - 误清恢复中心是否启用
+# %cyuclear_cluster_enabled%       - 跨服集群同步是否启用
+# %cyuclear_cluster_active%        - 跨服通信连接是否激活
+# %cyuclear_heuristics_enabled%    - 启发式免死保护是否启用
+# %cyuclear_metrics_enabled%       - 监控指标导出端点是否启用
+# %cyuclear_metrics_port%          - 监控指标导出端点监听端口
+# %cyuclear_rules_total%           - 生效规则总条数
+# %cyuclear_rules_items%           - 掉落物规则条数
+# %cyuclear_rules_entities%        - 实体规则条数
+# %cyuclear_platform%              - 当前运行服务端平台
+# %cyuclear_version%               - 插件版本
+# %cyuclear_config_version%        - 配置架构版本
 
-# 配置文件版本，请勿手动修改
+# 配置文件内部版本，请勿手动修改
 config-version: 140
 config-layout: 6
 
-# 总开关，首次安装默认关闭
-# 调整完配置后改为 true，再执行 /cc reload
-# 关闭时停用清理与拦截
+# 清理核心总开关：首次安装默认关闭，配置核对完毕后改为 true 并执行 /cc reload 启动
 enabled: false
 
-# 语言设置: zh_CN (简体中文) / en_US (English)
-# 也可以在游戏中通过 /cc lang <zh_CN|en_US> 随时切换
-language: "zh_CN"
+# 插件界面与提示语言：zh_cn (简体中文) / en_us (English)
+# 支持在游戏内通过 /cc lang <zh_cn|en_us> 随时切换
+language: "zh_cn"
 
 cleanup:
-  # 自动清理循环间隔 (秒)
+  # 自动定时清理周期 (秒)
   interval-seconds: 600
-  # 清理前倒计时提示点 (秒)
+  # 清理前预警倒计时节点 (秒)：按秒数倒序排列
   warning-times: [60, 30, 10, 3]
-  # 清理提示点显示方式
+  # 倒计时预警通知形式
   warning-output:
-    # 聊天栏提示
+    # 聊天栏公屏广播
     chat: true
-    # ActionBar 提示
+    # 底部动作栏 (ActionBar) 提示
     actionbar: false
-    # BossBar 提示
+    # 顶部 Boss 血条 (BossBar) 倒计时
     bossbar: false
-    # BossBar 颜色: PINK / BLUE / RED / GREEN / YELLOW / PURPLE / WHITE
+    # BossBar 颜色：PINK / BLUE / RED / GREEN / YELLOW / PURPLE / WHITE
     bossbar-color: BLUE
-    # BossBar 分段样式: SOLID / SEGMENTED_6 / SEGMENTED_10 / SEGMENTED_12 / SEGMENTED_20
+    # BossBar 分段样式：SOLID / SEGMENTED_6 / SEGMENTED_10 / SEGMENTED_12 / SEGMENTED_20
     bossbar-style: SOLID
 
 performance:
-  # 清理速度档位: 保守 / 均衡 / 快速 / 极限
+  # 清理吞吐性能档位：保守 / 均衡 / 快速 / 极限
   profile: "快速"
   scan:
-    # 每 tick 最多处理区块
+    # 单 Tick 最大处理区块数量：数值越大清理越快，但瞬时 CPU 占用越高
     max-chunks-per-tick: 600
-    # 每 tick 最多占用时间 (毫秒)
+    # 单 Tick 最大耗时预算 (毫秒)：超时自动平摊至下个 Tick 继续处理
     max-millis-per-tick: 15
   candidate-index:
-    # 优先扫描活跃区块
+    # 候选区块动态索引：优先扫描玩家密集与实体活跃的区块，跳过空旷荒地
     enabled: true
-    # 全量扫描间隔 (轮)
+    # 每隔多少轮局部清理执行一次全服所有已加载区块的深度全量巡检
     full-scan-every-cycles: 6
   folia:
-    # 同时运行的区域清理任务
+    # Folia 异步多线程并发区域调度上限
     max-active-region-tasks: 1024
-    # 每 tick 最多派发区块
+    # Folia 每 Tick 最大分发区块数
     dispatch-chunks-per-tick: 1024
   stats:
-    # 性能明细
+    # 控制台清理明细统计
     detail: true
-    # 阶段耗时
+    # 记录并打印各阶段微秒级耗时
     stage-timing: false
 
 audit:
-  # 清理原因汇总
+  # 每次清理完成后在控制台输出清理原因排行榜
   enabled: true
-  # 最多输出多少行
+  # 清理统计榜单最大展示行数
   max-lines: 30
 
 recovery:
-  # 保存误清掉落物
+  # 误清数据恢复中心：将误清理的物品安全备份至数据库或内存，供服主一键追溯找回
   enabled: false
   capture:
-    # 定时清理
+    # 是否捕获定时清理扫除的掉落物
     scheduled: true
-    # 手动清理
+    # 是否捕获 /cc clean 手动清理的掉落物
     manual: true
-    # 紧急清理
+    # 是否捕获过载熔断紧急清理的掉落物
     panic: false
-  # 单次保存上限，0 表示关闭
+  # 单次清理最大入库快照条数，0 为不限制
   max-entries-per-run: 256
-  # 保存时长 (小时)
+  # 快照历史保存时长 (小时)，过期自动修剪
   expire-hours: 72
-  # 最近批次数量
+  # 最近保留的清理快照批次数量
   recent-limit: 50
 
 emergency:
-  # 区块加载清扫
+  # 区块加载时同步执行轻量清扫：适用于大实体聚集地防卡服
   chunk-load-sweep: false
-  # 区块卸载清扫
+  # 区块卸载时同步执行清扫：防止离开视距后实体遗留膨胀
   chunk-unload-sweep: false
 
 worlds:
-  # 世界过滤模式: blacklist(跳过以下世界) | whitelist(只清理以下世界)
+  # 世界过滤模式：blacklist (黑名单，跳过列表中的世界) / whitelist (白名单，仅清理列表中的世界)
   mode: "blacklist"
-  # 支持 "*" 或 "all"
+  # 目标世界名称列表，支持填 "*" 或 "all" 匹配全部世界
   list:
     - "test_world"
 
 teleport:
-  # 传送着陆保护
+  # 管理员排查传送着陆保护
   landing-protection:
-    # 是否开启着陆免伤保护
+    # 是否开启传送至热点区块时的无敌免伤保护
     enabled: true
-    # 免伤持续时长 (秒)
+    # 免伤保护持续时长 (秒)
     duration-seconds: 5
-    # 抵消伤害时是否提示管理员
+    # 成功抵消环境伤害时是否向管理员发送提示
     notify: true
-  # 传送原点记忆与返回
+  # 传送历史原点记忆
   back:
-    # 是否开启 /cc back 一键返回
+    # 是否允许使用 /cc back 一键返回传送前的位置
     enabled: true
-    # 原点记忆有效时长 (秒)，0 为永不过期直至玩家离线
+    # 原点记录保留时长 (秒)，0 为永久保留直到玩家退服
     timeout-seconds: 300
 
-# 现场单区块就地清理
+# 玩家原地现场清理功能 (/cc here)
 here-cleanup:
-  # 是否开启 /cc here 指令
+  # 是否开启 /cc here 单区块就地清理指令
   enabled: true
+
+# 现代监控可观测性导出端点 (Prometheus / OpenMetrics)
+metrics:
+  # 是否开启 Prometheus 监控指标 HTTP 导出端点 (/metrics)
+  enabled: false
+  # 监控端点 HTTP 监听端口 (默认 9527)
+  port: 9527

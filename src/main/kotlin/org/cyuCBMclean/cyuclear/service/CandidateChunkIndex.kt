@@ -13,7 +13,6 @@ object CandidateChunkIndex {
     data class Selection(val candidates: List<ChunkCoord>, val fullScan: Boolean)
     data class ChunkCoord(val world: World, val x: Int, val z: Int)
 
-    // 64-bit 紧凑区块坐标打包算法：高32位为X坐标，低32位为Z坐标
     @JvmStatic
     fun packCoord(x: Int, z: Int): Long = (x.toLong() shl 32) or (z.toLong() and 0xFFFFFFFFL)
 

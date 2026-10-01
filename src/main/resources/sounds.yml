@@ -1,55 +1,62 @@
+# 提示音效配置
+# 音效名称填写 Bukkit Sound 标准枚举名；音调建议范围 0.5 ~ 2.0；留空或将 enabled 设为 false 可静音
+
 sounds:
-  # 音效总开关
+  # 音效总开关：关闭后全服所有清理音效与垃圾桶音效均不再播放
   enabled: true
-  # 自动清理倒计时提示音
+  # 自动清理倒计时预警音效
   cleanup-warning:
+    # 单项开关
     enabled: true
+    # Bukkit 音效枚举名：填错或不存在时跳过播放
     sound: BLOCK_NOTE_BLOCK_PLING
+    # 音量大小：0.0 以上，通常建议 0.5 ~ 1.0
     volume: 0.8
+    # 音调高低：0.5 ~ 2.0，数值越大音调越高，越小越低沉
     pitch: 1.2
-  # 清理开始音
+  # 清理开始音效
   cleanup-start:
     enabled: true
     sound: BLOCK_BEACON_ACTIVATE
     volume: 0.8
     pitch: 1.0
-  # 清理完成音
+  # 清理完成音效
   cleanup-complete:
     enabled: true
     sound: ENTITY_PLAYER_LEVELUP
     volume: 0.9
     pitch: 1.0
-  # 全服过载触发音
+  # 全服应急过载报警音效
   panic:
     enabled: true
     sound: ENTITY_WITHER_SPAWN
     volume: 0.9
     pitch: 0.8
-  # 单区块硬限制触发音
+  # 单区块堆积过载报警音效
   chunk-overload:
     enabled: true
     sound: BLOCK_NOTE_BLOCK_BASS
     volume: 0.8
     pitch: 0.7
-  # 打开虚空垃圾桶菜单音
+  # 打开虚空垃圾桶界面音效
   bin-open:
     enabled: true
     sound: BLOCK_CHEST_OPEN
     volume: 0.8
     pitch: 1.1
-  # 虚空垃圾桶关闭倒计时提示音
+  # 虚空垃圾桶倒计时预警音效
   bin-warning:
     enabled: true
     sound: BLOCK_NOTE_BLOCK_BELL
     volume: 0.8
     pitch: 1.0
-  # 虚空垃圾桶过期销毁音
+  # 虚空垃圾桶清空销毁音效
   bin-expire:
     enabled: true
     sound: BLOCK_CHEST_LOCKED
     volume: 0.8
     pitch: 0.8
-  # 玩家手动丢入垃圾桶反馈音
+  # 玩家丢入垃圾桶暂存音效
   bin-deposit:
     enabled: true
     sound: ENTITY_ITEM_PICKUP

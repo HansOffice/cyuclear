@@ -60,7 +60,8 @@ object ConfigDoctor {
         "storage.yml",
         "void-bin.yml",
         "sounds.yml",
-        "messages.yml",
+        "lang/zh_cn.yml",
+        "lang/en_us.yml",
         "menu/main.yml",
         "menu/target.yml",
         "menu/list.yml",
@@ -162,6 +163,9 @@ object ConfigDoctor {
         if (config.getLong("performance.scan.max-millis-per-tick", 7L) !in 1L..50L) {
             findings += Finding(Level.WARNING, "config.yml", "performance.scan.max-millis-per-tick", "建议填写 1 到 50")
         }
+        if (config.contains("metrics.port") && config.getInt("metrics.port", 9527) !in 1..65535) {
+            findings += Finding(Level.WARNING, "config.yml", "metrics.port", "端口范围应在 1 到 65535 之间")
+        }
     }
 
     private fun inspectRules(rules: YamlConfiguration, findings: MutableList<Finding>) {
@@ -174,6 +178,10 @@ object ConfigDoctor {
         inspectAdvancedRules(rules, findings)
         inspectPanic(rules, findings)
         inspectHookAvailability(rules, findings)
+        if (rules.contains("targets.entities.heuristics.cache-seconds") &&
+            rules.getLong("targets.entities.heuristics.cache-seconds", 60L) !in 1L..3600L) {
+            findings += Finding(Level.WARNING, "rules.yml", "targets.entities.heuristics.cache-seconds", "建议填写 1 到 3600 秒")
+        }
         if (rules.getLong("limits.chunk.hotspot.retention-seconds", 300L) !in 30L..3600L) {
             findings += Finding(Level.WARNING, "rules.yml", "limits.chunk.hotspot.retention-seconds", "建议填写 30 到 3600 秒")
         }

@@ -5,6 +5,8 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.ClickType
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
@@ -99,6 +101,16 @@ object CleanupRunMenu : Listener {
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
         val holder = event.view.topInventory.holder as? Holder ?: return
+        if (event.action == InventoryAction.COLLECT_TO_CURSOR || event.click == ClickType.DOUBLE_CLICK) {
+            event.isCancelled = true
+            return
+        }
+        if (event.clickedInventory == event.view.bottomInventory) {
+            if (event.isShiftClick) {
+                event.isCancelled = true
+            }
+            return
+        }
         event.isCancelled = true
         if (event.clickedInventory != event.view.topInventory) return
         val player = event.whoClicked as? Player ?: return
@@ -115,7 +127,9 @@ object CleanupRunMenu : Listener {
 
     @EventHandler
     fun onDrag(event: InventoryDragEvent) {
-        if (event.view.topInventory.holder is Holder) event.isCancelled = true
+        if (event.view.topInventory.holder is Holder && event.rawSlots.any { it < event.view.topInventory.size }) {
+            event.isCancelled = true
+        }
     }
 
     private fun clickRuns(player: Player, holder: Holder, slot: Int) {

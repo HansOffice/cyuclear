@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.ClickType
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
@@ -108,21 +109,31 @@ object RuleMenu : Listener {
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
         val holder = event.view.topInventory.holder as? Holder ?: return
-        event.isCancelled = true
+        if (event.action == InventoryAction.COLLECT_TO_CURSOR || event.click == ClickType.DOUBLE_CLICK) {
+            event.isCancelled = true
+            return
+        }
         val player = event.whoClicked as? Player ?: return
         if (!player.hasPermission("cyuclear.admin")) {
+            event.isCancelled = true
             player.closeInventory()
             player.sendMessage(Language.get("no-permission"))
             return
         }
         runCatching {
             if (event.clickedInventory == event.view.bottomInventory) {
-                if (holder.screen != Screen.LIST) return@runCatching
-                val item = event.currentItem ?: return@runCatching
-                if (item.type == Material.AIR) return@runCatching
-                addFromInventory(player, holder, item)
+                if (event.isShiftClick) {
+                    event.isCancelled = true
+                    if (holder.screen == Screen.LIST) {
+                        val item = event.currentItem
+                        if (item != null && item.type != Material.AIR) {
+                            addFromInventory(player, holder, item)
+                        }
+                    }
+                }
                 return@runCatching
             }
+            event.isCancelled = true
             if (event.clickedInventory != event.view.topInventory) return@runCatching
             val slot = event.rawSlot
             when (holder.screen) {
@@ -138,7 +149,9 @@ object RuleMenu : Listener {
 
     @EventHandler
     fun onDrag(event: InventoryDragEvent) {
-        if (event.view.topInventory.holder is Holder) event.isCancelled = true
+        if (event.view.topInventory.holder is Holder && event.rawSlots.any { it < event.view.topInventory.size }) {
+            event.isCancelled = true
+        }
     }
 
     private fun clickMain(player: Player, slot: Int) {
@@ -454,7 +467,7 @@ object RuleMenu : Listener {
                 meta.lore = listOf(
                     ColorUtils.color(if (isEn) "&7Match Mode: &f$mode" else "&7匹配方式: &f$mode"),
                     ColorUtils.color(""),
-                    ColorUtils.color(if (isEn) "&eClick inventory item to add" else "&e点击背包物品添加")
+                    ColorUtils.color(if (isEn) "&eShift-Click inventory item to add" else "&eShift+点击背包物品添加")
                 )
                 item.itemMeta = meta
             }

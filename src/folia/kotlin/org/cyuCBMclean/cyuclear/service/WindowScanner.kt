@@ -242,7 +242,6 @@ object WindowScanner {
             val first = chunkQueue.poll() ?: break
             remainingQueue.decrementAndGet()
 
-            // 同一 Folia Region (8x8 chunks) 的连续区块合并为一个 Region Task 执行
             val batch = ArrayList<ChunkRef>(8)
             batch.add(first)
             val world = first.world

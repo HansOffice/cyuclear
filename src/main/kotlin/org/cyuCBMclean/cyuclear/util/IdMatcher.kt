@@ -34,14 +34,12 @@ class IdMatcher private constructor(
     fun matchesAnyNormalized(values: Iterable<String>): Boolean {
         if (isEmpty()) return false
 
-        // Fast-path 1: 常规精准名称直接进行 O(1) 哈希查询，无需触发任何正则或通配计算
         if (hasExact) {
             for (value in values) {
                 if (value.isNotEmpty() && exactValues.contains(value)) return true
             }
         }
 
-        // Fast-path 2: 若未配置正则/通配规则，直接快速短路返回
         if (!hasPatterns) return false
 
         for (value in values) {

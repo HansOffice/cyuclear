@@ -53,7 +53,11 @@ object CleanupFilter {
         DETAIL_CLEAN("深度清理", "Detail Rule Clean"),
         CRAFT_ENGINE_FURNITURE("CraftEngine 家具保护", "CraftEngine Furniture Protection"),
         AGE_GRACE("掉落宽限", "Drop Grace Age"),
-        AREA_RULE("区域规则", "Area Rule");
+        AREA_RULE("区域规则", "Area Rule"),
+        HEURISTIC_TRADED_VILLAGER("交易村民保护", "Traded Villager Protection"),
+        HEURISTIC_WORKSTATION_VILLAGER("工位村民保护", "Workstation Villager Protection"),
+        HEURISTIC_IRON_FARM_VILLAGER("刷铁机村民保护", "Iron Farm Villager Protection"),
+        HEURISTIC_POWERED_VEHICLE("动力载具保护", "Powered Vehicle Protection");
 
         val title: String
             get() = if (org.cyuCBMclean.cyuclear.config.Language.isEnglish) titleEn else titleCn
@@ -238,6 +242,7 @@ object CleanupFilter {
                     return protected
                 }
             }
+            heuristicDecision(entity, displayId, bypassAllOrdinaryProtections, trace)?.let { return it }
             return FilterDecision(
                 remove = true,
                 id = displayId,
@@ -274,6 +279,7 @@ object CleanupFilter {
                     val blocked = if (bypassAllOrdinaryProtections) null else
                         ordinaryProtectionReason(entity, namespaceId, rawName, pokemonOwned, cleanMatch.bypasses)
                     if (blocked == null) {
+                        heuristicDecision(entity, displayId, bypassAllOrdinaryProtections, trace)?.let { return it }
                         return FilterDecision(true, displayId, "实体深度清理规则：${cleanMatch.name}", ReasonKey.DETAIL_CLEAN, cleanMatch.name, cleanMatch.bypasses)
                     }
                 }
@@ -283,6 +289,7 @@ object CleanupFilter {
                 val blocked = if (bypassAllOrdinaryProtections) null else
                     ordinaryProtectionReason(entity, namespaceId, rawName, pokemonOwned, bypasses)
                 if (blocked == null) {
+                    heuristicDecision(entity, displayId, bypassAllOrdinaryProtections, trace)?.let { return it }
                     return FilterDecision(true, displayId, "实体名称清理名单", ReasonKey.ENTITY_NAME_CLEAN, bypassedProtections = bypasses)
                 }
             }
@@ -301,6 +308,9 @@ object CleanupFilter {
             }
         }
         areaRule?.entities?.decide(ids, areaRule.name)?.let {
+            if (it.remove) {
+                heuristicDecision(entity, displayId, bypassAllOrdinaryProtections, trace)?.let { h -> return h }
+            }
             return FilterDecision(it.remove, displayId, it.reason, ReasonKey.AREA_RULE)
         }
         trace?.add("区域规则", areaRule?.let { "命中 ${it.name}，继续使用全局规则" } ?: "未命中")
@@ -309,12 +319,28 @@ object CleanupFilter {
             return FilterDecision(false, displayId, "实体保留名单", ReasonKey.KEEP_LIST)
         }
         if (isEntityMatched(namespaceId, mythicInternalName, craftEngineId, pokemonIds, cleanMatcher)) {
+            heuristicDecision(entity, displayId, bypassAllOrdinaryProtections, trace)?.let { return it }
             return FilterDecision(true, displayId, "实体清理名单", ReasonKey.CLEAN_LIST)
         }
         return when (defaultAction) {
-            Settings.DefaultAction.CLEAN -> FilterDecision(true, displayId, "默认清理", ReasonKey.DEFAULT_CLEAN)
+            Settings.DefaultAction.CLEAN -> {
+                heuristicDecision(entity, displayId, bypassAllOrdinaryProtections, trace)?.let { return it }
+                FilterDecision(true, displayId, "默认清理", ReasonKey.DEFAULT_CLEAN)
+            }
             Settings.DefaultAction.KEEP -> FilterDecision(false, displayId, "默认保留", ReasonKey.DEFAULT_KEEP)
         }
+    }
+
+    private fun heuristicDecision(
+        entity: Entity,
+        displayId: String,
+        bypassAll: Boolean,
+        trace: DecisionTraceBuilder?
+    ): FilterDecision? {
+        if (!Settings.heuristicsEnabled || bypassAll) return null
+        val decision = HeuristicProtection.evaluate(entity, displayId) ?: return null
+        trace?.add("启发式保护", "命中 ${decision.reason}")
+        return decision
     }
 
     private fun ordinaryProtectionReason(

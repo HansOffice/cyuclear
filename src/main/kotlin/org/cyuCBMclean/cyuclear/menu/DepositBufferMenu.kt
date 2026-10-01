@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.ClickType
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryDragEvent
@@ -66,13 +67,20 @@ object DepositBufferMenu : Listener {
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
         val holder = event.view.topInventory.holder as? Holder ?: return
-        event.isCancelled = true
+        if (event.action == InventoryAction.COLLECT_TO_CURSOR || event.click == ClickType.DOUBLE_CLICK) {
+            event.isCancelled = true
+            return
+        }
         val player = event.whoClicked as? Player ?: return
 
         if (event.clickedInventory == event.view.bottomInventory) {
-            stageFromInventory(event, player, holder)
+            if (event.isShiftClick) {
+                event.isCancelled = true
+                stageFromInventory(event, player, holder)
+            }
             return
         }
+        event.isCancelled = true
         if (event.clickedInventory != event.view.topInventory) return
         val slot = event.rawSlot
         if (template.dispatch(
@@ -116,7 +124,9 @@ object DepositBufferMenu : Listener {
 
     @EventHandler
     fun onDrag(event: InventoryDragEvent) {
-        if (event.view.topInventory.holder is Holder) event.isCancelled = true
+        if (event.view.topInventory.holder is Holder && event.rawSlots.any { it < event.view.topInventory.size }) {
+            event.isCancelled = true
+        }
     }
 
     private fun stageFromInventory(event: InventoryClickEvent, player: Player, holder: Holder) {

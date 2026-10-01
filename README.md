@@ -8,11 +8,11 @@ CyuClear 用于周期清理、规则检查、区块限流、恢复记录和虚�
 
 | 服务端 | 使用文件 | 产物目录 |
 | --- | --- | --- |
-| Bukkit / Spigot / Paper 1.13 及以上 | `cyuclear-paper-1.4.3.jar` | `target/` |
-| Folia | `cyuclear-folia-1.4.3.jar` | `target/` |
-| Bukkit / Spigot 1.8 至 1.12 | `cyuclear-legacy-1.4.3.jar` | `target/` |
+| Bukkit / Spigot / Paper 1.13 及以上 | `cyuclear-paper-1.4.5.jar` | `target/` |
+| Folia | `cyuclear-folia-1.4.5.jar` | `target/` |
+| Bukkit / Spigot 1.8 至 1.12 | `cyuclear-legacy-1.4.5.jar` | `target/` |
 
-每台服务端只放一个运行包到 `plugins`。首次启动后会生成配置文件；先完成规则检查与预演，再开启总开关。
+每台服务端只放一个运行包到 `plugins`。首次启动后会生成配置文件；先完成规则检查与预演，再开启总开关
 
 ## 常用入口
 
@@ -23,7 +23,8 @@ CyuClear 用于周期清理、规则检查、区块限流、恢复记录和虚�
 | `/cc check` | 检查准星目标的清理判定 |
 | `/cc preview` | 预演一次清理，不删除内容 |
 | `/cc menu` | 打开管理中心 |
-| `/cc status` | 查看当前运行状态 |
+| `/cc status` | 查看当前运行状态与扫描预算 |
+| `/cc doctor` | 检查配置文件健康度 |
 | `/cc reload` | 保存配置快照后重载运行设置 |
 
 | 权限 | 用途 |
@@ -36,53 +37,53 @@ CyuClear 用于周期清理、规则检查、区块限流、恢复记录和虚�
 
 | 文件 | 用途 |
 | --- | --- |
-| `config.yml` | 总开关、周期、性能、恢复与世界范围 |
-| `rules.yml` | 掉落物、实体、实时拦截、区块限制与 Panic |
+| `config.yml` | 总开关、周期、性能档位、恢复与世界范围 |
+| `rules.yml` | 掉落物与实体规则、实时拦截、区块硬限制与 Panic 熔断 |
 | `areas.yml` | 世界和坐标区域的独立规则 |
 | `storage.yml` | Redis 或 MySQL 跨服同步 |
 | `void-bin.yml` | 垃圾桶、玩家投放与个人投放缓冲区 |
-| `sounds.yml` | 音效 |
-| `messages.yml` | 玩家提示与帮助文本 |
+| `sounds.yml` | 提示音效 |
+| `lang/` | 双语语言文件（`zh_cn.yml` / `en_us.yml`） |
 | `menu/` | 垃圾桶、规则、批次、热点和管理菜单 |
 
 ## 源码结构
 
 ```text
 src/main/kotlin/org/cyuCBMclean/cyuclear/
-├─ bootstrap/  启动、关闭与重载流程
+├─ bootstrap/  启动装配、关闭与生命周期
 ├─ bridge/     PlaceholderAPI 与可选插件联动
 ├─ cluster/    Redis、MySQL 与跨服状态
-├─ command/    命令、权限与补全
+├─ command/    命令路由、权限检查与智能 Tab 补全
 ├─ config/     配置读取、迁移、校验与规则解析
-├─ listener/   Bukkit 事件入口
-├─ menu/       客制化菜单与图标渲染
+├─ listener/   事件监听与保护入口
+├─ menu/       字符布局菜单引擎与图标渲染
 ├─ platform/   平台通知与版本边界
-├─ service/    清理、回收、限流与运行状态
+├─ service/    清理、回收、启发式保护、指标导出与限流服务
 ├─ storage/    清理批次持久化
-├─ task/       倒计时与周期任务
+├─ task/       倒计时与周期调度任务
 └─ util/       物品、文本与兼容工具
 
-src/paper/     Paper 实现
-src/folia/     Folia 实现
-src/legacy/    Legacy 实现
+src/paper/     Paper 1.13+ 平台实现
+src/folia/     Folia 1.20+ 区域线程实现
+src/legacy/    Bukkit / Spigot 1.8~1.12 旧端平台实现
 ```
 
 ## 构建
 
 Paper 与 Legacy 使用 JDK 8，Folia 使用 JDK 17。
 
-```powershell
-# JDK 8 编译 Paper 与 Legacy
-$env:JAVA_HOME = '你的 JDK 8 目录'
+```bash
+# 构建 Paper 端运行包
 mvn -Ppaper package -DskipTests
+
+# 构建 Legacy 端运行包
 mvn -Plegacy package -DskipTests
 
-# JDK 17 编译 Folia
-$env:JAVA_HOME = '你的 JDK 17 目录'
+# 构建 Folia 端运行包（需 JDK 17）
 mvn -Pfolia package -DskipTests
 ```
 
-构建前不需要执行 `clean`。产物位于 `target/`，发布前检查对应包内的 `plugin.yml`、平台标记、资源文件和类版本
+构建前不需要执行 clean。产物位于 `target/`，发布前检查对应包内的 `plugin.yml`、平台标记、资源文件和类版本
 
 ## 许可
 

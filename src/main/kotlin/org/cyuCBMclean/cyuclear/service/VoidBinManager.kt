@@ -227,6 +227,8 @@ object VoidBinManager {
 
     fun itemTypeCount(): Int = storage.size
 
+    fun totalItemCount(): Long = storage.values.sumOf { it.toLong() }
+
     fun isOpen(): Boolean = Settings.binEnabled && (Settings.binAlwaysOpen || getRemainingSeconds() > 0)
 
     fun getStorageList(): List<Pair<ItemStack, Int>> = storage.map { (item, amount) -> item.clone() to amount }

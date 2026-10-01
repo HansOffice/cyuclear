@@ -349,17 +349,35 @@ object CleanupRunManager {
     @Volatile
     private var active: RunRecord? = null
 
+    val cumulativeScannedChunks = AtomicLong(0L)
+    val cumulativeScannedEntities = AtomicLong(0L)
+    val cumulativeCleanedItems = AtomicLong(0L)
+    val cumulativeCleanedEntities = AtomicLong(0L)
+
+    fun totalScannedChunks(): Long = cumulativeScannedChunks.get() + (active?.completedChunks?.get() ?: 0)
+    fun totalScannedEntities(): Long = cumulativeScannedEntities.get() + (active?.scannedEntities?.get() ?: 0)
+    fun totalCleanedItems(): Long = cumulativeCleanedItems.get() + (active?.removedItems?.get() ?: 0)
+    fun totalCleanedEntities(): Long = cumulativeCleanedEntities.get() + (active?.removedEntities?.get() ?: 0)
+
     fun initialize() {
         records.clear()
         synchronized(orderLock) {
             recordOrder.clear()
         }
         active = null
+        cumulativeScannedChunks.set(0L)
+        cumulativeScannedEntities.set(0L)
+        cumulativeCleanedItems.set(0L)
+        cumulativeCleanedEntities.set(0L)
         for (record in CleanupRunStore.loadRecent(Settings.recoveryRecentLimit)) {
             records[record.id] = record
             synchronized(orderLock) {
                 recordOrder += record.id
             }
+            cumulativeScannedChunks.addAndGet(record.processedChunks.toLong())
+            cumulativeScannedEntities.addAndGet(record.scannedEntities.get().toLong())
+            cumulativeCleanedItems.addAndGet(record.removedItems.get())
+            cumulativeCleanedEntities.addAndGet(record.removedEntities.get())
         }
     }
 
@@ -529,6 +547,10 @@ object CleanupRunManager {
             record.durationMillis = durationMillis.coerceAtLeast(0L)
             record.finishedAt = System.currentTimeMillis()
             record.revision.incrementAndGet()
+            cumulativeScannedChunks.addAndGet(record.processedChunks.toLong())
+            cumulativeScannedEntities.addAndGet(record.scannedEntities.get().toLong())
+            cumulativeCleanedItems.addAndGet(record.removedItems.get())
+            cumulativeCleanedEntities.addAndGet(record.removedEntities.get())
         }
         if (active === record) active = null
         saveAsync(record)

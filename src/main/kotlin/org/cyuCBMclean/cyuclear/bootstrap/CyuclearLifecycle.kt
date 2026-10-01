@@ -9,6 +9,7 @@ import org.cyuCBMclean.cyuclear.bridge.PapiHook
 import org.cyuCBMclean.cyuclear.bridge.StackerBridge
 import org.cyuCBMclean.cyuclear.cluster.BuildInfo
 import org.cyuCBMclean.cyuclear.command.CyuclearCommand
+import org.cyuCBMclean.cyuclear.command.CyuclearTabCompleter
 import org.cyuCBMclean.cyuclear.config.ConfigDoctor
 import org.cyuCBMclean.cyuclear.config.ConfigFiles
 import org.cyuCBMclean.cyuclear.config.ConfigUpgradeManager
@@ -36,7 +37,10 @@ import org.cyuCBMclean.cyuclear.service.ChunkLimitService
 import org.cyuCBMclean.cyuclear.service.CleanupNoticeManager
 import org.cyuCBMclean.cyuclear.service.CleanupRunManager
 import org.cyuCBMclean.cyuclear.service.DepositBufferManager
+import org.cyuCBMclean.cyuclear.service.HeuristicProtection
 import org.cyuCBMclean.cyuclear.service.HotspotTracker
+import org.cyuCBMclean.cyuclear.service.MetricsService
+import org.cyuCBMclean.cyuclear.platform.PlatformInfo
 import org.cyuCBMclean.cyuclear.service.SoundNoticeManager
 import org.cyuCBMclean.cyuclear.service.TeleportService
 import org.cyuCBMclean.cyuclear.service.VoidBinManager
@@ -48,10 +52,13 @@ internal object CyuclearLifecycle {
         loadRuntime(plugin)
         registerEntrypoints(plugin)
         ActivationService.reload()
+        MetricsService.reload()
         printStartup(plugin, Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
     }
 
     fun disable(plugin: Cyuclear) {
+        MetricsService.stop()
+        HeuristicProtection.reset()
         DepositBufferManager.shutdown()
         ActivationService.stop()
         CleanupRunManager.flush()
@@ -104,9 +111,10 @@ internal object CyuclearLifecycle {
         pluginManager.registerEvents(TeleportService, plugin)
         registerMenus(plugin)
 
+        val tabCompleter = CyuclearTabCompleter()
         plugin.getCommand("cyuclear")?.let {
             it.setExecutor(CyuclearCommand)
-            it.setTabCompleter(CyuclearCommand)
+            it.setTabCompleter(tabCompleter)
         }
 
         if (pluginManager.getPlugin("PlaceholderAPI") != null) {
@@ -130,15 +138,17 @@ internal object CyuclearLifecycle {
         val console = Bukkit.getConsoleSender()
         console.sendMessage("")
         console.sendMessage("§8--------------------------------------------------")
-        console.sendMessage(if (isEn) "§b CyuClear §f- Lag-Free Cleanup & Void Bin Recovery" else "§b Cyuclear §f- 轻量清理与虚空回收")
+        console.sendMessage(if (isEn) "§b CyuClear §f- Lag-Free Cleanup & Void Bin Recovery" else "§b CyuClear §f- 轻量清理与虚空回收")
         console.sendMessage("§f")
-        console.sendMessage(if (isEn) "§7 ▸ §fVersion §b${plugin.description.version} §8| §fPlatform §b${platformName(plugin)}" else "§7 ▸ §f版本 §b${plugin.description.version} §8| §f平台 §b${platformName(plugin)}")
+        console.sendMessage(if (isEn) "§7 ▸ §fVersion §b${plugin.description.version} §8| §fPlatform §b${PlatformInfo.id}" else "§7 ▸ §f版本 §b${plugin.description.version} §8| §f平台 §b${PlatformInfo.id}")
         console.sendMessage(if (isEn) "§7 ▸ §fModules §b${moduleText()}" else "§7 ▸ §f模块 §b${moduleText()}")
-        console.sendMessage(if (isEn) {
-            "§7 ▸ §fCluster §b${if (Settings.clusterEnabled) "Enabled / ${Settings.clusterId} / ${Settings.clusterServerId.ifBlank { "No Node ID" }}" else "Disabled"}"
-        } else {
-            "§7 ▸ §f跨服 §b${if (Settings.clusterEnabled) "已开启 / ${Settings.clusterId} / ${Settings.clusterServerId.ifBlank { "未配置节点" }}" else "未开启"}"
-        })
+        if (Settings.clusterEnabled) {
+            console.sendMessage(if (isEn) {
+                "§7 ▸ §fCluster §bEnabled / ${Settings.clusterId} / ${Settings.clusterServerId.ifBlank { "No Node ID" }}"
+            } else {
+                "§7 ▸ §f跨服 §b已开启 / ${Settings.clusterId} / ${Settings.clusterServerId.ifBlank { "未配置节点" }}"
+            })
+        }
         console.sendMessage(if (isEn) "§7 ▸ §fLists §b${listModeText()}" else "§7 ▸ §f名单 §b${listModeText()}")
         console.sendMessage(if (isEn) {
             "§7 ▸ §fPerformance §b${Settings.performanceProfile} §8| §fChunks §b${Settings.scanMaxChunksPerTick}/tick §8| §fBudget §b${Settings.scanMaxMillisPerTick}ms"
@@ -146,12 +156,7 @@ internal object CyuclearLifecycle {
             "§7 ▸ §f性能 §b${Settings.performanceProfile} §8| §f区块 §b${Settings.scanMaxChunksPerTick}/tick §8| §f预算 §b${Settings.scanMaxMillisPerTick}ms"
         })
         console.sendMessage(if (isEn) "§7 ▸ §fChunk Hard Limit §b${chunkEntityLimitModeText()}" else "§7 ▸ §f区块实体硬限制 §b${chunkEntityLimitModeText()}")
-        console.sendMessage(if (isEn) {
-            "§7 ▸ §fScheduler State §b${if (ActivationService.isActive()) "Active" else "Safe-Disabled"}"
-        } else {
-            "§7 ▸ §f清理状态 §b${if (ActivationService.isActive()) "已启用" else "安全关闭"}"
-        })
-        if (platformName(plugin) == "Folia") {
+        if (PlatformInfo.id == "folia") {
             console.sendMessage(if (isEn) {
                 "§7 ▸ §fFolia §bRegion Tasks ${Settings.foliaMaxActiveRegionTasks} §8| §fDispatch §b${Settings.foliaDispatchChunksPerTick}/tick"
             } else {
@@ -171,14 +176,15 @@ internal object CyuclearLifecycle {
             "§7 ▸ §fHook §bPlaceholderAPI ${hookText(papiHooked)} §8| §fMythicMobs ${hookText(Settings.entityMythicEnabled && pluginEnabled("MythicMobs"))} §8| §fCraftEngine ${hookText(Settings.entityCraftEngineEnabled && (pluginEnabled("CraftEngine") || pluginEnabled("CE")))} §8| §f宝可梦 ${if (Settings.entityPokemonEnabled) "已开启" else "未开启"}"
         })
         console.sendMessage(if (isEn) {
-            "§7 ▸ §fStacker §b${StackerBridge.activeNames().takeIf { it.isNotEmpty() }?.joinToString(" / ") ?: "None"}"
+            "§7 ▸ §fStacker §b${StackerBridge.activeNames().takeIf { it.isNotEmpty() }?.joinToString(" / ") ?: "None"} §8| §fGroup §b331910315"
         } else {
-            "§7 ▸ §f堆叠 §b${StackerBridge.activeNames().takeIf { it.isNotEmpty() }?.joinToString(" / ") ?: "未接入"}"
+            "§7 ▸ §f堆叠 §b${StackerBridge.activeNames().takeIf { it.isNotEmpty() }?.joinToString(" / ") ?: "未接入"} §8| §f交流群 §b331910315"
         })
+        console.sendMessage("§f")
         if (ActivationService.isActive()) {
             console.sendMessage(if (isEn) "§7 ▸ §fStatus §bReady" else "§7 ▸ §f状态 §b启动完成")
         } else {
-            console.sendMessage(if (isEn) "§7 ▸ §fSafe Disabled §bWill not clean or intercept items/entities" else "§7 ▸ §f安全关闭 §b不会清理或拦截实体与掉落物")
+            console.sendMessage(if (isEn) "§7 ▸ §fStatus §cSafe Disabled" else "§7 ▸ §f状态 §c安全关闭")
             console.sendMessage(Language.get("startup-disabled-console"))
         }
         console.sendMessage("§8--------------------------------------------------")
@@ -190,9 +196,9 @@ internal object CyuclearLifecycle {
         val console = Bukkit.getConsoleSender()
         console.sendMessage("")
         console.sendMessage("§8--------------------------------------------------")
-        console.sendMessage(if (isEn) "§b CyuClear §f- Lag-Free Cleanup & Void Bin Recovery" else "§b Cyuclear §f- 轻量清理与虚空回收")
+        console.sendMessage(if (isEn) "§b CyuClear §f- Lag-Free Cleanup & Void Bin Recovery" else "§b CyuClear §f- 轻量清理与虚空回收")
         console.sendMessage("§f")
-        console.sendMessage(if (isEn) "§7 ▸ §fStatus §7Disabled, background tasks stopped" else "§7 ▸ §f状态 §7已关闭，后台任务已停止")
+        console.sendMessage(if (isEn) "§7 ▸ §fStatus §7Saved and unloaded" else "§7 ▸ §f状态 §7已保存并卸载")
         console.sendMessage("§8--------------------------------------------------")
         console.sendMessage("")
     }
@@ -226,15 +232,6 @@ internal object CyuclearLifecycle {
             Settings.ChunkEntityLimitMode.OFF -> if (isEn) "OFF" else "关闭"
             Settings.ChunkEntityLimitMode.SAFE -> if (isEn) "SAFE" else "安全模式"
             Settings.ChunkEntityLimitMode.STRICT -> if (isEn) "STRICT" else "严格模式"
-        }
-    }
-
-    private fun platformName(plugin: Cyuclear): String {
-        return when {
-            plugin.server.name.contains("Folia", ignoreCase = true) -> "Folia"
-            plugin.server.name.contains("Paper", ignoreCase = true) -> "Paper"
-            plugin.server.name.contains("Spigot", ignoreCase = true) -> "Spigot"
-            else -> plugin.server.name
         }
     }
 
