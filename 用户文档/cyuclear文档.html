@@ -417,7 +417,6 @@
         <a href="#hotspots">热点区块</a>
         <div class="nav-title">界面与联动</div>
         <a href="#menu">垃圾桶菜单</a>
-        <a href="#metrics">Prometheus 监控</a>
         <a href="#worlds">世界与提示</a>
         <a href="#papi">PlaceholderAPI</a>
         <div class="nav-title">日常维护</div>
@@ -1949,33 +1948,6 @@ items:
         </table>
       </section>
 
-      <section id="metrics">
-        <h2>Prometheus 监控</h2>
-        <p>CyuClear 内置基于标准 JDK 原生网络组件的轻量指标导出端点，零外部依赖。在 <code>config.yml</code> 中开启 <code>metrics.enabled: true</code>，即可通过 HTTP 抓取标准 OpenMetrics 纯文本格式监控指标：</p>
-        <pre><code>metrics:
-  # 是否开启 Prometheus 监控指标 HTTP 导出端点 (/metrics)
-  enabled: true
-  # 监控端点 HTTP 监听端口 (默认 9527)
-  port: 9527</code></pre>
-        <p>常用监控指标包括：</p>
-        <table>
-          <thead><tr><th>指标名称</th><th>类型</th><th>说明</th></tr></thead>
-          <tbody>
-            <tr><td><code>cyuclear_cleaned_items_total</code></td><td>Counter</td><td>累计清理掉落物总数</td></tr>
-            <tr><td><code>cyuclear_cleaned_entities_total</code></td><td>Counter</td><td>累计清理实体总数</td></tr>
-            <tr><td><code>cyuclear_scanned_chunks_total</code></td><td>Counter</td><td>累计扫描区块总数</td></tr>
-            <tr><td><code>cyuclear_last_cleanup_duration_millis</code></td><td>Gauge</td><td>上次清理总耗时（毫秒）</td></tr>
-            <tr><td><code>cyuclear_last_cleanup_duration_micros</code></td><td>Gauge</td><td>上次清理总耗时（微秒）</td></tr>
-            <tr><td><code>cyuclear_hotspots_active_total</code></td><td>Gauge</td><td>全服当前活跃热点超载区块总数</td></tr>
-            <tr><td><code>cyuclear_hotspots_breaker_total</code></td><td>Gauge</td><td>全服当前处于 Panic 熔断拦截状态的区块数</td></tr>
-            <tr><td><code>cyuclear_void_bin_items_total</code></td><td>Gauge</td><td>虚空垃圾桶当前暂存的物品总件数</td></tr>
-          </tbody>
-        </table>
-        <div class="note">
-          Prometheus 抓取配置与详细 PromQL 监控大盘示例可参考知识库中的 <code>监控指标.md</code>
-        </div>
-      </section>
-
       <section id="worlds">
         <h2>世界与提示</h2>
         <p>世界过滤决定哪些世界参与周期清理、硬限制和实时清理</p>
@@ -2220,11 +2192,6 @@ items:
               <td>查看性能参数、名单规模、Hook 与上次清理结果</td>
             </tr>
             <tr>
-              <td><code>/cyuclear metrics</code></td>
-              <td><code>cyuclear.admin</code></td>
-              <td>查看 Prometheus 监控指标 HTTP 导出端点状态与监听端口</td>
-            </tr>
-            <tr>
               <td><code>/cyuclear cluster</code></td>
               <td><code>cyuclear.admin</code></td>
               <td>查看跨服连接、兼容身份、在线成员与领导者状态</td>
@@ -2367,9 +2334,6 @@ items:
 
         <h3>某个区块一加载就严重卡顿</h3>
         <p>如果区块能完成加载但实体活动会造成卡顿，可临时开启 <code>emergency.chunk-load-sweep</code>；卸载时清扫默认关闭，需要时再开 <code>emergency.chunk-unload-sweep</code>。若服务端在区块反序列化前已经崩溃，插件没有执行机会：先停服并备份世界文件，再使用离线区块工具处理实体数据，不要反复让玩家进入该区块。</p>
-
-        <h3>输入 /metrics 提示未知指令怎么回事</h3>
-        <p><code>/metrics</code> 是 Prometheus / Grafana 抓取监控指标的 <strong>HTTP 服务端点路径（HTTP Endpoint）</strong>，不是 Minecraft 聊天栏指令。在 <code>config.yml</code> 中开启 <code>metrics.enabled: true</code> 后，可在浏览器或监控端访问 <code>http://服务器IP:9527/metrics</code> 抓取监控数据流；在游戏内管理员可使用 <code>/cyuclear metrics</code>（或 <code>/cc metrics</code>）查看监控端点的实时运行状态与监听端口</p>
       </section>
 
       <section id="workflow">

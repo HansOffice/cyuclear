@@ -12,7 +12,6 @@ import org.cyuCBMclean.cyuclear.service.ChunkLimitService
 import org.cyuCBMclean.cyuclear.service.DepositBufferManager
 import org.cyuCBMclean.cyuclear.service.HeuristicProtection
 import org.cyuCBMclean.cyuclear.service.HotspotTracker
-import org.cyuCBMclean.cyuclear.service.MetricsService
 import org.cyuCBMclean.cyuclear.service.SoundNoticeManager
 import org.cyuCBMclean.cyuclear.util.ItemIdentity
 
@@ -39,7 +38,6 @@ internal object RuntimeReloadService {
         StackerBridge.reload()
         DepositBufferManager.onSettingsReload()
         ActivationService.reload()
-        MetricsService.reload()
         return Result(snapshot, ActivationService.isActive())
     }
 }

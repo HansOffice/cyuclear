@@ -459,11 +459,6 @@ object Settings {
     var heuristicCacheMillis: Long = 60_000L
         private set
 
-    var metricsEnabled: Boolean = false
-        private set
-    var metricsPort: Int = 9527
-        private set
-
     fun load() {
         config = ConfigFiles.load()
         AreaRules.load(config)
@@ -822,9 +817,6 @@ object Settings {
         heuristicIronFarmVillager = config.getBoolean("targets.entities.heuristics.iron-farm-villager", true)
         heuristicPoweredVehicle = config.getBoolean("targets.entities.heuristics.powered-vehicle", true)
         heuristicCacheMillis = config.getLong("targets.entities.heuristics.cache-seconds", 60L).coerceIn(1L, 3600L) * 1000L
-
-        metricsEnabled = config.getBoolean("metrics.enabled", false)
-        metricsPort = config.getInt("metrics.port", 9527).coerceIn(1, 65535)
 
         BinEntryRules.load(config)
         filterRevision++

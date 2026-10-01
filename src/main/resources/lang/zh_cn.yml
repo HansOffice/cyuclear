@@ -31,7 +31,6 @@ help-all: "&#D7DEE8› /cyuclear all &#8A96A8手动执行全量大扫除"
 help-check: "&#D7DEE8› /cyuclear check &#8A96A8显示准星目标的判定过程"
 help-preview: "&#D7DEE8› /cyuclear preview &#8A96A8预演本次清理，不删除实体"
 help-status: "&#D7DEE8› /cyuclear status &#8A96A8查看性能参数、名单规模与 Hook 状态"
-help-metrics: "&#D7DEE8› /cyuclear metrics &#8A96A8查看 Prometheus 监控端点状态"
 help-reload: "&#D7DEE8› /cyuclear reload &#8A96A8重载配置并应用总开关"
 help-lang: "&#D7DEE8› /cyuclear lang <zh_cn|en_us> &#8A96A8切换插件语言"
 help-cluster: "&#D7DEE8› /cyuclear cluster &#8A96A8查看跨服连接与严格版本身份"
@@ -169,14 +168,6 @@ status-lists: "&#8A96A8物品 ID 保留/清理 &#D7DEE8{item_keep}/{item_clean} 
 status-named-rules: "&#8A96A8命名规则 &#D7DEE8{total} &#5B6472| &#8A96A8掉落物 &#D7DEE8{items} &#5B6472| &#8A96A8实体 &#D7DEE8{entities}"
 status-hooks: "&#8A96A8Hook Mythic &#D7DEE8{mythic} &#5B6472| &#8A96A8CraftEngine &#D7DEE8{craftengine} &#5B6472| &#8A96A8宝可梦 &#D7DEE8{pokemon}"
 status-footer: "&#3A4352&m┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
-
-# Prometheus 监控导出端点
-metrics-title: "&#38BDF8&lCyuClear Prometheus 监控导出端点"
-metrics-enabled: "&#8A96A8服务状态 &#5B6472› &#34D399已开启"
-metrics-disabled: "&#8A96A8服务状态 &#5B6472› &#F87171未开启"
-metrics-port: "&#8A96A8监听端口 &#5B6472› &#D7DEE8{port}"
-metrics-endpoint: "&#8A96A8抓取地址 &#5B6472› &#D7DEE8http://0.0.0.0:{port}/metrics"
-metrics-hint-disabled: "&#8A96A8如需启用，请在 &#D7DEE8config.yml &#8A96A8中设置 &#D7DEE8metrics.enabled: true &#8A96A8并执行 &#D7DEE8/cc reload"
 
 # 虚空桶记录
 history-header: "&#3A4352&m┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"

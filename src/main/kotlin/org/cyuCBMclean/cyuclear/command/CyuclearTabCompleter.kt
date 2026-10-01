@@ -13,7 +13,7 @@ class CyuclearTabCompleter(
 ) : TabCompleter {
 
     private val subCommands = listOf(
-        "help", "bin", "items", "entities", "all", "check", "preview", "status", "metrics",
+        "help", "bin", "items", "entities", "all", "check", "preview", "status",
         "reload", "lang", "cluster", "menu", "runs", "run", "recover",
         "hotspots", "here", "tp", "back", "cancel", "doctor", "snapshot", "history"
     )

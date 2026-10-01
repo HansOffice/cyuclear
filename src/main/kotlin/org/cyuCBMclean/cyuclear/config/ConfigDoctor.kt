@@ -163,9 +163,6 @@ object ConfigDoctor {
         if (config.getLong("performance.scan.max-millis-per-tick", 7L) !in 1L..50L) {
             findings += Finding(Level.WARNING, "config.yml", "performance.scan.max-millis-per-tick", "建议填写 1 到 50")
         }
-        if (config.contains("metrics.port") && config.getInt("metrics.port", 9527) !in 1..65535) {
-            findings += Finding(Level.WARNING, "config.yml", "metrics.port", "端口范围应在 1 到 65535 之间")
-        }
     }
 
     private fun inspectRules(rules: YamlConfiguration, findings: MutableList<Finding>) {

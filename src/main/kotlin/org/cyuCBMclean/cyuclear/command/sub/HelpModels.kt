@@ -15,7 +15,6 @@ val MAIN_HELP_LINES = listOf(
     HelpLine("help-check", "&#D7DEE8› /cyuclear check &#8A96A8显示准星目标的判定过程", "/cyuclear check", "cyuclear.admin"),
     HelpLine("help-preview", "&#D7DEE8› /cyuclear preview &#8A96A8预演本次清理，不删除实体", "/cyuclear preview", "cyuclear.admin"),
     HelpLine("help-status", "&#D7DEE8› /cyuclear status &#8A96A8查看性能参数、名单规模与 Hook 状态", "/cyuclear status", "cyuclear.admin"),
-    HelpLine("help-metrics", "&#D7DEE8› /cyuclear metrics &#8A96A8查看 Prometheus 监控端点状态", "/cyuclear metrics", "cyuclear.admin"),
     HelpLine("help-reload", "&#D7DEE8› /cyuclear reload &#8A96A8重载配置并应用总开关", "/cyuclear reload", "cyuclear.admin"),
     HelpLine("help-lang", "&#D7DEE8› /cyuclear lang <zh_cn|en_us> &#8A96A8切换插件语言", "/cyuclear lang ", "cyuclear.admin"),
     HelpLine("help-cluster", "&#D7DEE8› /cyuclear cluster &#8A96A8查看跨服连接与严格版本身份", "/cyuclear cluster", "cyuclear.admin"),

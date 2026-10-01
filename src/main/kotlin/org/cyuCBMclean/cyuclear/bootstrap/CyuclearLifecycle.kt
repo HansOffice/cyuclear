@@ -39,7 +39,6 @@ import org.cyuCBMclean.cyuclear.service.CleanupRunManager
 import org.cyuCBMclean.cyuclear.service.DepositBufferManager
 import org.cyuCBMclean.cyuclear.service.HeuristicProtection
 import org.cyuCBMclean.cyuclear.service.HotspotTracker
-import org.cyuCBMclean.cyuclear.service.MetricsService
 import org.cyuCBMclean.cyuclear.platform.PlatformInfo
 import org.cyuCBMclean.cyuclear.service.SoundNoticeManager
 import org.cyuCBMclean.cyuclear.service.TeleportService
@@ -52,12 +51,10 @@ internal object CyuclearLifecycle {
         loadRuntime(plugin)
         registerEntrypoints(plugin)
         ActivationService.reload()
-        MetricsService.reload()
         printStartup(plugin, Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
     }
 
     fun disable(plugin: Cyuclear) {
-        MetricsService.stop()
         HeuristicProtection.reset()
         DepositBufferManager.shutdown()
         ActivationService.stop()
