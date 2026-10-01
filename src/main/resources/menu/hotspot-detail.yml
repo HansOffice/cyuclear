@@ -12,6 +12,11 @@ items:
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
     name: " "
+  "I":
+    material: CLOCK
+    name: "&#38BDF8&l区块信息"
+    lore:
+      - "&#8A96A8展示当前热点区块的负载状态与活动历史"
   "T":
     material: ENDER_PEARL
     name: "&#38BDF8&l前往该区块"

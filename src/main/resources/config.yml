@@ -192,6 +192,7 @@ here-cleanup:
 # 现代监控可观测性导出端点 (Prometheus / OpenMetrics)
 metrics:
   # 是否开启 Prometheus 监控指标 HTTP 导出端点 (/metrics)
+  # 开启后通过 http://服务器IP:9527/metrics 抓取，游戏内可用 /cc metrics 查看
   enabled: false
   # 监控端点 HTTP 监听端口 (默认 9527)
   port: 9527

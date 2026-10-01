@@ -2367,6 +2367,9 @@ items:
 
         <h3>某个区块一加载就严重卡顿</h3>
         <p>如果区块能完成加载但实体活动会造成卡顿，可临时开启 <code>emergency.chunk-load-sweep</code>；卸载时清扫默认关闭，需要时再开 <code>emergency.chunk-unload-sweep</code>。若服务端在区块反序列化前已经崩溃，插件没有执行机会：先停服并备份世界文件，再使用离线区块工具处理实体数据，不要反复让玩家进入该区块。</p>
+
+        <h3>输入 /metrics 提示未知指令怎么回事</h3>
+        <p><code>/metrics</code> 是 Prometheus / Grafana 抓取监控指标的 <strong>HTTP 服务端点路径（HTTP Endpoint）</strong>，不是 Minecraft 聊天栏指令。在 <code>config.yml</code> 中开启 <code>metrics.enabled: true</code> 后，可在浏览器或监控端访问 <code>http://服务器IP:9527/metrics</code> 抓取监控数据流；在游戏内管理员可使用 <code>/cyuclear metrics</code>（或 <code>/cc metrics</code>）查看监控端点的实时运行状态与监听端口</p>
       </section>
 
       <section id="workflow">
