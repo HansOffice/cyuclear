@@ -14,8 +14,8 @@ import java.util.UUID
 
 object ConfigUpgradeManager {
 
-    const val CURRENT_CONFIG_VERSION = 140
-    const val CURRENT_CONFIG_LAYOUT = 6
+    const val CURRENT_CONFIG_VERSION = 145
+    const val CURRENT_CONFIG_LAYOUT = 7
 
     private val managedFiles = listOf(
         "config.yml",
@@ -155,7 +155,7 @@ object ConfigUpgradeManager {
             return UpgradeResult(upgraded = false)
         }
 
-        val stageFolder = File(dataFolder, ".migration-140-${UUID.randomUUID()}")
+        val stageFolder = File(dataFolder, ".migration-145-${UUID.randomUUID()}")
         var backupFolder: File? = null
         val originalFiles = managedFiles.filter { File(dataFolder, it).exists() }.toSet()
         return try {
@@ -172,7 +172,7 @@ object ConfigUpgradeManager {
             writeUpgradeReport(backupFolder, version, plan.values.size, unmapped)
             commitStage(stageFolder, dataFolder)
 
-            plugin.logger.info("配置已迁移到 1.4.0，保留 ${plan.values.size} 项自定义值")
+            plugin.logger.info("配置已迁移到 1.4.5，保留 ${plan.values.size} 项自定义值")
             plugin.logger.info("已整理配置结构，并补齐清理批次、恢复与热点菜单")
             plugin.logger.info("原配置备份：backup/${backupFolder.name}")
             if (unmapped.isNotEmpty()) {
@@ -389,7 +389,7 @@ object ConfigUpgradeManager {
     ) {
         File(backupFolder, "upgrade-note.txt").writeText(
             buildString {
-                appendLine("CyuClear 配置已迁移到 1.4.0")
+                appendLine("CyuClear 配置已迁移到 1.4.5")
                 appendLine("旧配置文件保存在当前文件夹")
                 appendLine("保留自定义配置: $migratedCount 项")
                 appendLine("未识别配置: ${unmapped.size} 项")
@@ -436,9 +436,9 @@ object ConfigUpgradeManager {
         val backupRoot = File(dataFolder, "backup")
         check(backupRoot.exists() || backupRoot.mkdirs()) { "无法创建配置备份目录" }
         val timestamp = SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale.ROOT).format(Date())
-        var folder = File(backupRoot, "1.4.0-$timestamp")
+        var folder = File(backupRoot, "1.4.5-$timestamp")
         var index = 2
-        while (folder.exists()) folder = File(backupRoot, "1.4.0-$timestamp-${index++}")
+        while (folder.exists()) folder = File(backupRoot, "1.4.5-$timestamp-${index++}")
         check(folder.mkdirs()) { "无法创建备份目录 ${folder.path}" }
         return folder
     }

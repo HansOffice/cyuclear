@@ -291,26 +291,28 @@ object HotspotMenu : Listener {
         } ?: Material.STONE
         return ItemStack(material).apply {
             itemMeta = itemMeta?.also { meta ->
-                meta.setDisplayName(ColorUtils.color("&b${hotspot.world} &f${hotspot.chunkX}, ${hotspot.chunkZ}"))
+                meta.setDisplayName(ColorUtils.color("&#38BDF8${hotspot.world} &#D7DEE8${hotspot.chunkX}, ${hotspot.chunkZ}"))
                 meta.lore = if (isEn) {
                     listOf(
-                        "&7Status: &f${hotspot.state.display}",
-                        "&7Recent Count: &fItems ${hotspot.itemCount} &8| &fEntities ${hotspot.entityCount}",
-                        "&7Trigger Rate: &fItems ${hotspot.itemTriggerRate}/s &8| &fEntities ${hotspot.entityTriggerRate}/s",
-                        "&7Trigger Count: &f${hotspot.triggerCount}",
-                        "&7Last Seen: &f${formatTime(hotspot.lastSeenAt)}",
+                        "&#8A96A8Status &#D7DEE8${hotspot.state.display}",
+                        "&#8A96A8Recent Count &#8A96A8Items &#D7DEE8${hotspot.itemCount} &#5B6472| &#8A96A8Entities &#D7DEE8${hotspot.entityCount}",
+                        "&#8A96A8Trigger Rate &#8A96A8Items &#D7DEE8${hotspot.itemTriggerRate}/s &#5B6472| &#8A96A8Entities &#D7DEE8${hotspot.entityTriggerRate}/s",
+                        "&#8A96A8Trigger Count &#D7DEE8${hotspot.triggerCount}",
+                        "&#8A96A8Last Seen &#D7DEE8${formatTime(hotspot.lastSeenAt)}",
                         "",
-                        "&fLeft-Click to inspect"
+                        "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                        "&#D7DEE8› &#8A96A8Left-Click to inspect"
                     )
                 } else {
                     listOf(
-                        "&7状态: &f${hotspot.state.display}",
-                        "&7最近数量: &f掉落物 ${hotspot.itemCount} &8| &f实体 ${hotspot.entityCount}",
-                        "&7近期触发: &f掉落物 ${hotspot.itemTriggerRate}/秒 &8| &f实体 ${hotspot.entityTriggerRate}/秒",
-                        "&7触发次数: &f${hotspot.triggerCount}",
-                        "&7最近活动: &f${formatTime(hotspot.lastSeenAt)}",
+                        "&#8A96A8状态 &#D7DEE8${hotspot.state.display}",
+                        "&#8A96A8最近数量 &#8A96A8掉落物 &#D7DEE8${hotspot.itemCount} &#5B6472| &#8A96A8实体 &#D7DEE8${hotspot.entityCount}",
+                        "&#8A96A8近期触发 &#8A96A8掉落物 &#D7DEE8${hotspot.itemTriggerRate}/秒 &#5B6472| &#8A96A8实体 &#D7DEE8${hotspot.entityTriggerRate}/秒",
+                        "&#8A96A8触发次数 &#D7DEE8${hotspot.triggerCount}",
+                        "&#8A96A8最近活动 &#D7DEE8${formatTime(hotspot.lastSeenAt)}",
                         "",
-                        "&f左键查看"
+                        "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                        "&#D7DEE8› &#8A96A8左键查看详情"
                     )
                 }.map(ColorUtils::color)
             }
@@ -327,32 +329,32 @@ object HotspotMenu : Listener {
         } ?: Material.STONE
         return ItemStack(material).apply {
             itemMeta = itemMeta?.also { meta ->
-                meta.setDisplayName(ColorUtils.color("&b${hotspot.world} &f${hotspot.chunkX}, ${hotspot.chunkZ}"))
+                meta.setDisplayName(ColorUtils.color("&#38BDF8${hotspot.world} &#D7DEE8${hotspot.chunkX}, ${hotspot.chunkZ}"))
                 meta.lore = if (isEn) {
                     listOf(
-                        "&7Status: &f${hotspot.state.display}",
-                        "&7Recent Count: &fItems ${hotspot.itemCount} &8| &fEntities ${hotspot.entityCount}",
-                        "&7Trigger Rate: &fItems ${hotspot.itemTriggerRate}/s &8| &fEntities ${hotspot.entityTriggerRate}/s",
-                        if (hotspot.itemSubject.isNotEmpty()) "&7Item Subject: &f${hotspot.itemSubject}" else "",
-                        if (hotspot.entitySubject.isNotEmpty()) "&7Entity Subject: &f${hotspot.entitySubject}" else "",
-                        "&7First Seen: &f${formatTime(hotspot.firstSeenAt)}",
-                        "&7Last Seen: &f${formatTime(hotspot.lastSeenAt)}",
-                        "&7Cleanup Stats: &f${hotspot.cleanupRuns} runs &8| &fItems ${hotspot.cleanedItems} &8| &fEntities ${hotspot.cleanedEntities}",
-                        "&7Last Process: &f${hotspot.lastProcessMillis}ms",
-                        "&7Trigger Count: &f${hotspot.triggerCount}"
+                        "&#8A96A8Status &#D7DEE8${hotspot.state.display}",
+                        "&#8A96A8Recent Count &#8A96A8Items &#D7DEE8${hotspot.itemCount} &#5B6472| &#8A96A8Entities &#D7DEE8${hotspot.entityCount}",
+                        "&#8A96A8Trigger Rate &#8A96A8Items &#D7DEE8${hotspot.itemTriggerRate}/s &#5B6472| &#8A96A8Entities &#D7DEE8${hotspot.entityTriggerRate}/s",
+                        if (hotspot.itemSubject.isNotEmpty()) "&#8A96A8Item Subject &#D7DEE8${hotspot.itemSubject}" else "",
+                        if (hotspot.entitySubject.isNotEmpty()) "&#8A96A8Entity Subject &#D7DEE8${hotspot.entitySubject}" else "",
+                        "&#8A96A8First Seen &#D7DEE8${formatTime(hotspot.firstSeenAt)}",
+                        "&#8A96A8Last Seen &#D7DEE8${formatTime(hotspot.lastSeenAt)}",
+                        "&#8A96A8Cleanup Stats &#D7DEE8${hotspot.cleanupRuns} runs &#5B6472| &#8A96A8Items &#D7DEE8${hotspot.cleanedItems} &#5B6472| &#8A96A8Entities &#D7DEE8${hotspot.cleanedEntities}",
+                        "&#8A96A8Last Process &#D7DEE8${hotspot.lastProcessMillis}ms",
+                        "&#8A96A8Trigger Count &#D7DEE8${hotspot.triggerCount}"
                     )
                 } else {
                     listOf(
-                        "&7状态: &f${hotspot.state.display}",
-                        "&7最近数量: &f掉落物 ${hotspot.itemCount} &8| &f实体 ${hotspot.entityCount}",
-                        "&7近期触发: &f掉落物 ${hotspot.itemTriggerRate}/秒 &8| &f实体 ${hotspot.entityTriggerRate}/秒",
-                        if (hotspot.itemSubject.isNotEmpty()) "&7掉落物触发对象: &f${hotspot.itemSubject}" else "",
-                        if (hotspot.entitySubject.isNotEmpty()) "&7实体触发对象: &f${hotspot.entitySubject}" else "",
-                        "&7首次记录: &f${formatTime(hotspot.firstSeenAt)}",
-                        "&7最近活动: &f${formatTime(hotspot.lastSeenAt)}",
-                        "&7清理记录: &f${hotspot.cleanupRuns} 次 &8| &f掉落物 ${hotspot.cleanedItems} &8| &f实体 ${hotspot.cleanedEntities}",
-                        "&7最近处理: &f${hotspot.lastProcessMillis}ms",
-                        "&7触发次数: &f${hotspot.triggerCount}"
+                        "&#8A96A8状态 &#D7DEE8${hotspot.state.display}",
+                        "&#8A96A8最近数量 &#8A96A8掉落物 &#D7DEE8${hotspot.itemCount} &#5B6472| &#8A96A8实体 &#D7DEE8${hotspot.entityCount}",
+                        "&#8A96A8近期触发 &#8A96A8掉落物 &#D7DEE8${hotspot.itemTriggerRate}/秒 &#5B6472| &#8A96A8实体 &#D7DEE8${hotspot.entityTriggerRate}/秒",
+                        if (hotspot.itemSubject.isNotEmpty()) "&#8A96A8掉落物触发对象 &#D7DEE8${hotspot.itemSubject}" else "",
+                        if (hotspot.entitySubject.isNotEmpty()) "&#8A96A8实体触发对象 &#D7DEE8${hotspot.entitySubject}" else "",
+                        "&#8A96A8首次记录 &#D7DEE8${formatTime(hotspot.firstSeenAt)}",
+                        "&#8A96A8最近活动 &#D7DEE8${formatTime(hotspot.lastSeenAt)}",
+                        "&#8A96A8清理记录 &#D7DEE8${hotspot.cleanupRuns} 次 &#5B6472| &#8A96A8掉落物 &#D7DEE8${hotspot.cleanedItems} &#5B6472| &#8A96A8实体 &#D7DEE8${hotspot.cleanedEntities}",
+                        "&#8A96A8最近处理 &#D7DEE8${hotspot.lastProcessMillis}ms",
+                        "&#8A96A8触发次数 &#D7DEE8${hotspot.triggerCount}"
                     )
                 }.filter { it.isNotEmpty() }.map(ColorUtils::color)
             }
@@ -372,8 +374,8 @@ object HotspotMenu : Listener {
 
     private fun drawListButtons(inventory: Inventory, page: Int, totalPages: Int, empty: Boolean) {
         val isEn = Language.isEnglish
-        setLore(inventory, listTemplate.slots('P'), if (page > 0) listOf(if (isEn) "&eLeft-Click for prev page" else "&e左键上一页") else listOf(if (isEn) "&8First page" else "&8已经是第一页"))
-        setLore(inventory, listTemplate.slots('N'), if (page < totalPages - 1) listOf(if (isEn) "&eLeft-Click for next page" else "&e左键下一页") else listOf(if (isEn) "&8Last page" else "&8已经是最后一页"))
+        setLore(inventory, listTemplate.slots('P'), if (page > 0) listOf(if (isEn) "&#D7DEE8› &#8A96A8Left-Click for prev page" else "&#D7DEE8› &#8A96A8左键上一页") else listOf(if (isEn) "&#5B6472First page" else "&#5B6472已经是第一页"))
+        setLore(inventory, listTemplate.slots('N'), if (page < totalPages - 1) listOf(if (isEn) "&#D7DEE8› &#8A96A8Left-Click for next page" else "&#D7DEE8› &#8A96A8左键下一页") else listOf(if (isEn) "&#5B6472Last page" else "&#5B6472已经是最后一页"))
         if (empty) setEmpty(inventory, listTemplate.slots('*').firstOrNull(), if (isEn) "No hotspot chunks tracked" else "当前没有热点区块")
     }
 
@@ -384,15 +386,15 @@ object HotspotMenu : Listener {
     ) {
         val isEn = Language.isEnglish
         val cleanupText = if (confirmAction == ConfirmAction.CLEANUP) {
-            if (isEn) "&cClick again to confirm sweep" else "&c再次左键确认清理"
+            if (isEn) "&#FBBF24› Click again to confirm sweep" else "&#FBBF24› 再次左键确认清理"
         } else {
-            if (isEn) "&eLeft-Click to sweep this chunk" else "&e左键清理当前区块"
+            if (isEn) "&#D7DEE8› &#8A96A8Left-Click to sweep this chunk" else "&#D7DEE8› &#8A96A8左键清理当前区块"
         }
         setLore(inventory, detailTemplate.slots('C'), listOf(cleanupText))
         val releaseText = when {
-            confirmAction == ConfirmAction.RELEASE -> if (isEn) "&cClick again to confirm release" else "&c再次左键解除熔断"
-            hotspot.state == HotspotTracker.State.BREAKER -> if (isEn) "&eLeft-Click to release breaker" else "&e左键解除熔断"
-            else -> if (isEn) "&8No active breaker" else "&8当前没有熔断"
+            confirmAction == ConfirmAction.RELEASE -> if (isEn) "&#F87171› Click again to confirm release" else "&#F87171› 再次左键解除熔断"
+            hotspot.state == HotspotTracker.State.BREAKER -> if (isEn) "&#D7DEE8› &#8A96A8Left-Click to release breaker" else "&#D7DEE8› &#8A96A8左键解除熔断"
+            else -> if (isEn) "&#5B6472No active breaker" else "&#5B6472当前没有熔断"
         }
         setLore(inventory, detailTemplate.slots('R'), listOf(releaseText))
     }
@@ -400,7 +402,7 @@ object HotspotMenu : Listener {
     private fun setEmpty(inventory: Inventory, slot: Int?, text: String) {
         if (slot == null) return
         val item = ItemStack(Material.matchMaterial("PAPER") ?: Material.STONE)
-        item.itemMeta = item.itemMeta?.also { meta -> meta.setDisplayName(ColorUtils.color("&7$text")) }
+        item.itemMeta = item.itemMeta?.also { meta -> meta.setDisplayName(ColorUtils.color("&#8A96A8$text")) }
         inventory.setItem(slot, item)
     }
 

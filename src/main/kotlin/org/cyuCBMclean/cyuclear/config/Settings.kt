@@ -398,7 +398,7 @@ object Settings {
         private set
     var craftEngineExcludeFromPanicCount: Boolean = true
         private set
-    var entityPokemonEnabled: Boolean = true
+    var entityPokemonEnabled: Boolean = false
         private set
     var entityPokemonIgnorePlayerOwned: Boolean = true
         private set
@@ -774,7 +774,7 @@ object Settings {
         entityCraftEngineIdOnly = config.getBoolean("hooks.craft-engine.id-only", false)
         craftEngineExcludeFromChunkLimit = config.getBoolean("hooks.craft-engine.exclude-from-chunk-limit", true)
         craftEngineExcludeFromPanicCount = config.getBoolean("hooks.craft-engine.exclude-from-panic-count", true)
-        entityPokemonEnabled = getBoolean("hooks.pokemon.enabled", "modules.entities.pokemon.enabled", true)
+        entityPokemonEnabled = getBoolean("hooks.pokemon.enabled", "modules.entities.pokemon.enabled", false)
         entityPokemonRulesPresent = TargetRuleCapabilities.hasPokemonRules(entityRuleGroups) || namedRules.entityUsesPokemon
         entityPokemonFullRulesRequired = TargetRuleCapabilities.requiresFullPokemonRules(entityRuleGroups) || namedRules.entityRequiresFullPokemon
         entityPokemonLightRules = TargetRuleCapabilities.collectLightPokemonRules(entityRuleGroups) + namedRules.entityLightPokemonRules

@@ -31,9 +31,39 @@ object ColorUtils {
         0xFFFFFF to ChatColor.WHITE
     )
 
+    private val tagMap = mapOf(
+        "black" to "&0",
+        "dark_blue" to "&1",
+        "dark_green" to "&2",
+        "dark_aqua" to "&3",
+        "dark_red" to "&4",
+        "dark_purple" to "&5",
+        "gold" to "&6",
+        "gray" to "&7",
+        "dark_gray" to "&8",
+        "blue" to "&9",
+        "green" to "&a",
+        "aqua" to "&b",
+        "red" to "&c",
+        "light_purple" to "&d",
+        "yellow" to "&e",
+        "white" to "&f",
+        "bold" to "&l",
+        "italic" to "&o",
+        "underlined" to "&n",
+        "strikethrough" to "&m",
+        "reset" to "&r"
+    )
+
     @JvmStatic
     fun color(text: String): String {
-        var result = applyGradients(text)
+        if (text.isEmpty()) return ""
+        var current = text
+        for ((tag, code) in tagMap) {
+            current = current.replace("<$tag>", code, ignoreCase = true)
+                .replace("</$tag>", "", ignoreCase = true)
+        }
+        var result = applyGradients(current)
         val matcher = hexPattern.matcher(result)
         val buffer = StringBuffer()
 

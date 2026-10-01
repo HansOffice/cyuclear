@@ -1,7 +1,7 @@
 # CyuClear - 恢复中心物品菜单
 # 展示指定清理批次中备份的物品快照并支持管理员取回
 
-title: "&8恢复批次 #{run} ({page}/{total})"
+title: "<gradient:#58C7FF:#7DE2B8><bold>CyuClear</bold></gradient> <dark_gray>|</dark_gray> <gray>恢复批次 #{run} ({page}/{total})</gray>"
 layout:
   - "#########"
   - "#*******#"
@@ -12,20 +12,28 @@ items:
   "#":
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&r"
+    name: " "
   "P":
     material: BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&e上一页"
+    name: "&#7DD3FC&l‹ 上一页"
+    lore:
+      - "&#8A96A8翻到上一页"
   "N":
     material: BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&e下一页"
+    name: "&#7DD3FC&l下一页 ›"
+    lore:
+      - "&#8A96A8翻到下一页"
   "B":
     material: CYAN_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&e返回批次列表"
+    name: "&#FBBF24&l返回批次列表"
+    lore:
+      - "&#8A96A8返回清理批次历史"
   "X":
     material: RED_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&c关闭"
+    name: "&#F87171&l关闭"
+    lore:
+      - "&#8A96A8关闭当前界面"

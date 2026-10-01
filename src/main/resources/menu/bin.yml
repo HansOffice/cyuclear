@@ -1,7 +1,7 @@
 # CyuClear - 虚空垃圾桶菜单
 # 玩家失物招领与暂存箱，支持翻页浏览与一键安全取回
 
-title: "&8CYUCLEAR | 虚空垃圾桶 ({page}/{total})"
+title: "<gradient:#58C7FF:#7DE2B8><bold>CyuClear</bold></gradient> <dark_gray>|</dark_gray> <gray>虚空垃圾桶 ({page}/{total})</gray>"
 layout:
   - "#########"
   - "#*******#"
@@ -13,26 +13,31 @@ items:
   "#":
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&r"
+    name: " "
   "P":
     material: BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&e&l⬅ 上一页"
+    name: "&#7DD3FC&l‹ 上一页"
+    lore:
+      - "&#8A96A8翻到上一页"
     actions:
       - "[prev_page]"
       - "[sound] UI_BUTTON_CLICK 1.0 1.0"
   "N":
     material: BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&e&l下一页 ➡"
+    name: "&#7DD3FC&l下一页 ›"
+    lore:
+      - "&#8A96A8翻到下一页"
     actions:
       - "[next_page]"
       - "[sound] UI_BUTTON_CLICK 1.0 1.0"
   "X":
-    material: CYAN_STAINED_GLASS_PANE
+    material: RED_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&c&l关闭菜单"
+    name: "&#F87171&l关闭"
+    lore:
+      - "&#8A96A8关闭当前界面"
     actions:
       - "[close]"
-      - "[title] &c虚空垃圾桶已关闭;&7请注意清理倒计时"
       - "[sound] BLOCK_CHEST_CLOSE 1.0 1.0"

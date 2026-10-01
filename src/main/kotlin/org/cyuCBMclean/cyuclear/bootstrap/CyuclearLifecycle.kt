@@ -170,22 +170,30 @@ internal object CyuclearLifecycle {
                 })
             }
         }
+        val mmHooked = Settings.entityMythicEnabled && pluginEnabled("MythicMobs")
+        val ceHooked = Settings.entityCraftEngineEnabled && (pluginEnabled("CraftEngine") || pluginEnabled("CE"))
+        val pokeHooked = Settings.entityPokemonEnabled
         console.sendMessage(if (isEn) {
-            "§7 ▸ §fHooks §bPlaceholderAPI ${hookText(papiHooked)} §8| §fMythicMobs ${hookText(Settings.entityMythicEnabled && pluginEnabled("MythicMobs"))} §8| §fCraftEngine ${hookText(Settings.entityCraftEngineEnabled && (pluginEnabled("CraftEngine") || pluginEnabled("CE")))} §8| §fPokemon ${if (Settings.entityPokemonEnabled) "Enabled" else "Disabled"}"
+            "§7 ▸ §fHooks §fPlaceholderAPI ${if (papiHooked) "§bConnected" else "§7None"} §8| §fMythicMobs ${if (mmHooked) "§bConnected" else "§7None"} §8| §fCraftEngine ${if (ceHooked) "§bConnected" else "§7None"} §8| §fPokemon ${if (pokeHooked) "§bEnabled" else "§7Disabled"}"
         } else {
-            "§7 ▸ §fHook §bPlaceholderAPI ${hookText(papiHooked)} §8| §fMythicMobs ${hookText(Settings.entityMythicEnabled && pluginEnabled("MythicMobs"))} §8| §fCraftEngine ${hookText(Settings.entityCraftEngineEnabled && (pluginEnabled("CraftEngine") || pluginEnabled("CE")))} §8| §f宝可梦 ${if (Settings.entityPokemonEnabled) "已开启" else "未开启"}"
+            "§7 ▸ §fHook §fPlaceholderAPI ${if (papiHooked) "§b已接入" else "§7未接入"} §8| §fMythicMobs ${if (mmHooked) "§b已接入" else "§7未接入"} §8| §fCraftEngine ${if (ceHooked) "§b已接入" else "§7未接入"} §8| §f宝可梦 ${if (pokeHooked) "§b已开启" else "§7未开启"}"
         })
+        val stackerNames = StackerBridge.activeNames()
+        val stackerText = if (stackerNames.isNotEmpty()) "§b" + stackerNames.joinToString(" / ") else (if (isEn) "§7None" else "§7未接入")
         console.sendMessage(if (isEn) {
-            "§7 ▸ §fStacker §b${StackerBridge.activeNames().takeIf { it.isNotEmpty() }?.joinToString(" / ") ?: "None"} §8| §fGroup §b331910315"
+            "§7 ▸ §fStacker $stackerText §8| §fGroup §b331910315"
         } else {
-            "§7 ▸ §f堆叠 §b${StackerBridge.activeNames().takeIf { it.isNotEmpty() }?.joinToString(" / ") ?: "未接入"} §8| §f交流群 §b331910315"
+            "§7 ▸ §f堆叠 $stackerText §8| §f交流群 §b331910315"
         })
         console.sendMessage("§f")
         if (ActivationService.isActive()) {
             console.sendMessage(if (isEn) "§7 ▸ §fStatus §bReady" else "§7 ▸ §f状态 §b启动完成")
         } else {
-            console.sendMessage(if (isEn) "§7 ▸ §fStatus §cSafe Disabled" else "§7 ▸ §f状态 §c安全关闭")
-            console.sendMessage(Language.get("startup-disabled-console"))
+            console.sendMessage(if (isEn) {
+                "§7 ▸ §fStatus §7Standby §8(Disabled in config.yml, run /cc reload to enable)"
+            } else {
+                "§7 ▸ §f状态 §7安全就绪 §8(未开启，在 config.yml 启用 enabled 后重载)"
+            })
         }
         console.sendMessage("§8--------------------------------------------------")
         console.sendMessage("")
@@ -233,11 +241,6 @@ internal object CyuclearLifecycle {
             Settings.ChunkEntityLimitMode.SAFE -> if (isEn) "SAFE" else "安全模式"
             Settings.ChunkEntityLimitMode.STRICT -> if (isEn) "STRICT" else "严格模式"
         }
-    }
-
-    private fun hookText(enabled: Boolean): String {
-        val isEn = Language.isEnglish
-        return if (enabled) (if (isEn) "Connected" else "已接入") else (if (isEn) "None" else "未接入")
     }
 
     private fun pluginEnabled(name: String): Boolean = Bukkit.getPluginManager().isPluginEnabled(name)

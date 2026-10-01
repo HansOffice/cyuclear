@@ -1,7 +1,7 @@
 # CyuClear - 管理中心菜单
 # 集成清理规则、批次历史、热点区块、预演与紧急停机管理
 
-title: "&8CYUCLEAR | 管理中心"
+title: "<gradient:#58C7FF:#7DE2B8><bold>CyuClear</bold></gradient> <dark_gray>|</dark_gray> <gray>管理中心</gray>"
 layout:
   - "#########"
   - "# R H T #"
@@ -12,74 +12,85 @@ items:
   "#":
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&r"
+    name: " "
   "R":
     material: BOOK
-    name: "&b清理规则"
+    name: "&#38BDF8&l清理规则"
     lore:
-      - "&7掉落物、实体与实时拦截"
+      - "&#8A96A8管理掉落物、实体与实时拦截名单"
       - ""
-      - "&f左键进入"
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键进入设置"
   "H":
     material: CHEST
-    name: "&b清理批次"
+    name: "&#38BDF8&l清理批次"
     lore:
-      - "&7查看已完成清理与恢复物品"
+      - "&#8A96A8查看已完成清理与恢复物品"
       - ""
-      - "&f左键进入"
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键查看批次列表"
   "T":
     material: COMPASS
-    name: "&b热点区块"
+    name: "&#38BDF8&l热点区块"
     lore:
-      - "&7查看区块限流与熔断"
+      - "&#8A96A8查看区块限流、熔断与高负载监控"
       - ""
-      - "&f左键进入"
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键查看热点列表"
   "P":
     material: SPYGLASS
     fallback-material: COMPASS
-    name: "&b清理预演"
+    name: "&#34D399&l清理预演"
     lore:
-      - "&7只统计，不会删除实体或掉落物"
+      - "&#8A96A8预演计算清理目标，不删除实体或掉落物"
       - ""
-      - "&f左键开始"
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键开始预演"
   "A":
     material: TNT
-    name: "&c立即清理"
+    name: "&#FBBF24&l立即清理"
     lore:
-      - "&7立即清理已启用目标"
+      - "&#8A96A8立即全服清理已启用的目标"
       - ""
-      - "&f左键开始"
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键发起清理"
   "K":
     material: BARRIER
-    name: "&c停止清理"
+    name: "&#F87171&l停止清理"
     lore:
-      - "&7停止当前清理任务"
+      - "&#8A96A8紧急停止当前正在执行的清理任务"
       - ""
-      - "&f左键停止"
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键紧急停止"
   "S":
     material: COMPASS
-    name: "&b运行状态"
+    name: "&#38BDF8&l运行状态"
     lore:
-      - "&7查看扫描预算、索引与 Hook"
+      - "&#8A96A8查看扫描预算、空间索引与联动状态"
       - ""
-      - "&f左键发送到聊天栏"
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键发送至聊天栏"
   "D":
     material: MAP
     fallback-material: PAPER
-    name: "&b配置检查"
+    name: "&#38BDF8&l配置检查"
     lore:
-      - "&7检查配置与菜单"
+      - "&#8A96A8自检全套配置文件、规则与菜单完整性"
       - ""
-      - "&f左键发送到聊天栏"
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键发送自检报告"
   "C":
     material: WRITABLE_BOOK
     fallback-material: BOOK
-    name: "&b配置快照"
+    name: "&#38BDF8&l配置快照"
     lore:
-      - "&7把当前配置另存一份"
+      - "&#8A96A8将当前全套配置打包备份一份快照"
       - ""
-      - "&f左键创建"
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键创建备份快照"
   "X":
-    material: CYAN_STAINED_GLASS_PANE
+    material: RED_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&c关闭"
+    name: "&#F87171&l关闭"
+    lore:
+      - "&#8A96A8关闭当前界面"

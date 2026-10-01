@@ -139,17 +139,19 @@ object AdminMenu : Listener {
             template.slots('H'),
             if (isEn) {
                 listOf(
-                    "&7Current Scan: &f$runningText",
-                    "&7Recent Run: &f${active?.id ?: latest?.id ?: noneText}",
+                    "&#8A96A8Current Scan &#D7DEE8$runningText",
+                    "&#8A96A8Recent Run &#D7DEE8${active?.id ?: latest?.id ?: noneText}",
                     "",
-                    "&fLeft-Click to view runs & recovery"
+                    "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                    "&#D7DEE8› &#8A96A8Left-Click to view runs & recovery"
                 )
             } else {
                 listOf(
-                    "&7当前清理: &f$runningText",
-                    "&7最近批次: &f${active?.id ?: latest?.id ?: noneText}",
+                    "&#8A96A8当前清理 &#D7DEE8$runningText",
+                    "&#8A96A8最近批次 &#D7DEE8${active?.id ?: latest?.id ?: noneText}",
                     "",
-                    "&f左键查看记录与恢复物品"
+                    "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                    "&#D7DEE8› &#8A96A8左键查看记录与恢复物品"
                 )
             }
         )
@@ -158,17 +160,19 @@ object AdminMenu : Listener {
             template.slots('T'),
             if (isEn) {
                 listOf(
-                    "&7Hotspot Chunks: &f${hotspots.total}",
-                    "&7Active Breakers: &f${hotspots.breakers}",
+                    "&#8A96A8Hotspot Chunks &#D7DEE8${hotspots.total}",
+                    "&#8A96A8Active Breakers &#D7DEE8${hotspots.breakers}",
                     "",
-                    "&fLeft-Click to view hotspots"
+                    "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                    "&#D7DEE8› &#8A96A8Left-Click to view hotspots"
                 )
             } else {
                 listOf(
-                    "&7热点区块: &f${hotspots.total}",
-                    "&7正在熔断: &f${hotspots.breakers}",
+                    "&#8A96A8热点区块 &#D7DEE8${hotspots.total}",
+                    "&#8A96A8正在熔断 &#D7DEE8${hotspots.breakers}",
                     "",
-                    "&f左键查看热点"
+                    "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                    "&#D7DEE8› &#8A96A8左键查看热点列表"
                 )
             }
         )
@@ -177,15 +181,17 @@ object AdminMenu : Listener {
             template.slots('A'),
             if (isEn) {
                 listOf(
-                    "&7Immediately sweep all active targets",
+                    "&#8A96A8Immediately sweep all active targets",
                     "",
-                    if (holderConfirming(inventory, ConfirmAction.CLEANUP)) "&cClick again to confirm sweep" else "&fLeft-Click to start"
+                    "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                    if (holderConfirming(inventory, ConfirmAction.CLEANUP)) "&#FBBF24› Click again to confirm sweep" else "&#D7DEE8› &#8A96A8Left-Click to start"
                 )
             } else {
                 listOf(
-                    "&7立即清理所有已启用目标",
+                    "&#8A96A8立即全服清理已启用的目标",
                     "",
-                    if (holderConfirming(inventory, ConfirmAction.CLEANUP)) "&c再次左键确认清理" else "&f左键开始"
+                    "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                    if (holderConfirming(inventory, ConfirmAction.CLEANUP)) "&#FBBF24› 再次左键确认清理" else "&#D7DEE8› &#8A96A8左键发起清理"
                 )
             }
         )
@@ -194,15 +200,17 @@ object AdminMenu : Listener {
             template.slots('K'),
             if (isEn) {
                 listOf(
-                    "&7Cancel active cleanup task",
+                    "&#8A96A8Cancel active cleanup task",
                     "",
-                    if (holderConfirming(inventory, ConfirmAction.CANCEL)) "&cClick again to confirm stop" else "&fLeft-Click to stop"
+                    "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                    if (holderConfirming(inventory, ConfirmAction.CANCEL)) "&#F87171› Click again to confirm stop" else "&#D7DEE8› &#8A96A8Left-Click to stop"
                 )
             } else {
                 listOf(
-                    "&7停止当前清理任务",
+                    "&#8A96A8紧急停止当前正在执行的清理任务",
                     "",
-                    if (holderConfirming(inventory, ConfirmAction.CANCEL)) "&c再次左键确认停止" else "&f左键停止"
+                    "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                    if (holderConfirming(inventory, ConfirmAction.CANCEL)) "&#F87171› 再次左键确认停止" else "&#D7DEE8› &#8A96A8左键紧急停止"
                 )
             }
         )
@@ -211,15 +219,17 @@ object AdminMenu : Listener {
             template.slots('D'),
             if (isEn) {
                 listOf(
-                    "&7Diagnose configs, rules & menus",
+                    "&#8A96A8Diagnose configs, rules & menus",
                     "",
-                    "&fLeft-Click to diagnose"
+                    "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                    "&#D7DEE8› &#8A96A8Left-Click to diagnose"
                 )
             } else {
                 listOf(
-                    "&7检查配置、规则与菜单",
+                    "&#8A96A8自检全套配置文件、规则与菜单完整性",
                     "",
-                    "&f左键检查配置"
+                    "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                    "&#D7DEE8› &#8A96A8左键发送自检报告"
                 )
             }
         )

@@ -93,7 +93,11 @@ object MetricsService {
 
     private fun buildMetricsOutput(): String {
         val lastRun = CleanupRunManager.list(0, 1).first.firstOrNull()
-        val durationMillis = lastRun?.durationMillis ?: WindowScanner.lastTimeCost
+        val durationMillis = if (lastRun != null && lastRun.finishedAt >= lastRun.startedAt) {
+            lastRun.finishedAt - lastRun.startedAt
+        } else {
+            WindowScanner.lastTimeCost
+        }
         val durationMicros = durationMillis * 1000L
         val timestampSeconds = if (lastRun != null && lastRun.finishedAt > 0L) lastRun.finishedAt / 1000L else 0L
         val lastItems = lastRun?.removedItems ?: WindowScanner.lastClearedItems.toLong()

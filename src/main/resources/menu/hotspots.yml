@@ -1,7 +1,7 @@
 # CyuClear - 热点区块列表菜单
 # 监控全服高负载区块、实体堆积警报与熔断状态
 
-title: "&8CYUCLEAR | 热点区块 {page}/{total}"
+title: "<gradient:#58C7FF:#7DE2B8><bold>CyuClear</bold></gradient> <dark_gray>|</dark_gray> <gray>热点区块 ({page}/{total})</gray>"
 layout:
   - "#########"
   - "#*******#"
@@ -13,20 +13,28 @@ items:
   "#":
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&r"
+    name: " "
   "P":
     material: BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&e上一页"
+    name: "&#7DD3FC&l‹ 上一页"
+    lore:
+      - "&#8A96A8翻到上一页"
   "N":
     material: BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&e下一页"
+    name: "&#7DD3FC&l下一页 ›"
+    lore:
+      - "&#8A96A8翻到下一页"
   "B":
     material: CYAN_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&b返回管理中心"
+    name: "&#FBBF24&l返回管理中心"
+    lore:
+      - "&#8A96A8返回上级管理菜单"
   "X":
-    material: CYAN_STAINED_GLASS_PANE
+    material: RED_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&c关闭"
+    name: "&#F87171&l关闭"
+    lore:
+      - "&#8A96A8关闭当前界面"

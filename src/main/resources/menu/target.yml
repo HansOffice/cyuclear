@@ -1,7 +1,7 @@
 # CyuClear - 清理目标配置菜单
 # 切换掉落物或实体模块的名单模式、黑白名单与特征规则
 
-title: "&8CYUCLEAR | {target}"
+title: "<gradient:#58C7FF:#7DE2B8><bold>CyuClear</bold></gradient> <dark_gray>|</dark_gray> <gray>{target}</gray>"
 layout:
   - "#########"
   - "# T M S #"
@@ -13,40 +13,42 @@ items:
   "#":
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&r"
+    name: " "
   "T":
     material: LEVER
     fallback-material: REDSTONE_TORCH_ON
-    name: "&b模块开关"
+    name: "&#38BDF8&l模块开关"
   "M":
     material: COMPARATOR
     fallback-material: REDSTONE_COMPARATOR
-    name: "&b名单模式"
+    name: "&#38BDF8&l名单模式"
   "S":
     material: BOOK
-    name: "&b当前规则"
+    name: "&#38BDF8&l当前规则"
   "K":
     material: SHIELD
     fallback-material: IRON_CHESTPLATE
-    name: "&a保留名单"
+    name: "&#34D399&l保留名单"
   "C":
     material: FLINT_AND_STEEL
-    name: "&c清理名单"
+    name: "&#F87171&l清理名单"
   "A":
     material: NAME_TAG
     fallback-material: PAPER
-    name: "&a展示名保留"
+    name: "&#34D399&l展示名保留"
   "D":
     material: NAME_TAG
     fallback-material: PAPER
-    name: "&c展示名清理"
+    name: "&#F87171&l展示名清理"
   "G":
     material: BOOK
-    name: "&aLore 保留"
+    name: "&#34D399&lLore 保留"
   "H":
     material: BOOK
-    name: "&cLore 清理"
+    name: "&#F87171&lLore 清理"
   "B":
     material: CYAN_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&e返回"
+    name: "&#FBBF24&l返回上一级"
+    lore:
+      - "&#8A96A8返回上级设置菜单"

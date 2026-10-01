@@ -261,7 +261,7 @@ hooks:
   # 宝可梦模组联动 (Cobblemon / Pixelmon)
   pokemon:
     # 是否开启宝可梦实体与属性识别
-    enabled: true
+    enabled: false
 
 # 数量密度限制与熔断
 limits:

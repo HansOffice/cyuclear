@@ -1,7 +1,7 @@
 # CyuClear - 热点区块详情菜单
 # 展示区块超载状态、安全传送通道、临时熔断解除与现场清扫
 
-title: "&8CYUCLEAR | {world} {x}, {z}"
+title: "<gradient:#58C7FF:#7DE2B8><bold>CyuClear</bold></gradient> <dark_gray>|</dark_gray> <gray>{world} {x},{z}</gray>"
 layout:
   - "#########"
   - "####I####"
@@ -11,27 +11,40 @@ items:
   "#":
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&r"
+    name: " "
   "T":
     material: ENDER_PEARL
-    name: "&b前往该区块"
+    name: "&#38BDF8&l前往该区块"
     lore:
-      - "&7点击安全传送至该热点区块"
+      - "&#8A96A8安全传送至该热点区块中心"
+      - ""
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键传送"
   "R":
     material: REDSTONE_BLOCK
-    name: "&c解除熔断"
+    name: "&#F87171&l解除熔断"
     lore:
-      - "&7仅解除本次临时拦截"
+      - "&#8A96A8解除当前区块的临时生成拦截"
+      - ""
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键解除熔断"
   "C":
     material: HOPPER
-    name: "&e清理这个区块"
+    name: "&#FBBF24&l清理该区块"
     lore:
-      - "&7左键清理当前区块"
+      - "&#8A96A8立即清理当前热点区块内的目标"
+      - ""
+      - "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+      - "&#D7DEE8› &#8A96A8左键执行清理"
   "B":
     material: CYAN_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&b返回热点列表"
+    name: "&#FBBF24&l返回热点列表"
+    lore:
+      - "&#8A96A8返回热点区块监控列表"
   "X":
     material: RED_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&c关闭"
+    name: "&#F87171&l关闭"
+    lore:
+      - "&#8A96A8关闭当前界面"

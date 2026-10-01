@@ -93,8 +93,8 @@ object RuleMenu : Listener {
             val item = RuleConfigEditor.displayItem(target, domain, id)
             val meta = item.itemMeta
             if (meta != null) {
-                meta.setDisplayName(ColorUtils.color("&f$id"))
-                meta.lore = listOf(ColorUtils.color(if (Language.isEnglish) "&cLeft-Click to remove this entry" else "&c左键移除这一项"))
+                meta.setDisplayName(ColorUtils.color("&#D7DEE8$id"))
+                meta.lore = listOf(ColorUtils.color(if (Language.isEnglish) "&#F87171› Left-Click to remove this entry" else "&#F87171› 左键移除此项"))
                 item.itemMeta = meta
             }
             inventory.setItem(slot, item)
@@ -332,51 +332,57 @@ object RuleMenu : Listener {
         val isEn = Language.isEnglish
         setLore(inventory, mainTemplate.slots('I'), if (isEn) {
             listOf(
-                "&7State: ${enabledText(RuleConfigEditor.enabled(Target.ITEMS))}",
-                "&7Item IDs: &f${count(Target.ITEMS, ListDomain.MATERIAL, ListKind.KEEP)} Keep &8/ &f${count(Target.ITEMS, ListDomain.MATERIAL, ListKind.CLEAN)} Clean",
-                "&7Names: &f${count(Target.ITEMS, ListDomain.NAME, ListKind.KEEP)} Keep &8/ &f${count(Target.ITEMS, ListDomain.NAME, ListKind.CLEAN)} Clean",
+                "&#8A96A8State ${enabledText(RuleConfigEditor.enabled(Target.ITEMS))}",
+                "&#8A96A8Item IDs &#8A96A8Keep &#D7DEE8${count(Target.ITEMS, ListDomain.MATERIAL, ListKind.KEEP)} &#5B6472| &#8A96A8Clean &#D7DEE8${count(Target.ITEMS, ListDomain.MATERIAL, ListKind.CLEAN)}",
+                "&#8A96A8Names &#8A96A8Keep &#D7DEE8${count(Target.ITEMS, ListDomain.NAME, ListKind.KEEP)} &#5B6472| &#8A96A8Clean &#D7DEE8${count(Target.ITEMS, ListDomain.NAME, ListKind.CLEAN)}",
                 "",
-                "&fLeft-Click to configure"
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8Left-Click to configure"
             )
         } else {
             listOf(
-                "&7状态: ${enabledText(RuleConfigEditor.enabled(Target.ITEMS))}",
-                "&7物品 ID: &f${count(Target.ITEMS, ListDomain.MATERIAL, ListKind.KEEP)} 保留 &8/ &f${count(Target.ITEMS, ListDomain.MATERIAL, ListKind.CLEAN)} 清理",
-                "&7展示名: &f${count(Target.ITEMS, ListDomain.NAME, ListKind.KEEP)} 保留 &8/ &f${count(Target.ITEMS, ListDomain.NAME, ListKind.CLEAN)} 清理",
+                "&#8A96A8当前状态 ${enabledText(RuleConfigEditor.enabled(Target.ITEMS))}",
+                "&#8A96A8物品 ID &#8A96A8保留 &#D7DEE8${count(Target.ITEMS, ListDomain.MATERIAL, ListKind.KEEP)} &#5B6472| &#8A96A8清理 &#D7DEE8${count(Target.ITEMS, ListDomain.MATERIAL, ListKind.CLEAN)}",
+                "&#8A96A8展示名 &#8A96A8保留 &#D7DEE8${count(Target.ITEMS, ListDomain.NAME, ListKind.KEEP)} &#5B6472| &#8A96A8清理 &#D7DEE8${count(Target.ITEMS, ListDomain.NAME, ListKind.CLEAN)}",
                 "",
-                "&f左键进入设置"
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8左键进入设置"
             )
         })
         setLore(inventory, mainTemplate.slots('E'), if (isEn) {
             listOf(
-                "&7State: ${enabledText(RuleConfigEditor.enabled(Target.ENTITIES))}",
-                "&7Entity IDs: &f${count(Target.ENTITIES, ListDomain.MATERIAL, ListKind.KEEP)} Keep &8/ &f${count(Target.ENTITIES, ListDomain.MATERIAL, ListKind.CLEAN)} Clean",
+                "&#8A96A8State ${enabledText(RuleConfigEditor.enabled(Target.ENTITIES))}",
+                "&#8A96A8Entity IDs &#8A96A8Keep &#D7DEE8${count(Target.ENTITIES, ListDomain.MATERIAL, ListKind.KEEP)} &#5B6472| &#8A96A8Clean &#D7DEE8${count(Target.ENTITIES, ListDomain.MATERIAL, ListKind.CLEAN)}",
                 "",
-                "&fLeft-Click to configure"
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8Left-Click to configure"
             )
         } else {
             listOf(
-                "&7状态: ${enabledText(RuleConfigEditor.enabled(Target.ENTITIES))}",
-                "&7实体 ID: &f${count(Target.ENTITIES, ListDomain.MATERIAL, ListKind.KEEP)} 保留 &8/ &f${count(Target.ENTITIES, ListDomain.MATERIAL, ListKind.CLEAN)} 清理",
+                "&#8A96A8当前状态 ${enabledText(RuleConfigEditor.enabled(Target.ENTITIES))}",
+                "&#8A96A8实体 ID &#8A96A8保留 &#D7DEE8${count(Target.ENTITIES, ListDomain.MATERIAL, ListKind.KEEP)} &#5B6472| &#8A96A8清理 &#D7DEE8${count(Target.ENTITIES, ListDomain.MATERIAL, ListKind.CLEAN)}",
                 "",
-                "&f左键进入设置"
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8左键进入设置"
             )
         })
         setLore(inventory, mainTemplate.slots('R'), if (isEn) {
             listOf(
-                "&7State: ${enabledText(RuleConfigEditor.enabled(Target.REALTIME))}",
-                "&7Mode: &f${RuleConfigEditor.mode(Target.REALTIME)}",
-                "&7Lists: &f${count(Target.REALTIME, ListDomain.MATERIAL, ListKind.KEEP)} Keep &8/ &f${count(Target.REALTIME, ListDomain.MATERIAL, ListKind.CLEAN)} Intercept",
+                "&#8A96A8State ${enabledText(RuleConfigEditor.enabled(Target.REALTIME))}",
+                "&#8A96A8Mode &#D7DEE8${RuleConfigEditor.mode(Target.REALTIME)}",
+                "&#8A96A8Lists &#8A96A8Keep &#D7DEE8${count(Target.REALTIME, ListDomain.MATERIAL, ListKind.KEEP)} &#5B6472| &#8A96A8Intercept &#D7DEE8${count(Target.REALTIME, ListDomain.MATERIAL, ListKind.CLEAN)}",
                 "",
-                "&fLeft-Click to configure"
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8Left-Click to configure"
             )
         } else {
             listOf(
-                "&7状态: ${enabledText(RuleConfigEditor.enabled(Target.REALTIME))}",
-                "&7模式: &f${RuleConfigEditor.mode(Target.REALTIME)}",
-                "&7名单: &f${count(Target.REALTIME, ListDomain.MATERIAL, ListKind.KEEP)} 保留 &8/ &f${count(Target.REALTIME, ListDomain.MATERIAL, ListKind.CLEAN)} 拦截",
+                "&#8A96A8当前状态 ${enabledText(RuleConfigEditor.enabled(Target.REALTIME))}",
+                "&#8A96A8名单模式 &#D7DEE8${RuleConfigEditor.mode(Target.REALTIME)}",
+                "&#8A96A8实体名单 &#8A96A8保留 &#D7DEE8${count(Target.REALTIME, ListDomain.MATERIAL, ListKind.KEEP)} &#5B6472| &#8A96A8拦截 &#D7DEE8${count(Target.REALTIME, ListDomain.MATERIAL, ListKind.CLEAN)}",
                 "",
-                "&f左键进入设置"
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8左键进入设置"
             )
         })
     }
@@ -385,43 +391,47 @@ object RuleMenu : Listener {
         val isEn = Language.isEnglish
         setLore(inventory, targetTemplate.slots('T'), if (isEn) {
             listOf(
-                "&7State: ${enabledText(RuleConfigEditor.enabled(target))}",
+                "&#8A96A8State ${enabledText(RuleConfigEditor.enabled(target))}",
                 "",
-                "&fLeft-Click to toggle"
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8Left-Click to toggle"
             )
         } else {
             listOf(
-                "&7当前: ${enabledText(RuleConfigEditor.enabled(target))}",
+                "&#8A96A8当前状态 ${enabledText(RuleConfigEditor.enabled(target))}",
                 "",
-                "&f左键切换"
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8左键切换状态"
             )
         })
         setLore(inventory, targetTemplate.slots('M'), if (isEn) {
             listOf(
-                "&7Mode: &f${RuleConfigEditor.mode(target)}",
-                "&7Lists can configure match modes individually",
+                "&#8A96A8Mode &#D7DEE8${RuleConfigEditor.mode(target)}",
+                "&#5B6472Lists can configure match modes individually",
                 "",
-                "&fLeft-Click to switch mode"
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8Left-Click to switch mode"
             )
         } else {
             listOf(
-                "&7当前: &f${RuleConfigEditor.mode(target)}",
-                "&7各名单可单独调整匹配方式",
+                "&#8A96A8名单模式 &#D7DEE8${RuleConfigEditor.mode(target)}",
+                "&#5B6472各名单可单独配置匹配方式",
                 "",
-                "&f左键切换"
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8左键切换模式"
             )
         })
 
         setLore(inventory, targetTemplate.slots('S'), summaryLore(target))
-        setListButtonLore(inventory, targetTemplate.slots('K'), target, ListDomain.MATERIAL, ListKind.KEEP, if (isEn) "&aKept, will not be cleaned" else "&a保留，不会被清理")
-        setListButtonLore(inventory, targetTemplate.slots('C'), target, ListDomain.MATERIAL, ListKind.CLEAN, if (isEn) "&cCleaned on match" else "&c命中后会被清理")
+        setListButtonLore(inventory, targetTemplate.slots('K'), target, ListDomain.MATERIAL, ListKind.KEEP, if (isEn) "&#34D399Kept, will not be cleaned" else "&#34D399保留，不会被清理")
+        setListButtonLore(inventory, targetTemplate.slots('C'), target, ListDomain.MATERIAL, ListKind.CLEAN, if (isEn) "&#F87171Cleaned on match" else "&#F87171命中后会被清理")
         if (target == Target.ITEMS) {
-            setListButtonLore(inventory, targetTemplate.slots('A'), target, ListDomain.NAME, ListKind.KEEP, if (isEn) "&aKept when name matches" else "&a展示名命中后保留")
-            setListButtonLore(inventory, targetTemplate.slots('D'), target, ListDomain.NAME, ListKind.CLEAN, if (isEn) "&cCleaned when name matches" else "&c展示名命中后清理")
-            setListButtonLore(inventory, targetTemplate.slots('G'), target, ListDomain.LORE, ListKind.KEEP, if (isEn) "&aKept when lore matches" else "&aLore 命中后保留")
-            setListButtonLore(inventory, targetTemplate.slots('H'), target, ListDomain.LORE, ListKind.CLEAN, if (isEn) "&cCleaned when lore matches" else "&cLore 命中后清理")
+            setListButtonLore(inventory, targetTemplate.slots('A'), target, ListDomain.NAME, ListKind.KEEP, if (isEn) "&#34D399Kept when name matches" else "&#34D399展示名命中后保留")
+            setListButtonLore(inventory, targetTemplate.slots('D'), target, ListDomain.NAME, ListKind.CLEAN, if (isEn) "&#F87171Cleaned when name matches" else "&#F87171展示名命中后清理")
+            setListButtonLore(inventory, targetTemplate.slots('G'), target, ListDomain.LORE, ListKind.KEEP, if (isEn) "&#34D399Kept when lore matches" else "&#34D399Lore 命中后保留")
+            setListButtonLore(inventory, targetTemplate.slots('H'), target, ListDomain.LORE, ListKind.CLEAN, if (isEn) "&#F87171Cleaned when lore matches" else "&#F87171Lore 命中后清理")
         } else {
-            val unavailable = listOf(if (isEn) "&8Available for Item Rules only" else "&8仅掉落物规则可用")
+            val unavailable = listOf(if (isEn) "&#5B6472Available for Item Rules only" else "&#5B6472仅掉落物规则可用")
             setLore(inventory, targetTemplate.slots('A'), unavailable)
             setLore(inventory, targetTemplate.slots('D'), unavailable)
             setLore(inventory, targetTemplate.slots('G'), unavailable)
@@ -441,21 +451,21 @@ object RuleMenu : Listener {
         val isEn = Language.isEnglish
         val mode = RuleConfigEditor.matchMode(target, domain, kind)
         setLore(inventory, listTemplate.slots('P'), if (page > 0) {
-            if (isEn) listOf("&7Page &f${page + 1}&7", "", "&eLeft-Click for prev page")
-            else listOf("&7当前第 &f${page + 1} &7页", "", "&e左键上一页")
+            if (isEn) listOf("&#8A96A8Page &#D7DEE8${page + 1}", "", "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈", "&#D7DEE8› &#8A96A8Left-Click for prev page")
+            else listOf("&#8A96A8当前第 &#D7DEE8${page + 1} &#8A96A8页", "", "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈", "&#D7DEE8› &#8A96A8左键上一页")
         } else {
-            listOf(if (isEn) "&8First page" else "&8已经是第一页")
+            listOf(if (isEn) "&#5B6472First page" else "&#5B6472已经是第一页")
         })
         setLore(inventory, listTemplate.slots('N'), if (page < totalPages - 1) {
-            if (isEn) listOf("&7Page &f${page + 1}&7", "", "&eLeft-Click for next page")
-            else listOf("&7当前第 &f${page + 1} &7页", "", "&e左键下一页")
+            if (isEn) listOf("&#8A96A8Page &#D7DEE8${page + 1}", "", "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈", "&#D7DEE8› &#8A96A8Left-Click for next page")
+            else listOf("&#8A96A8当前第 &#D7DEE8${page + 1} &#8A96A8页", "", "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈", "&#D7DEE8› &#8A96A8左键下一页")
         } else {
-            listOf(if (isEn) "&8Last page" else "&8已经是最后一页")
+            listOf(if (isEn) "&#5B6472Last page" else "&#5B6472已经是最后一页")
         })
         setLore(inventory, listTemplate.slots('B'), if (isEn) {
-            listOf("&7Back to ${target.display} Settings", "", "&eLeft-Click to return")
+            listOf("&#8A96A8Back to ${target.display} Settings", "", "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈", "&#D7DEE8› &#8A96A8Left-Click to return")
         } else {
-            listOf("&7返回 ${target.display} 设置", "", "&e左键返回")
+            listOf("&#8A96A8返回 ${target.display} 设置", "", "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈", "&#D7DEE8› &#8A96A8左键返回")
         })
         if (empty) {
             val slot = listTemplate.slots('*').firstOrNull() ?: return
@@ -463,11 +473,12 @@ object RuleMenu : Listener {
             val item = ItemStack(material)
             val meta = item.itemMeta
             if (meta != null) {
-                meta.setDisplayName(ColorUtils.color(if (isEn) "&7List is currently empty" else "&7当前名单为空"))
+                meta.setDisplayName(ColorUtils.color(if (isEn) "&#8A96A8List is currently empty" else "&#8A96A8当前名单为空"))
                 meta.lore = listOf(
-                    ColorUtils.color(if (isEn) "&7Match Mode: &f$mode" else "&7匹配方式: &f$mode"),
+                    ColorUtils.color(if (isEn) "&#8A96A8Match Mode &#D7DEE8$mode" else "&#8A96A8匹配方式 &#D7DEE8$mode"),
                     ColorUtils.color(""),
-                    ColorUtils.color(if (isEn) "&eShift-Click inventory item to add" else "&eShift+点击背包物品添加")
+                    ColorUtils.color("&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"),
+                    ColorUtils.color(if (isEn) "&#D7DEE8› &#8A96A8Shift-Click inventory item to add" else "&#D7DEE8› &#8A96A8Shift+点击背包物品添加")
                 )
                 item.itemMeta = meta
             }
@@ -478,22 +489,22 @@ object RuleMenu : Listener {
     private fun summaryLore(target: Target): List<String> {
         val isEn = Language.isEnglish
         val material = if (isEn) {
-            "&7IDs: &f${count(target, ListDomain.MATERIAL, ListKind.KEEP)} Keep &8/ &f${count(target, ListDomain.MATERIAL, ListKind.CLEAN)} Clean"
+            "&#8A96A8IDs &#8A96A8Keep &#D7DEE8${count(target, ListDomain.MATERIAL, ListKind.KEEP)} &#5B6472| &#8A96A8Clean &#D7DEE8${count(target, ListDomain.MATERIAL, ListKind.CLEAN)}"
         } else {
-            "&7ID: &f${count(target, ListDomain.MATERIAL, ListKind.KEEP)} 保留 &8/ &f${count(target, ListDomain.MATERIAL, ListKind.CLEAN)} 清理"
+            "&#8A96A8ID &#8A96A8保留 &#D7DEE8${count(target, ListDomain.MATERIAL, ListKind.KEEP)} &#5B6472| &#8A96A8清理 &#D7DEE8${count(target, ListDomain.MATERIAL, ListKind.CLEAN)}"
         }
         if (target != Target.ITEMS) return listOf(material)
         return if (isEn) {
             listOf(
                 material,
-                "&7Names: &f${count(target, ListDomain.NAME, ListKind.KEEP)} Keep &8/ &f${count(target, ListDomain.NAME, ListKind.CLEAN)} Clean",
-                "&7Lore: &f${count(target, ListDomain.LORE, ListKind.KEEP)} Keep &8/ &f${count(target, ListDomain.LORE, ListKind.CLEAN)} Clean"
+                "&#8A96A8Names &#8A96A8Keep &#D7DEE8${count(target, ListDomain.NAME, ListKind.KEEP)} &#5B6472| &#8A96A8Clean &#D7DEE8${count(target, ListDomain.NAME, ListKind.CLEAN)}",
+                "&#8A96A8Lore &#8A96A8Keep &#D7DEE8${count(target, ListDomain.LORE, ListKind.KEEP)} &#5B6472| &#8A96A8Clean &#D7DEE8${count(target, ListDomain.LORE, ListKind.CLEAN)}"
             )
         } else {
             listOf(
                 material,
-                "&7展示名: &f${count(target, ListDomain.NAME, ListKind.KEEP)} 保留 &8/ &f${count(target, ListDomain.NAME, ListKind.CLEAN)} 清理",
-                "&7Lore: &f${count(target, ListDomain.LORE, ListKind.KEEP)} 保留 &8/ &f${count(target, ListDomain.LORE, ListKind.CLEAN)} 清理"
+                "&#8A96A8展示名 &#8A96A8保留 &#D7DEE8${count(target, ListDomain.NAME, ListKind.KEEP)} &#5B6472| &#8A96A8清理 &#D7DEE8${count(target, ListDomain.NAME, ListKind.CLEAN)}",
+                "&#8A96A8Lore &#8A96A8保留 &#D7DEE8${count(target, ListDomain.LORE, ListKind.KEEP)} &#5B6472| &#8A96A8清理 &#D7DEE8${count(target, ListDomain.LORE, ListKind.CLEAN)}"
             )
         }
     }
@@ -510,23 +521,27 @@ object RuleMenu : Listener {
         setLore(inventory, slots, if (isEn) {
             listOf(
                 description,
-                "&7Count: &f${count(target, domain, kind)}",
-                "&7Match: &f${RuleConfigEditor.matchMode(target, domain, kind)}",
-                if (domain == ListDomain.MATERIAL || target != Target.ITEMS) "" else "&7Rule: ${enabledText(RuleConfigEditor.domainEnabled(target, domain))}",
-                "&eLeft-Click to edit list",
-                "&eRight-Click to change match mode",
-                if (domain == ListDomain.MATERIAL || target != Target.ITEMS) "" else "&eShift+Left-Click to toggle rule"
-            )
+                "&#8A96A8Count &#D7DEE8${count(target, domain, kind)}",
+                "&#8A96A8Match &#D7DEE8${RuleConfigEditor.matchMode(target, domain, kind)}",
+                if (domain == ListDomain.MATERIAL || target != Target.ITEMS) "" else "&#8A96A8Rule ${enabledText(RuleConfigEditor.domainEnabled(target, domain))}",
+                "",
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8Left-Click to edit list",
+                "&#D7DEE8› &#8A96A8Right-Click to change match mode",
+                if (domain == ListDomain.MATERIAL || target != Target.ITEMS) "" else "&#D7DEE8› &#8A96A8Shift+Left-Click to toggle rule"
+            ).filter { it.isNotEmpty() }
         } else {
             listOf(
                 description,
-                "&7数量: &f${count(target, domain, kind)}",
-                "&7匹配: &f${RuleConfigEditor.matchMode(target, domain, kind)}",
-                if (domain == ListDomain.MATERIAL || target != Target.ITEMS) "" else "&7规则: ${enabledText(RuleConfigEditor.domainEnabled(target, domain))}",
-                "&e左键编辑名单",
-                "&e右键切换匹配方式",
-                if (domain == ListDomain.MATERIAL || target != Target.ITEMS) "" else "&eShift+左键开关规则"
-            )
+                "&#8A96A8数量 &#D7DEE8${count(target, domain, kind)}",
+                "&#8A96A8匹配 &#D7DEE8${RuleConfigEditor.matchMode(target, domain, kind)}",
+                if (domain == ListDomain.MATERIAL || target != Target.ITEMS) "" else "&#8A96A8规则 ${enabledText(RuleConfigEditor.domainEnabled(target, domain))}",
+                "",
+                "&#3A4352┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈",
+                "&#D7DEE8› &#8A96A8左键编辑名单",
+                "&#D7DEE8› &#8A96A8右键切换匹配方式",
+                if (domain == ListDomain.MATERIAL || target != Target.ITEMS) "" else "&#D7DEE8› &#8A96A8Shift+左键开关规则"
+            ).filter { it.isNotEmpty() }
         })
     }
 
@@ -535,7 +550,7 @@ object RuleMenu : Listener {
 
     private fun enabledText(enabled: Boolean): String {
         val isEn = Language.isEnglish
-        return if (enabled) (if (isEn) "&aON" else "&a开启") else (if (isEn) "&cOFF" else "&c关闭")
+        return if (enabled) (if (isEn) "&#34D399ON" else "&#34D399开启") else (if (isEn) "&#F87171OFF" else "&#F87171关闭")
     }
 
     private fun drawTemplate(inventory: Inventory, template: ConfiguredMenu, player: Player) {

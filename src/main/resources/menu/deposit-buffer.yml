@@ -1,7 +1,7 @@
 # CyuClear - 投放缓冲区菜单
 # 玩家向虚空垃圾桶投放物品的中转确认窗口，关闭自动退还背包
 
-title: "&8CYUCLEAR | 投放缓冲区 ({page}/{total})"
+title: "<gradient:#58C7FF:#7DE2B8><bold>CyuClear</bold></gradient> <dark_gray>|</dark_gray> <gray>投放缓冲区 ({page}/{total})</gray>"
 layout:
   - "#########"
   - "#*******#"
@@ -13,20 +13,28 @@ items:
   "#":
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&r"
+    name: " "
   "P":
     material: BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&e&l⬅ 上一页"
+    name: "&#7DD3FC&l‹ 上一页"
+    lore:
+      - "&#8A96A8翻到上一页"
   "N":
     material: BLUE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&e&l下一页 ➡"
+    name: "&#7DD3FC&l下一页 ›"
+    lore:
+      - "&#8A96A8翻到下一页"
   "X":
     material: ORANGE_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&c&l放回背包并关闭"
+    name: "&#F87171&l退还背包并关闭"
+    lore:
+      - "&#8A96A8将暂存物品全部退回背包"
   "C":
     material: LIME_STAINED_GLASS_PANE
     fallback-material: STAINED_GLASS_PANE
-    name: "&a&l确认投放"
+    name: "&#34D399&l确认投放"
+    lore:
+      - "&#8A96A8确认将当前暂存物品移入虚空垃圾桶"
