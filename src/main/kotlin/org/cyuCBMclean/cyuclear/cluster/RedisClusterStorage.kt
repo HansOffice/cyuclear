@@ -30,14 +30,14 @@ internal class RedisClusterStorage(
             "0" -> ClusterPulseResult.IdentityMismatch(raw.getOrNull(1)?.toString().orEmpty())
             "-1" -> ClusterPulseResult.ServerIdOccupied(raw.getOrNull(1)?.toString().orEmpty())
             "1" -> {
-                val seconds = raw.getOrNull(3)?.toString()?.toLongOrNull() ?: error("Redis TIME 秒值无效")
-                val micros = raw.getOrNull(4)?.toString()?.toLongOrNull() ?: error("Redis TIME 微秒值无效")
+                val seconds = raw.getOrNull(2)?.toString()?.toLongOrNull() ?: error("Redis TIME 秒值无效")
+                val micros = raw.getOrNull(3)?.toString()?.toLongOrNull() ?: error("Redis TIME 微秒值无效")
                 ClusterPulseResult.Accepted(
-                    memberCount = raw.getOrNull(2)?.toString()?.toIntOrNull() ?: 0,
+                    memberCount = raw.getOrNull(1)?.toString()?.toIntOrNull() ?: 0,
                     storageNowMillis = seconds * 1000L + micros / 1000L,
-                    leaderServerId = raw.getOrNull(5)?.toString().orEmpty(),
-                    runId = raw.getOrNull(6)?.toString().orEmpty(),
-                    executeAtMillis = raw.getOrNull(7)?.toString()?.toLongOrNull() ?: 0L
+                    leaderServerId = raw.getOrNull(4)?.toString().orEmpty(),
+                    runId = raw.getOrNull(5)?.toString().orEmpty(),
+                    executeAtMillis = raw.getOrNull(6)?.toString()?.toLongOrNull() ?: 0L
                 )
             }
             else -> error("Redis 返回了未知的跨服心跳状态")

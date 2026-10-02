@@ -78,7 +78,7 @@
 # %cyuclear_config_version%        - 配置架构版本
 
 # 配置文件内部版本，请勿手动修改
-config-version: 145
+config-version: 146
 config-layout: 7
 
 # 清理核心总开关：首次安装默认关闭，配置核对完毕后改为 true 并执行 /cc reload 启动

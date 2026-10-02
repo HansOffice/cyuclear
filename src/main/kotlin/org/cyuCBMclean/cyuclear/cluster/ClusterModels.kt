@@ -8,9 +8,12 @@ data class ClusterIdentity(
     val protocolVersion: Int,
     val serializationVersion: Int
 ) {
+    val clusterPlatform: String
+        get() = if (compatibilityDomain == "modern" && (platform == "paper" || platform == "folia")) "paper/folia" else platform
+
     fun canonical(): String = listOf(
         "plugin=$pluginVersion",
-        "platform=$platform",
+        "platform=$clusterPlatform",
         "minecraft=$minecraftVersion",
         "domain=$compatibilityDomain",
         "protocol=$protocolVersion",

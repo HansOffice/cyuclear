@@ -12,6 +12,7 @@
 cyuclear-bungee/
 cyuclear-velocity/
 cyuclear-proxy-common/
+代理端/
 .agents/
 AGENTS.md
 .gemini/

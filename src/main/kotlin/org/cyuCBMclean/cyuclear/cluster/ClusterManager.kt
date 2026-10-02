@@ -403,7 +403,7 @@ object ClusterManager {
     private fun currentIdentity(): ClusterIdentity = ClusterIdentity(
         pluginVersion = Cyuclear.instance.description.version,
         platform = BuildInfo.platformId,
-        minecraftVersion = Bukkit.getBukkitVersion(),
+        minecraftVersion = Bukkit.getBukkitVersion().substringBefore('-'),
         compatibilityDomain = BuildInfo.compatibilityDomain,
         protocolVersion = PROTOCOL_VERSION,
         serializationVersion = SERIALIZATION_VERSION

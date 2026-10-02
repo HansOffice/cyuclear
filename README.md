@@ -8,11 +8,13 @@
 
 | 服务端 | 使用文件 |
 |---|---|
-| Paper 1.13+ / Spigot | `cyuclear-paper-1.4.5.jar` |
-| Folia 1.20+ | `cyuclear-folia-1.4.5.jar` |
-| Bukkit / Spigot 1.8~1.12 | `cyuclear-legacy-1.4.5.jar` |
+| Paper 1.13+ / Spigot | `cyuclear-paper-1.4.6.jar` |
+| Folia 1.20+ | `cyuclear-folia-1.4.6.jar` |
+| Bukkit / Spigot 1.8~1.12 | `cyuclear-legacy-1.4.6.jar` |
+| Velocity 3.3+ | `cyuclear-velocity-1.0.1.jar` |
+| BungeeCord | `cyuclear-bungee-1.0.1.jar` |
 
-每台服务端按类型放一个运行包到 `plugins` 即可，首次启动自动生成配置；建议先用 `/cc preview` 预演无误后再开启总开关
+每台服务端按类型放一个运行包到 `plugins` 即可，首次启动自动生成配置；后端建议先用 `/cc preview` 预演无误后再开启总开关
 
 ## 常用入口
 
@@ -26,20 +28,25 @@
 | `/cc runs` | 查看历史清理批次与回滚 |
 | `/cc hotspots` | 查看实体密集热点区块 |
 | `/cc status` | 查看运行状态与预算占用 |
+| `/cc cluster` | 查看子服跨服集群状态 |
 | `/cc doctor` | 检查配置文件健康度 |
 | `/cc reload` | 重载运行设置 |
+| `/ccproxy status` | 查看代理端集群监控状态 |
+| `/ccproxy reload` | 重载代理端监控配置 |
+| `/ccproxy help` | 查看代理端帮助 |
 
 | 权限 | 用途 |
 |---|---|
 | `cyuclear.use` | 基础使用与虚空垃圾桶 |
 | `cyuclear.bin.deposit` | 投放物品进虚空垃圾桶 |
 | `cyuclear.admin` | 管理、清理、预演与重载 |
+| `cyuclear.proxy.admin` | 代理端集群监控与重载 |
 
 ## 配置文件
 
 | 文件 | 用途 |
 |---|---|
-| `config.yml` | 基础设置、周期、性能预算、世界范围与监控端点 |
+| `config.yml` | 基础设置、周期、性能预算与世界范围 |
 | `rules.yml` | 掉落物与实体黑白名单、启发式保护、区块硬限制与熔断 |
 | `areas.yml` | 世界与坐标区域独立规则 |
 | `void-bin.yml` | 虚空垃圾桶与个人投放缓冲区 |
@@ -47,6 +54,7 @@
 | `sounds.yml` | 提示音效 |
 | `lang/` | 双语语言文件（`zh_cn.yml` / `en_us.yml`） |
 | `menu/` | 字符画 GUI 菜单布局 |
+| `代理端/.../config.yml` | 代理端集群只读监控连接配置 |
 
 ## 源码结构
 
@@ -55,7 +63,7 @@ src/
 ├─ main/kotlin/org/cyuCBMclean/cyuclear/
 │  ├─ bootstrap/   启动装配与生命周期
 │  ├─ bridge/      PAPI 与可选插件联动
-│  ├─ cluster/     跨服状态同步
+│  ├─ cluster/     跨服状态同步与垃圾桶协同
 │  ├─ command/     命令鉴权、路由与补全
 │  ├─ config/      配置解析与校验
 │  ├─ listener/    事件监听与保护
@@ -69,17 +77,27 @@ src/
 ├─ paper/          Paper 实现
 ├─ folia/          Folia 区域线程实现
 └─ legacy/         Legacy 旧端实现
+
+代理端/
+├─ cyuclear-proxy-common/  跨服集群只读状态读取核心
+├─ cyuclear-bungee/        BungeeCord 代理端插件
+└─ cyuclear-velocity/      Velocity 代理端插件
 ```
 
 ## 构建
 
 ```bash
+# 后端多平台构建
 mvn package -Ppaper -DskipTests
 mvn package -Pfolia -DskipTests
 mvn package -Plegacy -DskipTests
+
+# 代理端构建
+mvn package -f 代理端/cyuclear-bungee/pom.xml -DskipTests
+mvn package -f 代理端/cyuclear-velocity/pom.xml -DskipTests
 ```
 
-构建产物位于 `target/`
+构建产物分别位于各工程的 `target/` 目录
 
 ## 许可
 
