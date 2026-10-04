@@ -8,9 +8,9 @@
 
 | 服务端 | 使用文件 |
 |---|---|
-| Paper 1.13+ / Spigot | `cyuclear-paper-1.4.6.jar` |
-| Folia 1.20+ | `cyuclear-folia-1.4.6.jar` |
-| Bukkit / Spigot 1.8~1.12 | `cyuclear-legacy-1.4.6.jar` |
+| Paper 1.13+ / Spigot | `cyuclear-paper-1.4.7.jar` |
+| Folia 1.20+ | `cyuclear-folia-1.4.7.jar` |
+| Bukkit / Spigot 1.8~1.12 | `cyuclear-legacy-1.4.7.jar` |
 | Velocity 3.3+ | `cyuclear-velocity-1.0.1.jar` |
 | BungeeCord | `cyuclear-bungee-1.0.1.jar` |
 

@@ -1,12 +1,11 @@
 package org.cyuCBMclean.cyuclear.util
 
-import org.bukkit.Bukkit
+import org.cyuCBMclean.cyuclear.cluster.BuildInfo
 
 object ServerEnv {
 
     val supportsHexColors: Boolean by lazy {
-        val parts = Bukkit.getBukkitVersion()
-            .substringBefore('-')
+        val parts = BuildInfo.minecraftVersion
             .split('.')
             .mapNotNull { it.toIntOrNull() }
 

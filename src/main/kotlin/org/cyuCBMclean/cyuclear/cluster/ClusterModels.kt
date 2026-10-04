@@ -11,10 +11,13 @@ data class ClusterIdentity(
     val clusterPlatform: String
         get() = if (compatibilityDomain == "modern" && (platform == "paper" || platform == "folia")) "paper/folia" else platform
 
+    val clusterMinecraftVersion: String
+        get() = normalizeMinecraftVersion(minecraftVersion)
+
     fun canonical(): String = listOf(
         "plugin=$pluginVersion",
         "platform=$clusterPlatform",
-        "minecraft=$minecraftVersion",
+        "minecraft=$clusterMinecraftVersion",
         "domain=$compatibilityDomain",
         "protocol=$protocolVersion",
         "serialization=$serializationVersion"
@@ -24,6 +27,12 @@ data class ClusterIdentity(
         "Cyuclear $pluginVersion / 平台 $platform / Minecraft $minecraftVersion / $compatibilityDomain / 协议 $protocolVersion / 序列化 $serializationVersion"
 
     companion object {
+        fun normalizeMinecraftVersion(raw: String): String {
+            val trimmed = raw.trim()
+            val beforeBuild = trimmed.replace(Regex("[._-](build|git|dev|snapshot|alpha|beta|rc)[._-]?\\d*.*$", RegexOption.IGNORE_CASE), "")
+            return beforeBuild.ifBlank { trimmed }
+        }
+
         fun describeCanonical(value: String): String {
             val fields = value.lineSequence()
                 .mapNotNull { line ->

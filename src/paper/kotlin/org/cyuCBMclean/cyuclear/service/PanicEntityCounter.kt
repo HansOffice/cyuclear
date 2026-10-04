@@ -12,9 +12,20 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 object PanicEntityCounter {
+    private val entityCountMethod by lazy {
+        runCatching { World::class.java.getMethod("getEntityCount") }.getOrNull()
+    }
 
     fun count(world: World, budget: Int, callback: (Int) -> Unit): PanicCountHandle {
         val limit = budget.coerceAtLeast(1)
+        val estimate = (entityCountMethod?.invoke(world) as? Int) ?: -1
+        val filtered = (Settings.entityMythicEnabled && Settings.mythicExcludeFromPanicCount) ||
+            (Settings.entityCraftEngineEnabled && Settings.craftEngineExcludeFromPanicCount)
+        if (estimate >= 0 && (!filtered || estimate < limit)) {
+            callback(estimate)
+            return NoopPanicCountHandle
+        }
+
         val chunks = world.loadedChunks
         if (chunks.isEmpty()) {
             callback(0)

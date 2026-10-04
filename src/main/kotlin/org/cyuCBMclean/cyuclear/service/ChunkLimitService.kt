@@ -2,6 +2,7 @@ package org.cyuCBMclean.cyuclear.service
 
 import org.bukkit.Bukkit
 import org.bukkit.Chunk
+import org.bukkit.World
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
 import org.bukkit.entity.Projectile
@@ -75,39 +76,43 @@ object ChunkLimitService {
         val specificThresholds = Settings.itemSpecificThresholds
         if (threshold <= 0 && specificThresholds.isEmpty()) return
 
-        val world = event.location.world ?: return
+        val loc = event.location
+        val world = loc.world ?: return
         if (!Settings.isWorldEnabled(world.name)) return
 
-        val chunk = event.location.chunk
+        val chunkX = loc.blockX shr 4
+        val chunkZ = loc.blockZ shr 4
+        val worldName = world.name
+
         val specificLimit = if (specificThresholds.isNotEmpty()) findSpecificItemLimit(event.entity) else null
-        if (specificLimit != null && shouldCancelItemSpawn(event, chunk, specificLimit.first, specificLimit.second)) {
+        if (specificLimit != null && shouldCancelItemSpawn(event, world, chunkX, chunkZ, specificLimit.first, specificLimit.second)) {
             return
         }
 
         if (threshold <= 0) return
-        val key = ChunkLimitKey(chunk.world.name, chunk.x, chunk.z, LimitKind.ITEM)
+        val key = ChunkLimitKey(worldName, chunkX, chunkZ, LimitKind.ITEM)
 
         if (shouldCancelFromCache(key)) {
             event.isCancelled = true
-            notifyOverload(chunk, event.location.blockX, event.location.blockY, event.location.blockZ, key, -1, threshold, HotspotTracker.State.BREAKER)
+            notifyOverload(worldName, chunkX, chunkZ, loc.blockX, loc.blockY, loc.blockZ, key, -1, threshold, HotspotTracker.State.BREAKER)
             return
         }
 
-        val count = estimateOrCount(key, threshold, chunk, LimitKind.ITEM)
+        val count = estimateOrCount(key, threshold, world, chunkX, chunkZ, LimitKind.ITEM)
         if (count >= threshold) {
             event.isCancelled = true
             markOverloaded(key)
-            notifyOverload(chunk, event.location.blockX, event.location.blockY, event.location.blockZ, key, count, threshold, HotspotTracker.State.BREAKER)
+            notifyOverload(worldName, chunkX, chunkZ, loc.blockX, loc.blockY, loc.blockZ, key, count, threshold, HotspotTracker.State.BREAKER)
         } else if (Settings.chunkItemSoftThreshold > 0 && count >= Settings.chunkItemSoftThreshold) {
             val decision = CleanupFilter.explainItem(event.entity, honorGrace = false)
             if (decision.remove) {
                 event.isCancelled = true
-                notifyOverload(chunk, event.location.blockX, event.location.blockY, event.location.blockZ, key, count, Settings.chunkItemSoftThreshold, HotspotTracker.State.THROTTLED)
+                notifyOverload(worldName, chunkX, chunkZ, loc.blockX, loc.blockY, loc.blockZ, key, count, Settings.chunkItemSoftThreshold, HotspotTracker.State.THROTTLED)
             } else {
                 HotspotTracker.recordPressure(
-                    chunk.world.name,
-                    chunk.x,
-                    chunk.z,
+                    worldName,
+                    chunkX,
+                    chunkZ,
                     HotspotTracker.SubjectKind.ITEM,
                     decision.id,
                     count,
@@ -119,23 +124,25 @@ object ChunkLimitService {
 
     private fun shouldCancelItemSpawn(
         event: ItemSpawnEvent,
-        chunk: Chunk,
+        world: World,
+        chunkX: Int,
+        chunkZ: Int,
         targetId: String,
         threshold: Int
     ): Boolean {
-        val key = ChunkLimitKey(chunk.world.name, chunk.x, chunk.z, LimitKind.ITEM_TYPE, targetId)
+        val key = ChunkLimitKey(world.name, chunkX, chunkZ, LimitKind.ITEM_TYPE, targetId)
 
         if (shouldCancelFromCache(key)) {
             event.isCancelled = true
-            notifyOverload(chunk, event.location.blockX, event.location.blockY, event.location.blockZ, key, -1, threshold, HotspotTracker.State.BREAKER)
+            notifyOverload(world.name, chunkX, chunkZ, event.location.blockX, event.location.blockY, event.location.blockZ, key, -1, threshold, HotspotTracker.State.BREAKER)
             return true
         }
 
-        val count = estimateOrCount(key, threshold, chunk, LimitKind.ITEM_TYPE, targetId)
+        val count = estimateOrCount(key, threshold, world, chunkX, chunkZ, LimitKind.ITEM_TYPE, targetId)
         if (count >= threshold) {
             event.isCancelled = true
             markOverloaded(key)
-            notifyOverload(chunk, event.location.blockX, event.location.blockY, event.location.blockZ, key, count, threshold, HotspotTracker.State.BREAKER)
+            notifyOverload(world.name, chunkX, chunkZ, event.location.blockX, event.location.blockY, event.location.blockZ, key, count, threshold, HotspotTracker.State.BREAKER)
             return true
         }
 
@@ -152,14 +159,19 @@ object ChunkLimitService {
 
         if (event.entity is Item) return
         if (EntityUtils.shouldIgnoreForChunkLimit(event.entity)) return
-        val world = event.location.world ?: return
+        val loc = event.location
+        val world = loc.world ?: return
         if (!Settings.isWorldEnabled(world.name)) return
 
-        val chunk = event.location.chunk
+        val chunkX = loc.blockX shr 4
+        val chunkZ = loc.blockZ shr 4
+
         val specificLimit = if (specificThresholds.isNotEmpty()) findSpecificEntityLimit(event.entity) else null
         if (specificLimit != null && shouldCancelEntitySpawn(
                 event = event,
-                chunk = chunk,
+                world = world,
+                chunkX = chunkX,
+                chunkZ = chunkZ,
                 kind = LimitKind.ENTITY_TYPE,
                 targetId = specificLimit.first,
                 threshold = specificLimit.second
@@ -170,7 +182,9 @@ object ChunkLimitService {
 
         if (entityThreshold > 0 && shouldCancelEntitySpawn(
             event = event,
-            chunk = chunk,
+            world = world,
+            chunkX = chunkX,
+            chunkZ = chunkZ,
             kind = LimitKind.ENTITY,
             targetId = "",
             threshold = entityThreshold
@@ -179,7 +193,7 @@ object ChunkLimitService {
         }
 
         if (Settings.chunkEntityLimitMode == Settings.ChunkEntityLimitMode.STRICT && event.entity is Projectile) {
-            rememberStrictSpawn(event.entity, chunk)
+            rememberStrictSpawn(event.entity, world.name, chunkX, chunkZ)
         }
     }
 
@@ -193,16 +207,21 @@ object ChunkLimitService {
 
         val projectile = event.entity
         if (EntityUtils.shouldIgnoreForChunkLimit(projectile)) return
-        val world = projectile.location.world ?: return
+        val loc = projectile.location
+        val world = loc.world ?: return
         if (!Settings.isWorldEnabled(world.name)) return
 
-        val chunk = projectile.location.chunk
-        if (consumeStrictSpawnAdmission(projectile, chunk)) return
+        val chunkX = loc.blockX shr 4
+        val chunkZ = loc.blockZ shr 4
+
+        if (consumeStrictSpawnAdmission(projectile, world.name, chunkX, chunkZ)) return
 
         val specificLimit = if (specificThresholds.isNotEmpty()) findSpecificEntityLimit(projectile) else null
         if (specificLimit != null && shouldCancelProjectileLaunch(
                 event = event,
-                chunk = chunk,
+                world = world,
+                chunkX = chunkX,
+                chunkZ = chunkZ,
                 kind = LimitKind.ENTITY_TYPE,
                 targetId = specificLimit.first,
                 threshold = specificLimit.second
@@ -214,7 +233,9 @@ object ChunkLimitService {
         if (entityThreshold > 0) {
             shouldCancelProjectileLaunch(
                 event = event,
-                chunk = chunk,
+                world = world,
+                chunkX = chunkX,
+                chunkZ = chunkZ,
                 kind = LimitKind.ENTITY,
                 targetId = "",
                 threshold = entityThreshold
@@ -224,37 +245,43 @@ object ChunkLimitService {
 
     private fun shouldCancelEntitySpawn(
         event: EntitySpawnEvent,
-        chunk: Chunk,
+        world: World,
+        chunkX: Int,
+        chunkZ: Int,
         kind: LimitKind,
         targetId: String,
         threshold: Int
     ): Boolean {
         if (threshold <= 0) return false
 
-        val key = ChunkLimitKey(chunk.world.name, chunk.x, chunk.z, kind, targetId)
+        val key = ChunkLimitKey(world.name, chunkX, chunkZ, kind, targetId)
 
         if (shouldCancelFromCache(key)) {
             event.isCancelled = true
-            notifyOverload(chunk, event.location.blockX, event.location.blockY, event.location.blockZ, key, -1, threshold, HotspotTracker.State.BREAKER)
+            notifyOverload(world.name, chunkX, chunkZ, event.location.blockX, event.location.blockY, event.location.blockZ, key, -1, threshold, HotspotTracker.State.BREAKER)
             return true
         }
 
         return when (Settings.chunkEntityLimitMode) {
             Settings.ChunkEntityLimitMode.OFF -> false
-            Settings.ChunkEntityLimitMode.SAFE -> shouldCancelEntitySpawnByPressure(event, chunk, key, threshold)
-            Settings.ChunkEntityLimitMode.STRICT -> shouldCancelEntitySpawnByResidentCount(event, chunk, key, threshold)
+            Settings.ChunkEntityLimitMode.SAFE -> shouldCancelEntitySpawnByPressure(event, world.name, chunkX, chunkZ, key, threshold)
+            Settings.ChunkEntityLimitMode.STRICT -> shouldCancelEntitySpawnByResidentCount(event, world, chunkX, chunkZ, key, threshold)
         }
     }
 
     private fun shouldCancelEntitySpawnByResidentCount(
         event: EntitySpawnEvent,
-        chunk: Chunk,
+        world: World,
+        chunkX: Int,
+        chunkZ: Int,
         key: ChunkLimitKey,
         threshold: Int
     ): Boolean {
         val resident = readResidentSnapshot(
             entity = event.entity,
-            chunk = chunk,
+            world = world,
+            chunkX = chunkX,
+            chunkZ = chunkZ,
             kind = key.kind,
             targetId = key.targetId,
             threshold = threshold,
@@ -269,9 +296,9 @@ object ChunkLimitService {
         if (!hardLimitReached && (softDecision == null || !softDecision.remove)) {
             if (softDecision != null) {
                 HotspotTracker.recordPressure(
-                    chunk.world.name,
-                    chunk.x,
-                    chunk.z,
+                    world.name,
+                    chunkX,
+                    chunkZ,
                     HotspotTracker.SubjectKind.ENTITY,
                     softDecision.id,
                     projected,
@@ -286,33 +313,37 @@ object ChunkLimitService {
         event.isCancelled = true
         if (hardLimitReached) {
             markOverloaded(key)
-            notifyOverload(chunk, event.location.blockX, event.location.blockY, event.location.blockZ, key, projected, threshold, HotspotTracker.State.BREAKER)
+            notifyOverload(world.name, chunkX, chunkZ, event.location.blockX, event.location.blockY, event.location.blockZ, key, projected, threshold, HotspotTracker.State.BREAKER)
         } else {
-            notifyOverload(chunk, event.location.blockX, event.location.blockY, event.location.blockZ, key, projected, Settings.chunkEntitySoftThreshold, HotspotTracker.State.THROTTLED)
+            notifyOverload(world.name, chunkX, chunkZ, event.location.blockX, event.location.blockY, event.location.blockZ, key, projected, Settings.chunkEntitySoftThreshold, HotspotTracker.State.THROTTLED)
         }
         return true
     }
 
     private fun shouldCancelProjectileLaunch(
         event: ProjectileLaunchEvent,
-        chunk: Chunk,
+        world: World,
+        chunkX: Int,
+        chunkZ: Int,
         kind: LimitKind,
         targetId: String,
         threshold: Int
     ): Boolean {
         if (threshold <= 0) return false
 
-        val key = ChunkLimitKey(chunk.world.name, chunk.x, chunk.z, kind, targetId)
+        val key = ChunkLimitKey(world.name, chunkX, chunkZ, kind, targetId)
         if (shouldCancelFromCache(key)) {
             event.isCancelled = true
             event.entity.remove()
-            notifyOverload(chunk, event.entity.location.blockX, event.entity.location.blockY, event.entity.location.blockZ, key, -1, threshold, HotspotTracker.State.BREAKER)
+            notifyOverload(world.name, chunkX, chunkZ, event.entity.location.blockX, event.entity.location.blockY, event.entity.location.blockZ, key, -1, threshold, HotspotTracker.State.BREAKER)
             return true
         }
 
         val resident = readResidentSnapshot(
             entity = event.entity,
-            chunk = chunk,
+            world = world,
+            chunkX = chunkX,
+            chunkZ = chunkZ,
             kind = kind,
             targetId = targetId,
             threshold = threshold,
@@ -327,9 +358,9 @@ object ChunkLimitService {
         if (!hardLimitReached && (softDecision == null || !softDecision.remove)) {
             if (softDecision != null) {
                 HotspotTracker.recordPressure(
-                    chunk.world.name,
-                    chunk.x,
-                    chunk.z,
+                    world.name,
+                    chunkX,
+                    chunkZ,
                     HotspotTracker.SubjectKind.ENTITY,
                     softDecision.id,
                     projected,
@@ -345,16 +376,18 @@ object ChunkLimitService {
         event.entity.remove()
         if (hardLimitReached) {
             markOverloaded(key)
-            notifyOverload(chunk, event.entity.location.blockX, event.entity.location.blockY, event.entity.location.blockZ, key, projected, threshold, HotspotTracker.State.BREAKER)
+            notifyOverload(world.name, chunkX, chunkZ, event.entity.location.blockX, event.entity.location.blockY, event.entity.location.blockZ, key, projected, threshold, HotspotTracker.State.BREAKER)
         } else {
-            notifyOverload(chunk, event.entity.location.blockX, event.entity.location.blockY, event.entity.location.blockZ, key, projected, Settings.chunkEntitySoftThreshold, HotspotTracker.State.THROTTLED)
+            notifyOverload(world.name, chunkX, chunkZ, event.entity.location.blockX, event.entity.location.blockY, event.entity.location.blockZ, key, projected, Settings.chunkEntitySoftThreshold, HotspotTracker.State.THROTTLED)
         }
         return true
     }
 
     private fun shouldCancelEntitySpawnByPressure(
         event: EntitySpawnEvent,
-        chunk: Chunk,
+        worldName: String,
+        chunkX: Int,
+        chunkZ: Int,
         key: ChunkLimitKey,
         threshold: Int
     ): Boolean {
@@ -364,9 +397,9 @@ object ChunkLimitService {
             val decision = CleanupFilter.explainEntity(event.entity)
             if (!decision.remove) {
                 HotspotTracker.recordPressure(
-                    chunk.world.name,
-                    chunk.x,
-                    chunk.z,
+                    worldName,
+                    chunkX,
+                    chunkZ,
                     HotspotTracker.SubjectKind.ENTITY,
                     decision.id,
                     spawned,
@@ -375,13 +408,13 @@ object ChunkLimitService {
                 return false
             }
             event.isCancelled = true
-            notifyOverload(chunk, event.location.blockX, event.location.blockY, event.location.blockZ, key, spawned, Settings.chunkEntitySoftThreshold, HotspotTracker.State.THROTTLED)
+            notifyOverload(worldName, chunkX, chunkZ, event.location.blockX, event.location.blockY, event.location.blockZ, key, spawned, Settings.chunkEntitySoftThreshold, HotspotTracker.State.THROTTLED)
             return true
         }
 
         event.isCancelled = true
         markOverloaded(key)
-        notifyOverload(chunk, event.location.blockX, event.location.blockY, event.location.blockZ, key, spawned, threshold, HotspotTracker.State.BREAKER)
+        notifyOverload(worldName, chunkX, chunkZ, event.location.blockX, event.location.blockY, event.location.blockZ, key, spawned, threshold, HotspotTracker.State.BREAKER)
         return true
     }
 
@@ -400,13 +433,15 @@ object ChunkLimitService {
 
     private fun readResidentSnapshot(
         entity: Entity,
-        chunk: Chunk,
+        world: World,
+        chunkX: Int,
+        chunkZ: Int,
         kind: LimitKind,
         targetId: String,
         threshold: Int,
         useCache: Boolean
     ): ResidentSnapshot {
-        val key = ChunkLimitKey(chunk.world.name, chunk.x, chunk.z, kind, targetId)
+        val key = ChunkLimitKey(world.name, chunkX, chunkZ, kind, targetId)
         val now = System.currentTimeMillis()
         if (useCache) {
             val cached = countCacheMap[key]
@@ -415,6 +450,11 @@ object ChunkLimitService {
             }
         }
 
+        if (!world.isChunkLoaded(chunkX, chunkZ)) {
+            return ResidentSnapshot(0, false)
+        }
+
+        val chunk = world.getChunkAt(chunkX, chunkZ)
         val stopAt = if (threshold == Int.MAX_VALUE) Int.MAX_VALUE else threshold + 1
         val entities = chunk.entities
         var count = 0
@@ -440,20 +480,20 @@ object ChunkLimitService {
         countCacheMap[key] = CountSnapshot(count, System.currentTimeMillis() + Settings.limitCountCacheMillis)
     }
 
-    private fun rememberStrictSpawn(entity: Entity, chunk: Chunk) {
+    private fun rememberStrictSpawn(entity: Entity, worldName: String, chunkX: Int, chunkZ: Int) {
         val ttl = Settings.chunkEntitySpawnWindowMillis.coerceIn(100L, 1000L)
         strictSpawnAdmissionMap[entity.uniqueId] = SpawnAdmission(
-            worldName = chunk.world.name,
-            chunkX = chunk.x,
-            chunkZ = chunk.z,
+            worldName = worldName,
+            chunkX = chunkX,
+            chunkZ = chunkZ,
             expiresAt = System.currentTimeMillis() + ttl
         )
     }
 
-    private fun consumeStrictSpawnAdmission(entity: Entity, chunk: Chunk): Boolean {
+    private fun consumeStrictSpawnAdmission(entity: Entity, worldName: String, chunkX: Int, chunkZ: Int): Boolean {
         val admission = strictSpawnAdmissionMap.remove(entity.uniqueId) ?: return false
         if (admission.expiresAt <= System.currentTimeMillis()) return false
-        return admission.worldName == chunk.world.name && admission.chunkX == chunk.x && admission.chunkZ == chunk.z
+        return admission.worldName == worldName && admission.chunkX == chunkX && admission.chunkZ == chunkZ
     }
 
     private fun addCounts(first: Int, second: Int): Int {
@@ -477,7 +517,9 @@ object ChunkLimitService {
     private fun estimateOrCount(
         key: ChunkLimitKey,
         threshold: Int,
-        chunk: Chunk,
+        world: World,
+        chunkX: Int,
+        chunkZ: Int,
         kind: LimitKind,
         targetId: String = ""
     ): Int {
@@ -489,6 +531,11 @@ object ChunkLimitService {
             return estimated
         }
 
+        if (!world.isChunkLoaded(chunkX, chunkZ)) {
+            return 0
+        }
+
+        val chunk = world.getChunkAt(chunkX, chunkZ)
         val counted = countChunkEntities(chunk, kind, threshold, targetId)
         if (Settings.limitCountCacheMillis > 0L && counted < threshold) {
             countCacheMap[key] = CountSnapshot(counted, now + Settings.limitCountCacheMillis)
@@ -569,7 +616,9 @@ object ChunkLimitService {
     }
 
     private fun notifyOverload(
-        chunk: Chunk,
+        worldName: String,
+        chunkX: Int,
+        chunkZ: Int,
         x: Int,
         y: Int,
         z: Int,
@@ -579,9 +628,9 @@ object ChunkLimitService {
         state: HotspotTracker.State
     ) {
         HotspotTracker.recordPressure(
-            world = chunk.world.name,
-            chunkX = chunk.x,
-            chunkZ = chunk.z,
+            world = worldName,
+            chunkX = chunkX,
+            chunkZ = chunkZ,
             kind = when (key.kind) {
                 LimitKind.ITEM, LimitKind.ITEM_TYPE -> HotspotTracker.SubjectKind.ITEM
                 LimitKind.ENTITY, LimitKind.ENTITY_TYPE -> HotspotTracker.SubjectKind.ENTITY
@@ -601,9 +650,9 @@ object ChunkLimitService {
 
             val msg = Language.get(
                 "chunk-overload-warn",
-                "world" to chunk.world.name,
-                "chunk_x" to chunk.x.toString(),
-                "chunk_z" to chunk.z.toString(),
+                "world" to worldName,
+                "chunk_x" to chunkX.toString(),
+                "chunk_z" to chunkZ.toString(),
                 "x" to x.toString(),
                 "y" to y.toString(),
                 "z" to z.toString(),
@@ -613,7 +662,7 @@ object ChunkLimitService {
                 "threshold" to threshold.toString(),
                 "duration" to Settings.limitOverloadCacheMillis.toString()
             )
-            val adminComponents = createAdminOverloadComponent(msg, chunk.world.name, x, y, z)
+            val adminComponents = createAdminOverloadComponent(msg, worldName, x, y, z)
             when (Settings.overloadNoticeTarget) {
                 Settings.OverloadNoticeTarget.NONE -> Unit
                 Settings.OverloadNoticeTarget.ADMINS -> PlayerMessageDispatcher.broadcast(adminComponents, "cyuclear.admin")

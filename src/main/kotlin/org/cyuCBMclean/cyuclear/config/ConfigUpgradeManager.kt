@@ -14,7 +14,7 @@ import java.util.UUID
 
 object ConfigUpgradeManager {
 
-    const val CURRENT_CONFIG_VERSION = 146
+    const val CURRENT_CONFIG_VERSION = 147
     const val CURRENT_CONFIG_LAYOUT = 7
 
     private val managedFiles = listOf(
@@ -172,7 +172,7 @@ object ConfigUpgradeManager {
             writeUpgradeReport(backupFolder, version, plan.values.size, unmapped)
             commitStage(stageFolder, dataFolder)
 
-            plugin.logger.info("配置已迁移到 1.4.6，保留 ${plan.values.size} 项自定义值")
+            plugin.logger.info("配置已迁移到 1.4.7，保留 ${plan.values.size} 项自定义值")
             plugin.logger.info("已整理配置结构，并补齐清理批次、恢复与热点菜单")
             plugin.logger.info("原配置备份：backup/${backupFolder.name}")
             if (unmapped.isNotEmpty()) {

@@ -422,7 +422,7 @@
         <div class="nav-title">日常维护</div>
         <a href="#commands">命令</a>
         <a href="#faq">常见问题</a>
-        <a href="#workflow">配置建议</a>
+        <a href="#tips">配置建议</a>
       </nav>
     </aside>
 
@@ -446,27 +446,49 @@
 
       <section id="install">
         <h2>安装</h2>
-        <p>把插件 jar 放入服务器 <code>plugins</code> 目录后重启服务器，首次启动会生成主配置、规则、存储、垃圾桶、音效、语言和 <code>menu</code> 菜单目录</p>
-        <div class="grid">
-          <div class="card">
-            <h4>选择文件</h4>
-            <p>1.13 及以上的普通 Bukkit / Paper 服务端使用 <code>cyuclear-paper-1.4.6.jar</code>；Folia 服务端使用 <code>cyuclear-folia-1.4.6.jar</code>；1.8 到 1.12 的老版本服务端使用 <code>cyuclear-legacy-1.4.6.jar</code></p>
+        <div class="steps">
+          <div class="step">
+            <h4>放入插件</h4>
+            <p>按服务端类型选择对应 jar，放进服务器的 <code>plugins</code> 文件夹</p>
           </div>
-          <div class="card">
-            <h4>当前版本</h4>
-            <p>当前文档对应 <code>1.4.6</code>，配置文件以默认生成内容为准</p>
+          <div class="step">
+            <h4>首次启动保持关闭</h4>
+            <p>第一次启动会生成主配置与规则文件，默认 <code>enabled: false</code>，方便服主先核对规则再开启</p>
           </div>
-          <div class="card">
-            <h4>软依赖</h4>
-            <p>支持 PlaceholderAPI、MythicMobs、CraftEngine、Cobblemon / Pixelmon，并可按 RoseStacker / WildStacker 的实际堆叠数量统计、清理和恢复物品</p>
+          <div class="step">
+            <h4>设置权限</h4>
+            <p>普通玩家授予垃圾桶与通知权限，清理管理与重载权限分配给管理员</p>
+          </div>
+          <div class="step">
+            <h4>进服测试与开启</h4>
+            <p>核对规则后将 <code>enabled</code> 改为 <code>true</code> 并执行 <code>/cc reload</code>，测试清理与垃圾桶功能</p>
           </div>
         </div>
-        <div class="note">
-          三个 jar 只需要放一个。低版本服务端请直接使用 Legacy 版，不要把多个版本同时放进 plugins 目录
-        </div>
-        <div class="note">
-          Legacy 版的 <code>ActionBar</code> 提示会显示在聊天栏；BossBar 在 1.8 至 1.12 不可用。需要跨服同步时，Legacy 子服同样可以选择 Redis 或 MySQL，但所有子服必须使用同一个后端构建包
-        </div>
+
+        <h3>选择哪个 jar</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>文件</th>
+              <th>适合场景</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>cyuclear-paper-1.4.7.jar</code></td>
+              <td>1.13 起的 Paper / Spigot / Purpur 服务端</td>
+            </tr>
+            <tr>
+              <td><code>cyuclear-folia-1.4.7.jar</code></td>
+              <td>1.20 起的 Folia 服务端</td>
+            </tr>
+            <tr>
+              <td><code>cyuclear-legacy-1.4.7.jar</code></td>
+              <td>1.8 到 1.12 的 Bukkit / Spigot 老服</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note">三个 jar 只放一个；当前文档对应 <code>1.4.7</code>；功能完全一致，根据服务端环境选择对应 jar 即可</div>
 
         <h3>生成的主要文件</h3>
         <table>
@@ -533,7 +555,7 @@
           </div>
         </div>
         <div class="note">
-          <code>/cc reload</code> 会应用总开关。改为 <code>false</code> 后重载，会停止自动清理、区块限制、紧急监控和跨服连接
+          <code>/cc reload</code> 会应用总开关；改为 <code>false</code> 后重载，会停止自动清理、区块限制、紧急监控和跨服连接
         </div>
         <div class="note green">
           升级已有配置时会保留原来的清理间隔、名单、阈值、保护规则、垃圾桶和连接配置；只有全新安装默认关闭总开关
@@ -572,7 +594,7 @@
 
       <section id="rules-file">
         <h2>规则文件导览</h2>
-        <p><code>rules.yml</code> 按服主实际调整顺序排列。先找到掉落物或实体，再依次查看基础设置、名单、保护和高级规则</p>
+        <p><code>rules.yml</code> 按服主实际调整顺序排列，先找到掉落物或实体，再依次查看基础设置、名单、保护和高级规则</p>
         <table>
           <thead>
             <tr><th>板块</th><th>配置路径</th><th>主要内容</th></tr>
@@ -586,7 +608,7 @@
           </tbody>
         </table>
         <div class="note">
-          默认配置保留字段说明和容易配错的写法。复杂组合示例集中在本文档，修改时不需要删掉注释
+          默认配置保留字段说明和容易配错的写法，复杂组合示例集中在本文档，修改时不需要删掉注释
         </div>
       </section>
 
@@ -641,13 +663,13 @@ cleanup:
           </tbody>
         </table>
         <div class="note green">
-          清理速度由 <code>performance</code> 控制。Paper / Legacy 按时间预算让出主线程，Folia 按区域任务批次派发
+          清理速度由 <code>performance</code> 控制，Paper / Legacy 按时间预算让出主线程，Folia 按区域任务批次派发
         </div>
       </section>
 
       <section id="performance">
         <h2>性能策略</h2>
-        <p><code>performance</code> 控制清理器的处理速度和统计输出。Paper / Legacy 使用时间预算平滑扫描，Folia 使用区域任务批次派发，避免一次性把所有已加载区块塞进调度器</p>
+        <p><code>performance</code> 控制清理器的处理速度和统计输出；Paper / Legacy 使用时间预算平滑扫描，Folia 使用区域任务批次派发，避免一次性把所有已加载区块塞进调度器</p>
         <pre><code>performance:
   profile: "快速"
   scan:
@@ -663,7 +685,7 @@ cleanup:
     detail: true
     stage-timing: false</code></pre>
         <div class="note">
-          实服调参时先看 <code>/cc status</code>：档位、每 tick 区块与预算、候选索引待扫数量、上次清理耗时。卡顿时先把 <code>profile</code> 调到「均衡」或降低 <code>max-chunks-per-tick</code>。
+          实服调参时先看 <code>/cc status</code>：档位、每 tick 区块与预算、候选索引待扫数量、上次清理耗时；卡顿时先把 <code>profile</code> 调到「均衡」或降低 <code>max-chunks-per-tick</code>
         </div>
         <table>
           <thead>
@@ -708,9 +730,9 @@ cleanup:
           </tbody>
         </table>
         <div class="note">
-          玩家提示使用友好耗时，例如 <code>低于 1 秒</code>、<code>1.2 秒</code>、<code>1 分 8 秒</code>，避免直接显示一串毫秒。排查速度时看控制台性能统计：<code>total</code> 是分批跨区块处理的总时长，<code>work</code> 是实际执行清理逻辑的耗时，<code>maxChunk</code> 是最慢区块。Folia 服加载区块多时，<code>total</code> 高但 <code>work</code> 低是正常的限速保护
+          玩家提示使用友好耗时，例如 <code>低于 1 秒</code>、<code>1.2 秒</code>、<code>1 分 8 秒</code>，避免直接显示一串毫秒；排查速度时看控制台性能统计：<code>total</code> 是分批跨区块处理的总时长，<code>work</code> 是实际执行清理逻辑的耗时，<code>maxChunk</code> 是最慢区块；Folia 服加载区块多时，<code>total</code> 高但 <code>work</code> 低是正常的限速保护
         </div>
-        <p>单区块数量限制分为软限制和硬限制。达到软限制后，只拦截按现有规则本来就会被清理的新对象；达到硬限制后停止继续堆积。安装 RoseStacker 或 WildStacker 时，统计、清理、垃圾桶恢复和审计会按实际堆叠数量处理</p>
+        <p>单区块数量限制分为软限制和硬限制；达到软限制后，只拦截按现有规则本来就会被清理的新对象；达到硬限制后停止继续堆积；安装 RoseStacker 或 WildStacker 时，统计、清理、垃圾桶恢复和审计会按实际堆叠数量处理</p>
         <h3>清理原因汇总</h3>
         <p><code>audit</code> 会在清理结束后按实体类型和原因聚合输出，方便排查某次清理到底删了什么</p>
         <pre><code>audit:
@@ -720,7 +742,7 @@ cleanup:
 
       <section id="item-rules">
         <h2>掉落物规则</h2>
-        <p>掉落物规则写在 <code>rules.yml</code> 的 <code>targets.items</code>。配置依次分为基础设置、掉落保护时间、物品 ID、展示名和 Lore；物品 ID 同时支持原版、ItemsAdder、CraftEngine 与 Oraxen</p>
+        <p>掉落物规则写在 <code>rules.yml</code> 的 <code>targets.items</code>，配置依次分为基础设置、掉落保护时间、物品 ID、展示名和 Lore；物品 ID 同时支持原版、ItemsAdder、CraftEngine 与 Oraxen</p>
 
         <h3>选择名单模式</h3>
         <div class="grid">
@@ -764,7 +786,7 @@ cleanup:
         - "minecraft:rotten_flesh"</code></pre>
 
         <h3>示例：精确保留插件物品</h3>
-        <p>安装对应插件后，CyuClear 会从掉落的 <code>ItemStack</code> 反查真实自定义 ID。把 ID 写进 <code>keep-list</code>，就能只保护指定的 IA、CraftEngine 或 Oraxen 物品，不必把共用同一种原版材质的其他物品一起保留</p>
+        <p>安装对应插件后，CyuClear 会从掉落的 <code>ItemStack</code> 反查真实自定义 ID；把 ID 写进 <code>keep-list</code>，就能只保护指定的 IA、CraftEngine 或 Oraxen 物品，不必把共用同一种原版材质的其他物品一起保留</p>
         <table>
           <thead>
             <tr><th>来源</th><th>推荐写法</th><th>兼容写法</th></tr>
@@ -784,13 +806,13 @@ cleanup:
         - "ia:iasurvival:ruby"
         - "ce:default:ancient_coin"
         - "ox:quest_key"</code></pre>
-        <p>同样的写法也能用于 <code>clean-list</code>、<code>grace.high-value-list</code> 和 <code>limits.chunk.items.specific</code>。识别顺序是插件专属 ID、CustomModelData、原版材质，因此旧规则无需修改；看着掉落物执行 <code>/cc check</code> 可以直接查看插件识别出的推荐 ID</p>
+        <p>同样的写法也能用于 <code>clean-list</code>、<code>grace.high-value-list</code> 和 <code>limits.chunk.items.specific</code>，识别顺序是插件专属 ID、CustomModelData、原版材质，因此旧规则无需修改；看着掉落物执行 <code>/cc check</code> 可以直接查看插件识别出的推荐 ID</p>
         <div class="note">
-          只有对应物品插件已安装并正常启用时，专属 ID 才能被识别。插件缺失或 API 不可用时会安全回退到 CustomModelData 与原版材质规则
+          只有对应物品插件已安装并正常启用时，专属 ID 才能被识别；插件缺失或 API 不可用时会安全回退到 CustomModelData 与原版材质规则
         </div>
 
         <h3>示例：按 CustomModelData 区分物品</h3>
-        <p>1.14 及以上可以使用 <code>材质#CustomModelData</code>。插件会先匹配具体编号，再回退到纯材质规则</p>
+        <p>1.14 及以上可以使用 <code>材质#CustomModelData</code>，插件会先匹配具体编号，再回退到纯材质规则</p>
         <pre><code>targets:
   items:
     keep-list:
@@ -819,7 +841,7 @@ cleanup:
         list:
           - "垃圾"
           - "通配:*测试*"</code></pre>
-        <p><code>color-mode: strip</code> 会先去掉颜色再匹配。开启 <code>force-clean</code> 后，展示名清理规则可以压过材质保留规则</p>
+        <p><code>color-mode: strip</code> 会先去掉颜色再匹配；开启 <code>force-clean</code> 后，展示名清理规则可以压过材质保留规则</p>
 
         <h3>示例：按 Lore 判断</h3>
         <pre><code>targets:
@@ -854,7 +876,7 @@ cleanup:
 
       <section id="entity-rules">
         <h2>实体名单</h2>
-        <p>实体规则写在 <code>rules.yml</code> 的 <code>targets.entities</code>。先配置实体 ID 名单和安全保护，再按需要使用名称规则或深度规则</p>
+        <p>实体规则写在 <code>rules.yml</code> 的 <code>targets.entities</code>，先配置实体 ID 名单和安全保护，再按需要使用名称规则或深度规则</p>
 
         <h3>示例：保护常见生物和装饰实体</h3>
         <pre><code>targets:
@@ -916,7 +938,7 @@ cleanup:
         </div>
 
         <h3>智能启发式免死保护</h3>
-        <p>配置位于 <code>rules.yml</code> 的 <code>targets.entities.heuristics</code>，默认开启。CyuClear 能够自动识别常见的原版功能装置与高价值实体，无需服主逐一配置坐标或命名：</p>
+        <p>配置位于 <code>rules.yml</code> 的 <code>targets.entities.heuristics</code>，默认开启，CyuClear 能够自动识别常见的原版功能装置与高价值实体，无需服主逐一配置坐标或命名：</p>
         <ul>
           <li><strong>交易成熟村民</strong> (<code>traded-villager: true</code>)：玩家交易过或积累了交易经验的村民自动免死</li>
           <li><strong>工位工作村民</strong> (<code>workstation-villager: true</code>)：村民交易所内拥有对应职业方块且空间被限位的村民自动免死</li>
@@ -928,7 +950,7 @@ cleanup:
 
       <section id="entity-name-rules">
         <h2>实体名称</h2>
-        <p>指令直接召唤并设置名称的实体同样拥有 Bukkit <code>customName</code>，不需要命名牌。名称规则支持精确、通配和正则，并可选择匹配前是否去除颜色</p>
+        <p>指令直接召唤并设置名称的实体同样拥有 Bukkit <code>customName</code>，不需要命名牌；名称规则支持精确、通配和正则，并可选择匹配前是否去除颜色</p>
 
         <h3>示例：保留商店与剧情实体</h3>
         <pre><code>targets:
@@ -957,13 +979,13 @@ cleanup:
       clean-bypasses:
         - "named"</code></pre>
         <div class="note">
-          <code>clean-bypasses</code> 很关键：默认的命名保护开启时，名称清理名单必须显式绕过 <code>named</code> 才能真正清理。它不会绕过玩家、NPC 或受保护的 CraftEngine 家具
+          <code>clean-bypasses</code> 很关键：默认的命名保护开启时，名称清理名单必须显式绕过 <code>named</code> 才能真正清理；它不会绕过玩家、NPC 或受保护的 CraftEngine 家具
         </div>
       </section>
 
       <section id="entity-detail-rules">
         <h2>实体深度规则</h2>
-        <p>深度规则把多个维度组合成一个有名字、可检查的规则。<code>match: all</code> 要求所有已填写条件同时命中；<code>match: any</code> 只需任意条件命中</p>
+        <p>深度规则把多个维度组合成一个有名字、可检查的规则，<code>match: all</code> 要求所有已填写条件同时命中，<code>match: any</code> 只需任意条件命中</p>
 
         <h3>示例：只清理空载的临时展示实体</h3>
         <pre><code>targets:
@@ -1012,13 +1034,13 @@ cleanup:
           </tbody>
         </table>
         <div class="note">
-          计分板标签匹配适用于 Paper 与 Folia。Legacy 1.8–1.12 不提供 Bukkit scoreboard tags API，因此该条件不会命中；名称、ID 和其他兼容状态仍可使用。深度规则只参与周期清理，不套用到实时出生拦截
+          计分板标签匹配适用于 Paper 与 Folia；Legacy 1.8–1.12 不提供 Bukkit scoreboard tags API，因此该条件不会命中，名称、ID 和其他兼容状态仍可使用；深度规则只参与周期清理，不套用到实时出生拦截
         </div>
       </section>
 
       <section id="named-rules">
         <h2>命名规则</h2>
-        <p>需要把多项条件写成一条明确规则时，使用 <code>rules</code>。规则按 <code>priority</code> 从大到小处理；同优先级按文件顺序。命中后默认结束，只有写入 <code>stop-processing: false</code> 时才继续检查下一条</p>
+        <p>需要把多项条件写成一条明确规则时，使用 <code>rules</code>；规则按 <code>priority</code> 从大到小处理，同优先级按文件顺序；命中后默认结束，只有写入 <code>stop-processing: false</code> 时才继续检查下一条</p>
         <h3>示例：保护活动奖励</h3>
         <pre><code>rules:
   protect-event-rewards:
@@ -1065,9 +1087,9 @@ cleanup:
             <tr><td><code>scoreboard-tags</code>、<code>states</code></td><td>实体</td></tr>
           </tbody>
         </table>
-        <p><code>age.minimum-seconds</code> 和 <code>age.maximum-seconds</code> 按对象已存在的时间判断；<code>height.min</code> 与 <code>height.max</code> 按所在高度判断。物品 ID 可以直接写 <code>minecraft:paper#2005</code>，用于匹配 CustomModelData</p>
+        <p><code>age.minimum-seconds</code> 和 <code>age.maximum-seconds</code> 按对象已存在的时间判断，<code>height.min</code> 与 <code>height.max</code> 按所在高度判断；物品 ID 可以直接写 <code>minecraft:paper#2005</code>，用于匹配 CustomModelData</p>
         <div class="note">
-          <code>targets.entities.detail-rules</code> 会继续按原方式生效。需要让物品和实体使用同一套优先级时，再新增 <code>rules</code> 条目。命名规则也会参与已开启的实时出生拦截
+          <code>targets.entities.detail-rules</code> 会继续按原方式生效；需要让物品和实体使用同一套优先级时，再新增 <code>rules</code> 条目；命名规则也会参与已开启的实时出生拦截
         </div>
       </section>
 
@@ -1087,10 +1109,10 @@ cleanup:
 
       <section id="special-entities">
         <h2>特殊实体</h2>
-        <p>MythicMobs、CraftEngine 和宝可梦实体可以直接写进实体保留名单或清理名单。先写实际目标，只有需要关闭识别或调整保护时再修改 <code>hooks</code></p>
+        <p>MythicMobs、CraftEngine 和宝可梦实体可以直接写进实体保留名单或清理名单；先写实际目标，只有需要关闭识别或调整保护时再修改 <code>hooks</code></p>
 
         <h3>MythicMobs 示例</h3>
-        <p>使用 <code>mythic:内部ID</code>。下面的 Boss 会被保留，普通 MythicMobs 继续按照当前名单模式处理</p>
+        <p>使用 <code>mythic:内部ID</code>，示例中的 Boss 会被保留，普通 MythicMobs 继续按照当前名单模式处理</p>
         <pre><code>targets:
   entities:
     keep-list:
@@ -1100,7 +1122,7 @@ cleanup:
         <p>如果需要关闭识别，设置 <code>hooks.mythic-mobs.enabled: false</code></p>
 
         <h3>CraftEngine 家具示例</h3>
-        <p>使用 <code>ce:命名空间:家具ID</code>。默认配置会保护全部 CraftEngine 家具部件</p>
+        <p>使用 <code>ce:命名空间:家具ID</code>，默认配置会保护全部 CraftEngine 家具部件</p>
         <pre><code># 保留指定家具
 targets:
   entities:
@@ -1112,11 +1134,11 @@ targets:
 # 保留全部 CraftEngine 家具
         - "通配:ce:*"</code></pre>
         <div class="note">
-          若要让家具改由名单决定，先设置 <code>hooks.craft-engine.protect-furniture: false</code>。保持默认值时不必重复填写全部家具
+          若要让家具改由名单决定，先设置 <code>hooks.craft-engine.protect-furniture: false</code>；保持默认值时不必重复填写全部家具
         </div>
 
         <h3>宝可梦示例</h3>
-        <p>Cobblemon 与 Pixelmon 都使用 <code>pokemon:</code> 规则。默认会保护玩家放出来的宝可梦</p>
+        <p>Cobblemon 与 Pixelmon 都使用 <code>pokemon:</code> 规则，默认会保护玩家放出来的宝可梦</p>
         <pre><code># 保留闪光、神兽和幻兽
 targets:
   entities:
@@ -1219,13 +1241,13 @@ targets:
         - "minecraft:fireball"
         - "minecraft:dragon_fireball"</code></pre>
         <div class="note">
-          普通周期清理请使用实体规则。实时拦截不会等待倒计时，也不会让实体先生成再清理
+          普通周期清理请使用实体规则；实时拦截不会等待倒计时，也不会让实体先生成再清理
         </div>
       </section>
       <section id="limits">
         <h2>硬限制与紧急清理</h2>
-        <p>数量限制写在 <code>rules.yml</code> 的 <code>limits</code>。这里依次包含单区块软硬限制、实时出生拦截和全服紧急清理</p>
-        <p>实体硬限制默认使用安全模式：实体生成事件里只记录短时间生成压力，不直接读取 <code>chunk.entities</code>。需要限制区块内当前实体总量时，把模式改为“严格”；严格模式只在实体出生和抛射物发射入口读取当前区块，并沿用短时计数缓存，不在默认安全模式增加扫描</p>
+        <p>数量限制写在 <code>rules.yml</code> 的 <code>limits</code>，这里依次包含单区块软硬限制、实时出生拦截和全服紧急清理</p>
+        <p>实体硬限制默认使用安全模式：实体生成事件里只记录短时间生成压力，不直接读取 <code>chunk.entities</code>；需要限制区块内当前实体总量时，把模式改为“严格”，严格模式只在实体出生和抛射物发射入口读取当前区块，并沿用短时计数缓存，不在默认安全模式增加扫描负担</p>
 <pre><code>limits:
   chunk:
     items:
@@ -1307,7 +1329,7 @@ targets:
           </tbody>
         </table>
         <div class="note">
-          升级插件不会覆盖已有服务器的自定义阈值。要限制区块当前实体总量，可把 <code>mode</code> 改为 <code>严格</code>；只想保留硬阈值时把 <code>soft-threshold</code> 写为 <code>0</code>
+          升级插件不会覆盖已有服务器的自定义阈值；要限制区块当前实体总量，可把 <code>mode</code> 改为 <code>严格</code>，只想保留硬阈值时把 <code>soft-threshold</code> 写为 <code>0</code>
         </div>
 
         <h3>严格模式示例</h3>
@@ -1331,7 +1353,7 @@ overload-type-entity-type: "指定实体"
 overload-type-spawn-pressure: "生成压力"</code></pre>
 
         <h3>Panic 模式</h3>
-        <p>当全服实体总数突破极限值时，panic 模式会跳过倒计时，直接触发全服清理。清理动作不受提示接收范围影响</p>
+        <p>当全服实体总数突破极限值时，panic 模式会跳过倒计时，直接触发全服清理；清理动作不受提示接收范围影响</p>
         <pre><code>limits:
   panic:
     enabled: false
@@ -1356,7 +1378,7 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
 
         <section id="cluster">
           <h2>跨服同步</h2>
-          <p>CyuClear 1.4.6 由每台总开关已启用的子服直接连接同一个跨服存储，连接信息填写在 <code>storage.yml</code>。可选择 Redis 或 MySQL；Redis 更适合高频状态同步，MySQL 需要 8.0 或更高版本。清理周期和共享垃圾桶始终由子服与这份存储决定</p>
+          <p>CyuClear 1.4.7 由每台总开关已启用的子服直接连接同一个跨服存储，连接信息填写在 <code>storage.yml</code>；可选择 Redis 或 MySQL，Redis 更适合高频状态同步，MySQL 需要 8.0 或更高版本；清理周期和共享垃圾桶始终由子服与这份存储决定</p>
           <pre><code>cluster:
   enabled: true
   id: "survival"
@@ -1389,55 +1411,30 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
     table-prefix: "cyuclear_"</code></pre>
           <h3>允许互通的范围</h3>
           <ul>
-            <li>所有子服必须完全一致：CyuClear 版本、构建平台（Paper、Folia、Legacy）、Minecraft 版本、同步协议版本和物品序列化版本</li>
-            <li>Paper、Folia 与 Legacy 不允许混用。即使 Minecraft 版本相同，任一平台身份不一致也会拒绝加入集群</li>
+            <li>所有子服的基础版本必须一致：CyuClear 插件版本、Minecraft 游戏版本、集群协议版本与物品序列化版本</li>
+            <li>现代端支持 Paper 与 Folia 混合组网；1.8~1.12 的 Legacy 端与现代端不允许混用</li>
             <li><code>cluster.id</code> 必须相同，<code>server-id</code> 必须在每台子服上唯一；重复 ID 会被拒绝</li>
             <li>所有子服必须指向同一份存储：Redis 的地址和数据库必须相同；MySQL 的地址、数据库和表前缀必须相同</li>
-            <li>没有“强制兼容”开关。身份不匹配或存储断开时会停止同步定时清理并锁定共享垃圾桶，避免各服各自运行后产生错误状态</li>
+            <li>没有“强制兼容”开关；身份不匹配或存储断开时会停止同步定时清理并锁定共享垃圾桶，避免各服各自运行后产生错误状态</li>
           </ul>
           <h3>同步内容</h3>
-          <p>集群只选出一个调度领导者生成清理周期和执行时间，各子服按同一个运行编号各执行一次本服扫描；领导者离线后由存活成员自动接管。垃圾桶物品按清理周期共享，写入批量合并。玩家取回时，物品会先在共享存储中预约给该玩家，成功交付后再完成预约；玩家离线或菜单失效时会释放预约，避免两台子服同时发放同一件物品</p>
-          <p>启用跨服同步后，只有同步定时清理会写入共享垃圾桶。手动、紧急和区块卸载清理仍会执行本服清理，但不会写入或重置共享物品；玩家也不能手动存入共享垃圾桶。这样不会让本地操作覆盖其他子服正在使用的恢复窗口</p>
+          <p>集群只选出一个调度领导者生成清理周期和执行时间，各子服按同一个运行编号各执行一次本服扫描，领导者离线后由存活成员自动接管；垃圾桶物品按清理周期共享，写入批量合并；玩家取回时，物品会先在共享存储中预约给该玩家，成功交付后再完成预约，玩家离线或菜单失效时会释放预约，避免两台子服同时发放同一件物品</p>
+          <p>启用跨服同步后，只有同步定时清理会写入共享垃圾桶；手动、紧急和区块卸载清理仍会执行本服清理，但不会写入或重置共享物品，玩家也不能手动存入共享垃圾桶，这样不会让本地操作覆盖其他子服正在使用的恢复窗口</p>
           <p><code>/cc cluster</code> 会汇总最近一次同步清理的参与节点、物品数量、实体数量和最慢节点耗时，便于确认各子服是否在同一轮完成清理</p>
           <div class="note">
-            如果服务器在“物品已经交给玩家、预约尚未来得及确认”的瞬间被强制终止，玩家下次进入时可能再次收到该预约中的物品。待交付预约独立保留 24 小时，不受垃圾桶窗口结束或下一轮清理影响；超过 24 小时的记录会在后续维护时移除。游戏背包与外部存储之间无法放进同一笔事务，本版本优先保留可恢复记录。短暂断线、玩家离线，以及仍连接同一份跨服存储时的 <code>/cc reload</code> 会继续处理已排队的完成或释放操作
+            如果服务器在“物品已经交给玩家、预约尚未来得及确认”的瞬间被强制终止，玩家下次进入时可能再次收到该预约中的物品；待交付预约独立保留 24 小时，不受垃圾桶窗口结束或下一轮清理影响，超过 24 小时的记录会在后续维护时移除；游戏背包与外部存储之间无法放进同一笔事务，本版本优先保留可恢复记录；短暂断线、玩家离线，以及仍连接同一份跨服存储时的 <code>/cc reload</code> 会继续处理已排队的完成或释放操作
           </div>
-          <h3>Velocity / BungeeCord 代理端</h3>
-          <p>跨服网络由每台子服直接连接 Redis 或 MySQL，代理端只负责在代理控制台查看这份状态。后端和代理端不需要互相发送插件消息，也不要把代理端当成清理执行节点</p>
-          <table>
-            <thead>
-              <tr>
-                <th>文件</th>
-                <th>放置位置</th>
-                <th>用途</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><code>cyuclear-paper-1.4.6.jar</code></td><td>每个普通后端服的 <code>plugins</code></td><td>Paper / Bukkit 后端清理本体</td></tr>
-              <tr><td><code>cyuclear-folia-1.4.6.jar</code></td><td>每个 Folia 后端服的 <code>plugins</code></td><td>Folia 后端清理本体</td></tr>
-              <tr><td><code>cyuclear-legacy-1.4.6.jar</code></td><td>1.8 至 1.12 后端服的 <code>plugins</code></td><td>Legacy 后端清理本体</td></tr>
-              <tr><td><code>cyuclear-velocity-1.0.1.jar</code></td><td>Velocity 的 <code>plugins</code></td><td>代理端状态查看</td></tr>
-              <tr><td><code>cyuclear-bungee-1.0.1.jar</code></td><td>BungeeCord 的 <code>plugins</code></td><td>代理端状态查看</td></tr>
-            </tbody>
-          </table>
-          <h4>代理端配置</h4>
-          <p>代理端首次启动会在自己的插件数据目录生成 <code>config.yml</code>。把 <code>cluster.id</code>、<code>storage</code>、Redis 或 MySQL 连接信息、<code>member-timeout-seconds</code> 填成与子服 <code>storage.yml</code> 相同的值</p>
-          <pre><code>cluster:
-  id: "survival"
-  storage: "redis"
-  refresh-seconds: 10
-  member-timeout-seconds: 20</code></pre>
-          <p>Velocity 使用 <code>cyuclear-velocity-1.0.1.jar</code>，需要 Java 21；BungeeCord 使用 <code>cyuclear-bungee-1.0.1.jar</code>，需要 Java 17。代理端版本独立于后端版本；每个网络只放与当前代理软件对应的一个代理端 jar，不要把代理端 jar 放进任一子服，也不要把后端 jar 放进代理端</p>
-          <h4>查看与重载</h4>
-          <p>代理控制台或拥有 <code>cyuclear.proxy.admin</code> 的代理端管理员可使用 <code>/ccproxy status</code> 查看集群摘要，使用 <code>/ccproxy reload</code> 重载代理端配置和刷新间隔。代理端不参与领导者选举，不写入清理周期，也不写入共享垃圾桶物品</p>
-          <p>总开关关闭的子服不会连接共享存储，因此不会出现在代理端活跃成员中。将子服的 <code>enabled</code> 改为 <code>true</code> 并执行 <code>/cc reload</code> 后才会加入集群</p>
+          <h3>代理端选配与监控（Velocity / BungeeCord）</h3>
+          <p>跨服清理倒计时统一与虚空垃圾桶跨服共享完全由各后端子服直接连接 Redis 或 MySQL 完成，只要各子服配置了相同的 <code>storage.yml</code> 即可正常协同，不需要代理端参与数据中转</p>
+          <p>代理端插件仅提供控制台只读监控，如果服主希望在 Velocity 或 BungeeCord 控制台输入 <code>/ccproxy status</code> 查看全网子服在线数量、领头子服与清理倒计时，才需要在代理端安装；平时不在代理控制台看监控的服务器直接留空不装即可</p>
+          <p>代理端的详细选配、配置文件与监控命令请参阅配套的《CyuClear 代理端使用文档》</p>
           <div class="note orange">
-            请不要让多个服务器共用相同的 <code>server-id</code>，也不要将 1.8~1.12 的 Legacy 端与现代端混入同一集群。现代端支持 Paper 与 Folia 混合组网；可使用 <code>/cc cluster</code> 查看连接、身份、成员和领导者状态
+            请不要让多个服务器共用相同的 <code>server-id</code>，也不要将 1.8~1.12 的 Legacy 端与现代端混入同一集群；现代端支持 Paper 与 Folia 混合组网，可使用 <code>/cc cluster</code> 查看连接、身份、成员和领导者状态
           </div>
         </section>
       <section id="void-bin">
         <h2>虚空垃圾桶</h2>
-        <p>清理掉落物时，插件可以把被清理的物品暂存到虚空垃圾桶。玩家在有效期内输入 <code>/cc bin</code> 可打开菜单取回误扫物品</p>
+        <p>清理掉落物时，插件可以把被清理的物品暂存到虚空垃圾桶；玩家在有效期内输入 <code>/cc bin</code> 可打开菜单取回误扫物品</p>
         <pre><code>void-bin:
   enabled: true
   always-open: false
@@ -1526,7 +1523,7 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
           </tbody>
         </table>
         <h3 id="bin-recovery-rules">清理回收规则</h3>
-        <p>这组规则只决定“被清理的掉落物是否进入垃圾桶”。命中禁止规则后，掉落物仍会按照 <code>rules.yml</code> 的结果正常清理，只是不提供取回</p>
+        <p>这组规则只决定“被清理的掉落物是否进入垃圾桶”；命中禁止规则后，掉落物仍会按照 <code>rules.yml</code> 的结果正常清理，只是不提供取回</p>
         <pre><code>void-bin:
   entry-rules:
     cleanup-recovery:
@@ -1560,11 +1557,11 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
           match-mode: "精确"
           list: []</code></pre>
         <div class="note orange">
-          <code>allow-list</code> 的优先级高于 <code>deny-list</code>。如果想只回收少数指定物品，把 <code>default</code> 改为 <code>拒绝</code>，再把允许回收的物品写入允许名单
+          <code>allow-list</code> 的优先级高于 <code>deny-list</code>；如果想只回收少数指定物品，把 <code>default</code> 改为 <code>拒绝</code>，再把允许回收的物品写入允许名单
         </div>
 
         <h3 id="bin-deposit-rules">玩家投放规则</h3>
-        <p>这组规则用于玩家在垃圾桶菜单中点击背包物品。命中禁止规则、没有权限或达到种类上限时，原物会留在玩家背包，不会先移除再回退。启用个人投放缓冲区时，点击后会先进入玩家自己的待确认菜单，确认后才写入本地垃圾桶</p>
+        <p>这组规则用于玩家在垃圾桶菜单中点击背包物品；命中禁止规则、没有权限或达到种类上限时，原物会留在玩家背包，不会先移除再回退；启用个人投放缓冲区时，点击后会先进入玩家自己的待确认菜单，确认后才写入本地垃圾桶</p>
         <pre><code>void-bin:
   entry-rules:
     player-deposit:
@@ -1614,7 +1611,7 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
           </tbody>
         </table>
         <h3 id="bin-deposit-buffer">个人投放缓冲区</h3>
-        <p><code>void-bin.deposit-buffer.enabled</code> 默认开启。玩家从背包点击物品后，插件先把这一笔投放写入玩家专属的缓冲文件，再从背包移出并打开独立的“投放缓冲区”菜单。只有点击“确认投放”后，物品才会一次性进入虚空垃圾桶。</p>
+        <p><code>void-bin.deposit-buffer.enabled</code> 默认开启；玩家从背包点击物品后，插件先把这一笔投放写入玩家专属的缓冲文件，再从背包移出并打开独立的“投放缓冲区”菜单；只有点击“确认投放”后，物品才会一次性进入虚空垃圾桶</p>
         <pre><code>void-bin:
   deposit-buffer:
     # true = 先进入个人缓冲区并确认；false = 点击后直接进入本地垃圾桶
@@ -1631,42 +1628,42 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
           </tbody>
         </table>
         <div class="note green">
-          个人缓冲区不参与跨服共享垃圾桶。跨服同步开启时仍禁止玩家手动投放；切换配置前已有的待确认物品会优先退回玩家背包，不会直接写入共享仓库
+          个人缓冲区不参与跨服共享垃圾桶；跨服同步开启时仍禁止玩家手动投放，切换配置前已有的待确认物品会优先退回玩家背包，不会直接写入共享仓库
         </div>
         <div class="note orange">
-          个人缓冲文件位于 <code>plugins/cyuclear/deposit-buffer/&lt;玩家 UUID&gt;.yml</code>，只由插件维护。不要手动改动其中的物品编码；如果读取失败，文件会保留并在控制台提示
+          个人缓冲文件位于 <code>plugins/cyuclear/deposit-buffer/&lt;玩家 UUID&gt;.yml</code>，只由插件维护；不要手动改动其中的物品编码，如果读取失败，文件会保留并在控制台提示
         </div>
         <div class="note green">
-          两组入桶规则都支持原版物品、CustomModelData、ItemsAdder、CraftEngine 和 Oraxen ID，也支持精确、通配、正则、展示名和 Lore。直接沿用本文“匹配写法”中的格式
+          两组入桶规则都支持原版物品、CustomModelData、ItemsAdder、CraftEngine 和 Oraxen ID，也支持精确、通配、正则、展示名和 Lore；直接沿用本文“匹配写法”中的格式
         </div>
         <div class="note">
-          <code>/cc check</code> 看向掉落物时会分别显示清理结果、清理回收结果和玩家投放结果。玩家投放按玩家当前坐标判断，清理回收按掉落物所在坐标判断
+          <code>/cc check</code> 看向掉落物时会分别显示清理结果、清理回收结果和玩家投放结果；玩家投放按玩家当前坐标判断，清理回收按掉落物所在坐标判断
         </div>
         <div class="note">
-          缓冲区里的每个物品图标单独处理，不需要把其他待确认物品一起退回。背包空间不足时，未取回的数量继续留在缓冲区
+          缓冲区里的每个物品图标单独处理，不需要把其他待确认物品一起退回；背包空间不足时，未取回的数量继续留在缓冲区
         </div>
         <div class="note green">
-          潜影盒、各色收纳袋和带自定义数据的物品会作为完整物品保存。跨服模式会在清除潜影盒或收纳袋掉落物前校验回收快照；如果无法确认内容可以完整恢复，插件会保留原掉落物
+          潜影盒、各色收纳袋和带自定义数据的物品会作为完整物品保存；跨服模式会在清除潜影盒或收纳袋掉落物前校验回收快照，如果无法确认内容可以完整恢复，插件会保留原掉落物
         </div>
         <div class="note green">
-          垃圾桶菜单刷新会合并同一轮仓库变更，并先生成一次物品快照再分发给所有打开菜单的玩家。这样能保持多人看到的物品状态同步，也避免多人同时打开时重复构建物品页
+          垃圾桶菜单刷新会合并同一轮仓库变更，并先生成一次物品快照再分发给所有打开菜单的玩家；这样能保持多人看到的物品状态同步，也避免多人同时打开时重复构建物品页
         </div>
         <div class="note">
-          若开启取回冷却，玩家每次成功取回后需要等待冷却结束才能继续拿下一件。点击打开垃圾桶的显示文本在语言文件（如 <code>lang/zh_cn.yml</code>）的 <code>bin-open-click.text</code> 和 <code>bin-open-click.hover</code> 中配置
+          若开启取回冷却，玩家每次成功取回后需要等待冷却结束才能继续拿下一件；点击打开垃圾桶的显示文本在语言文件（如 <code>lang/zh_cn.yml</code>）的 <code>bin-open-click.text</code> 和 <code>bin-open-click.hover</code> 中配置
         </div>
         <div class="note orange">
-          <code>always-open</code> 只控制玩家能否随时打开当前垃圾桶，不会把垃圾桶变成永久仓库。下一轮清理开始或垃圾桶到期时，现有内容仍会按原逻辑清空
+          <code>always-open</code> 只控制玩家能否随时打开当前垃圾桶，不会把垃圾桶变成永久仓库；下一轮清理开始或垃圾桶到期时，现有内容仍会按原逻辑清空
         </div>
         <div class="note green">
-          如果一次清理的处理过程出现异常，但其中一部分物品已成功保留，插件会照常开启这次垃圾桶有效期。即使 <code>always-open</code> 为 <code>false</code>，玩家也能在有效期内取回这些物品
+          如果一次清理的处理过程出现异常，但其中一部分物品已成功保留，插件会照常开启这次垃圾桶有效期；即使 <code>always-open</code> 为 <code>false</code>，玩家也能在有效期内取回这些物品
         </div>
       </section>
 
       <section id="cleanup-runs">
         <h2>清理批次与恢复</h2>
-        <p>定时、手动和紧急清理结束后都会留下一个批次记录。记录会显示来源、时间、处理区块、清理数量和主要原因，可通过 <code>/cc runs</code> 或管理中心查看</p>
+        <p>定时、手动和紧急清理结束后都会留下一个批次记录，记录会显示来源、时间、处理区块、清理数量和主要原因，可通过 <code>/cc runs</code> 或管理中心查看</p>
         <p>个别区块处理失败时，批次会标记为「部分完成」，并保留最慢区块与首个异常，已经保存的恢复物品仍可领取，主动停止或重载中断的批次也是如此</p>
-        <p>恢复中心默认关闭。需要保留误清掉落物时，在 <code>config.yml</code> 的 <code>recovery.enabled</code> 改为 <code>true</code>，再按清理来源选择是否保存，已选来源的掉落物会进入恢复中心，不再写入虚空垃圾桶</p>
+        <p>恢复中心默认关闭；需要保留误清掉落物时，在 <code>config.yml</code> 的 <code>recovery.enabled</code> 改为 <code>true</code>，再按清理来源选择是否保存，已选来源的掉落物会进入恢复中心，不再写入虚空垃圾桶</p>
         <pre><code>recovery:
   enabled: true
   capture:
@@ -1681,29 +1678,29 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
           <tbody>
             <tr><td><code>capture.scheduled</code></td><td>保存定时清理的掉落物</td></tr>
             <tr><td><code>capture.manual</code></td><td>保存管理员手动清理的掉落物</td></tr>
-            <tr><td><code>capture.panic</code></td><td>保存紧急清理的掉落物。紧急清理以减压为主，默认关闭</td></tr>
-            <tr><td><code>max-entries-per-run</code></td><td>单个批次最多保存多少条物品。达到上限后清理继续进行，后续物品不会写入该批次</td></tr>
+            <tr><td><code>capture.panic</code></td><td>保存紧急清理的掉落物；紧急清理以减压为主，默认关闭</td></tr>
+            <tr><td><code>max-entries-per-run</code></td><td>单个批次最多保存多少条物品；达到上限后清理继续进行，后续物品不会写入该批次</td></tr>
             <tr><td><code>expire-hours</code></td><td>恢复物品的领取时长，单位为小时</td></tr>
-            <tr><td><code>recent-limit</code></td><td>管理中心和重启后保留的近期批次数量。早期批次文件不会被插件自动删除</td></tr>
+            <tr><td><code>recent-limit</code></td><td>管理中心和重启后保留的近期批次数量；早期批次文件不会被插件自动删除</td></tr>
           </tbody>
         </table>
         <h3>领取恢复物品</h3>
         <div class="steps">
           <div class="step"><h4>找到批次</h4><p>执行 <code>/cc runs</code>，或在 <code>/cc menu</code> 的管理中心进入「清理批次」</p></div>
-          <div class="step"><h4>打开物品</h4><p>选择需要检查的批次。已领取、已过期和无法读取的条目会保留原始状态，不会重复发放</p></div>
-          <div class="step"><h4>确认领取</h4><p>左键同一件物品两次后领取到管理员背包。背包空间不足时不会领取，也不会改变记录</p></div>
+          <div class="step"><h4>打开物品</h4><p>选择需要检查的批次；已领取、已过期和无法读取的条目会保留原始状态，不会重复发放</p></div>
+          <div class="step"><h4>确认领取</h4><p>左键同一件物品两次后领取到管理员背包；背包空间不足时不会领取，也不会改变记录</p></div>
         </div>
         <div class="note orange">
-          恢复中心不会自动批量发放，也不会把物品丢回原坐标。每一条恢复物品都需要管理员单独确认
+          恢复中心不会自动批量发放，也不会把物品丢回原坐标，每一条恢复物品都需要管理员单独确认
         </div>
         <h3>配置检查与快照</h3>
-        <p><code>/cc doctor</code> 会检查配置文件、版本、菜单布局和常见的名单写法；<code>/cc snapshot</code> 会保存当前配置。执行 <code>/cc reload</code> 前也会自动保存一份</p>
+        <p><code>/cc doctor</code> 会检查配置文件、版本、菜单布局和常见的名单写法；<code>/cc snapshot</code> 会保存当前配置，执行 <code>/cc reload</code> 前也会自动保存一份</p>
         <p>快照保存在 <code>plugins/cyuclear/backup/snapshots/</code>，配置升级前会先备份旧文件</p>
       </section>
 
       <section id="hotspots">
         <h2>热点区块</h2>
-        <p>当区块触发掉落物或实体限制时，CyuClear 会把它加入热点列表。执行 <code>/cc hotspots</code>，或在管理中心进入「热点区块」即可查看</p>
+        <p>当区块触发掉落物或实体限制时，CyuClear 会把它加入热点列表；执行 <code>/cc hotspots</code>，或在管理中心进入「热点区块」即可查看</p>
         <pre><code>limits:
   chunk:
     hotspot:
@@ -1724,13 +1721,13 @@ overload-type-spawn-pressure: "生成压力"</code></pre>
           <div class="card"><h4>熔断</h4><p>区块达到硬限制，按现有区块限制暂时拦截同类新增对象</p></div>
           <div class="card"><h4>恢复观察</h4><p>熔断时间结束后暂时保留记录，方便确认问题是否反复出现</p></div>
         </div>
-        <p>详情页会显示最近数量、近期触发、最近清理和处理耗时。「清理这个区块」只处理当前已加载区块；提前解除临时熔断时，左键「解除熔断」后再次确认</p>
+        <p>详情页会显示最近数量、近期触发、最近清理和处理耗时；「清理这个区块」只处理当前已加载区块，提前解除临时熔断时，左键「解除熔断」后再次确认</p>
         <div class="note orange">
           热点列表只记录触发过区块限制的区块，不会额外扫描全服已加载区块
         </div>
 
         <h3>超载告警传送与现场清理</h3>
-        <p>当区块触发超载警报时，管理员（<code>cyuclear.admin</code>）收到的聊天提示会附带 <code>[前往查看]</code> 交互按钮；点击即可跨维度安全传送至现场，普通玩家接收纯文本广播。排查完成后可执行 <code>/cc here</code> 外科手术式清理当前区块，或通过 <code>/cc back</code> 原路返回出发点</p>
+        <p>当区块触发超载警报时，管理员（<code>cyuclear.admin</code>）收到的聊天提示会附带 <code>[前往查看]</code> 交互按钮；点击即可跨维度安全传送至现场，普通玩家接收纯文本广播；排查完成后可执行 <code>/cc here</code> 外科手术式清理当前区块，或通过 <code>/cc back</code> 原路返回出发点</p>
         <pre><code>teleport:
   landing-protection:
     enabled: true
@@ -1757,7 +1754,7 @@ here-cleanup:
 
       <section id="menu">
         <h2>垃圾桶菜单</h2>
-        <p><code>menu/bin.yml</code> 控制虚空垃圾桶界面布局，其中 <code>*</code> 是物品槽位，其他字符对应下方按钮配置。旧版 <code>bin-menu.yml</code> 会在启动时复制到新位置，旧文件不会删除。</p>
+        <p><code>menu/bin.yml</code> 控制虚空垃圾桶界面布局，其中 <code>*</code> 是物品槽位，其他字符对应下方按钮配置；旧版 <code>bin-menu.yml</code> 会在启动时复制到新位置，旧文件不会删除</p>
         <pre><code>title: "&amp;8CYUCLEAR | 虚空垃圾桶 ({page}/{total})"
 layout:
   - "#########"
@@ -1767,7 +1764,7 @@ layout:
   - "#*******#"
   - "P###X###N"</code></pre>
         <h3>投放缓冲区菜单</h3>
-        <p><code>menu/deposit-buffer.yml</code> 是个人待确认菜单，与公共垃圾桶菜单分开配置。<code>*</code> 显示当前玩家待确认的物品；物品图标支持按数量取回，<code>P</code> / <code>N</code> 翻页，<code>X</code> 放回全部物品并关闭，<code>C</code> 确认全部投放。按钮材质同样支持原版、ItemsAdder、Oraxen、CraftEngine 和资源包 <code>custom-model-data</code></p>
+        <p><code>menu/deposit-buffer.yml</code> 是个人待确认菜单，与公共垃圾桶菜单分开配置；<code>*</code> 显示当前玩家待确认的物品，物品图标支持按数量取回，<code>P</code> / <code>N</code> 翻页，<code>X</code> 放回全部物品并关闭，<code>C</code> 确认全部投放；按钮材质同样支持原版、ItemsAdder、Oraxen、CraftEngine 和资源包 <code>custom-model-data</code></p>
         <pre><code>title: "&amp;8CYUCLEAR | 投放缓冲区 ({page}/{total})"
 layout:
   - "#########"
@@ -1786,7 +1783,7 @@ items:
     fallback-material: STAINED_GLASS_PANE
     name: "&amp;a&amp;l确认投放"</code></pre>
         <h3>管理中心</h3>
-        <p><code>/cc menu</code> 打开 <code>menu/admin.yml</code>。这里可以处理规则、批次恢复、热点、预演、清理、状态和配置检查</p>
+        <p><code>/cc menu</code> 打开 <code>menu/admin.yml</code>，这里可以处理规则、批次恢复、热点、预演、清理、状态和配置检查</p>
         <table>
           <thead><tr><th>入口</th><th>作用</th></tr></thead>
           <tbody>
@@ -1800,7 +1797,7 @@ items:
           </tbody>
         </table>
         <h4>清理规则</h4>
-        <p>规则入口使用 <code>menu/main.yml</code>、<code>menu/target.yml</code> 和 <code>menu/list.yml</code>。主菜单会显示掉落物、实体和实时拦截当前开关及名单数量；进入目标后，左键切换模块或名单模式，左键名单按钮编辑内容，右键循环该名单的匹配方式</p>
+        <p>规则入口使用 <code>menu/main.yml</code>、<code>menu/target.yml</code> 和 <code>menu/list.yml</code>；主菜单会显示掉落物、实体和实时拦截当前开关及名单数量，进入目标后，左键切换模块或名单模式，左键名单按钮编辑内容，右键循环该名单的匹配方式</p>
         <table>
           <thead><tr><th>操作</th><th>结果</th></tr></thead>
           <tbody>
@@ -1811,7 +1808,7 @@ items:
           </tbody>
         </table>
         <div class="note">
-          管理菜单直接保存 <code>rules.yml</code>，保存后会重新读取清理规则。实体名单仍需使用能识别实体类型的刷怪蛋；MythicMobs、CraftEngine 和宝可梦等需要写专属 ID 时，先按本文“特殊实体”中的格式编辑文件，再用 <code>/cc reload</code> 应用
+          管理菜单直接保存 <code>rules.yml</code>，保存后会重新读取清理规则；实体名单仍需使用能识别实体类型的刷怪蛋，MythicMobs、CraftEngine 和宝可梦等需要写专属 ID 时，先按本文“特殊实体”中的格式编辑文件，再用 <code>/cc reload</code> 应用
         </div>
         <h3>按钮图标来源</h3>
         <p><code>items.&lt;字符&gt;.material</code> 不只支持原版材质，也可以直接引用 ItemsAdder、Oraxen、CraftEngine 物品；纯资源包物品使用原版材质配合 <code>custom-model-data</code></p>
@@ -1857,13 +1854,13 @@ items:
           </tbody>
         </table>
         <div class="note green">
-          外部物品会在启动或执行 <code>/cyuclear reload</code> 时重新读取。普通图标和固定纹理会作为菜单模板保存；带变量的文本和玩家头会在打开菜单时按当前玩家显示
+          外部物品会在启动或执行 <code>/cyuclear reload</code> 时重新读取；普通图标和固定纹理会作为菜单模板保存，带变量的文本和玩家头会在打开菜单时按当前玩家显示
         </div>
         <div class="note">
-          如果外部物品不存在或对应插件未启用，会使用 <code>fallback-material</code>，未配置时默认回退为 <code>STONE</code>。ItemsAdder、Oraxen 或 CraftEngine 自身重载物品后，请再执行一次 <code>/cyuclear reload</code>
+          如果外部物品不存在或对应插件未启用，会使用 <code>fallback-material</code>，未配置时默认回退为 <code>STONE</code>；ItemsAdder、Oraxen 或 CraftEngine 自身重载物品后，请再执行一次 <code>/cyuclear reload</code>
         </div>
         <h3>玩家头颅</h3>
-        <p>所有 <code>menu/*.yml</code> 的普通按钮都可以使用玩家头颅。字段和动作索引统一写在 <code>menu/main.yml</code> 顶部</p>
+        <p>所有 <code>menu/*.yml</code> 的普通按钮都可以使用玩家头颅，字段和动作索引统一写在 <code>menu/main.yml</code> 顶部</p>
         <pre><code>items:
   "U":
     material: PLAYER_HEAD
@@ -1891,7 +1888,7 @@ items:
         </table>
         <p><code>%player_name%</code> 与 <code>%player_uuid%</code> 可以直接使用；安装 PlaceholderAPI 后，也可以在名称、Lore、头颅来源和动作中使用其他变量</p>
         <h3>所有菜单按钮动作</h3>
-        <p>任意 <code>menu/*.yml</code> 的普通 <code>items.符号</code> 都可写 <code>actions</code>。未写时保留原按钮行为；写了动作又要保留原功能时加入 <code>[default]</code>。<code>*</code> 是内容格，不写动作</p>
+        <p>任意 <code>menu/*.yml</code> 的普通 <code>items.符号</code> 都可写 <code>actions</code>；未写时保留原按钮行为，写了动作又要保留原功能时加入 <code>[default]</code>，<code>*</code> 是内容格，不写动作</p>
         <table>
           <thead>
             <tr>
@@ -1956,7 +1953,7 @@ items:
   list:
     - "test_world"</code></pre>
         <h3>世界与区域独立规则</h3>
-        <p><code>areas.yml</code> 可以让一张世界或两个角坐标之间使用独立规则。物品与实体分别支持继承、全部保留、全部清理、黑名单、白名单和并行名单；垃圾桶可独立覆盖清理回收与玩家投放。未命中区域时继续使用全局配置</p>
+        <p><code>areas.yml</code> 可以让一张世界或两个角坐标之间使用独立规则；物品与实体分别支持继承、全部保留、全部清理、黑名单、白名单和并行名单，垃圾桶可独立覆盖清理回收与玩家投放；未命中区域时继续使用全局配置</p>
         <pre><code>areas:
   enabled: true
   rules:
@@ -1976,7 +1973,7 @@ items:
         player-deposit:
           default: "拒绝"</code></pre>
         <div class="note">
-          不写 <code>area</code> 时规则覆盖整张世界。重叠范围优先使用 <code>priority</code> 较大的规则；相同优先级按文件中的先后顺序判断。区域垃圾桶规则可使用 <code>允许</code>、<code>拒绝</code>、<code>继承</code> 及完整名单；<code>全部清理</code> 仍不会绕过玩家、NPC、命名、驯服和事件保护
+          不写 <code>area</code> 时规则覆盖整张世界；重叠范围优先使用 <code>priority</code> 较大的规则，相同优先级按文件中的先后顺序判断；区域垃圾桶规则可使用 <code>允许</code>、<code>拒绝</code>、<code>继承</code> 及完整名单，<code>全部清理</code> 仍不会绕过玩家、NPC、命名、驯服和事件保护
         </div>
         <table>
           <thead>
@@ -2282,19 +2279,19 @@ items:
       <section id="faq">
         <h2>常见问题</h2>
         <h3>刚安装后为什么没有开始清理</h3>
-         <p>全新安装的 1.4.6 默认使用 <code>enabled: false</code>。请按服务器实际情况调整配置，使用 <code>/cc check</code> 与 <code>/cc preview</code> 核对结果，再把总开关改为 <code>true</code> 并执行 <code>/cc reload</code>。升级已有数据目录时会迁移为已启用，严格实体总量模式需要在 <code>rules.yml</code> 中手动选择</p>
+         <p>全新安装的 1.4.7 默认使用 <code>enabled: false</code>；请按服务器实际情况调整配置，使用 <code>/cc check</code> 与 <code>/cc preview</code> 核对结果，再把总开关改为 <code>true</code> 并执行 <code>/cc reload</code>；升级已有数据目录时会迁移为已启用，严格实体总量模式需要在 <code>rules.yml</code> 中手动选择</p>
 
         <h3>代理端为什么看不到刚安装的子服</h3>
-        <p>总开关关闭的后端不会连接代理端，也不会发送集群心跳。完成配置后把 <code>enabled</code> 改为 <code>true</code> 并执行 <code>/cc reload</code> 即可自动接入；随后可用 <code>/cc cluster</code> 查看连接状态</p>
+        <p>总开关关闭的后端不会连接代理端，也不会发送集群心跳；完成配置后把 <code>enabled</code> 改为 <code>true</code> 并执行 <code>/cc reload</code> 即可自动接入，随后可用 <code>/cc cluster</code> 查看连接状态</p>
 
          <h3>玩家输入 /cc bin 提示垃圾桶为空</h3>
          <p>如果 <code>always-open</code> 为 <code>false</code>，只有清理后且有效期内才能打开确认上次清理确实清到了掉落物</p>
 
          <h3>菜单里的 CraftEngine 图标显示为石头</h3>
-         <p>确认菜单中的物品 ID 写成 <code>ce:命名空间:物品ID</code>，再执行 <code>/cc reload</code>。1.4.6 会在 CraftEngine 重载后重新读取菜单图标；仍显示石头时检查 ID 是否已在 CraftEngine 中注册，并查看服务器日志</p>
+         <p>确认菜单中的物品 ID 写成 <code>ce:命名空间:物品ID</code>，再执行 <code>/cc reload</code>；1.4.7 会在 CraftEngine 重载后重新读取菜单图标，仍显示石头时检查 ID 是否已在 CraftEngine 中注册，并查看服务器日志</p>
 
          <h3>潜影盒或收纳袋放进垃圾桶后会清空吗</h3>
-         <p>1.4.6 会保留容器物品的完整数据，菜单展示信息也不会写回真实物品。跨服回收在删除原掉落物前还会验证容器快照；验证失败时，原掉落物会留在世界中，不会进入垃圾桶</p>
+         <p>1.4.7 会保留容器物品的完整数据，菜单展示信息也不会写回真实物品；跨服回收在删除原掉落物前还会验证容器快照，验证失败时，原掉落物会留在世界中，不会进入垃圾桶</p>
 
         <h3>钻石被清理了怎么办</h3>
         <p>默认配置里钻石写在 <code>targets.items.keep-list.list</code>，正常不会被清理；若仍被清理，检查是否仍为 <code>minecraft:diamond</code>，以及掉落物是否仍为黑名单模式</p>
@@ -2303,25 +2300,25 @@ items:
         <p>把 <code>targets.items.mode</code> 改为 <code>白名单</code>，再把要清理的物品 ID 写入 <code>targets.items.clean-list.list</code></p>
 
         <h3>已命名实体没有被清理</h3>
-        <p>这是 <code>targets.entities.protections.named: true</code> 的保护行为。若只清理特定名称，请使用 <code>targets.entities.name-rules.clean-list</code>，并在 <code>clean-bypasses</code> 中写入 <code>named</code>；无需关闭所有命名实体保护。MythicMobs 也可通过 <code>hooks.mythic-mobs.bypass-protection-flags</code> 整体绕过普通保护</p>
+        <p>这是 <code>targets.entities.protections.named: true</code> 的保护行为；若只清理特定名称，请使用 <code>targets.entities.name-rules.clean-list</code>，并在 <code>clean-bypasses</code> 中写入 <code>named</code>，无需关闭所有命名实体保护；MythicMobs 也可通过 <code>hooks.mythic-mobs.bypass-protection-flags</code> 整体绕过普通保护</p>
 
         <h3>只让某些实体或建筑区域忽略命名保护</h3>
-        <p>在 <code>rules.yml</code> 的 <code>targets.entities.protections.named-bypass.entities</code> 填实体 ID，或在 <code>named-bypass.regions</code> 填世界和两个角坐标。它只跳过命名保护，实体仍按保留名单、清理名单和其他保护判断</p>
+        <p>在 <code>rules.yml</code> 的 <code>targets.entities.protections.named-bypass.entities</code> 填实体 ID，或在 <code>named-bypass.regions</code> 填世界和两个角坐标；它只跳过命名保护，实体仍按保留名单、清理名单和其他保护判断</p>
 
         <h3>有人说实体命名后还是被清</h3>
-         <p>先确认正在使用 1.4.6，再让管理员看着目标执行 <code>/cc check</code>。如果检查里显示“是否命名: 否”，说明那个名字不是 Bukkit 实体名，可能只是其他插件做的视觉显示</p>
+         <p>先确认正在使用 1.4.7，再让管理员看着目标执行 <code>/cc check</code>；如果检查里显示“是否命名: 否”，说明那个名字不是 Bukkit 实体名，可能只是其他插件做的视觉显示</p>
 
         <h3>袭击事件里的怪被清理了怎么办</h3>
-        <p>确认 <code>targets.entities.protections.events.raid: true</code>。CyuClear 会保护正在参与袭击的灾厄实体，但不会保护普通野外掠夺者。管理员可以用 <code>/cc check</code> 看目标是否显示“是否参与袭击: 是”</p>
+        <p>确认 <code>targets.entities.protections.events.raid: true</code>，CyuClear 会保护正在参与袭击的灾厄实体，但不会保护普通野外掠夺者；管理员可以用 <code>/cc check</code> 看目标是否显示“是否参与袭击: 是”</p>
 
         <h3>区块高压警报频繁出现</h3>
-        <p>说明某个区块实体或掉落物生成太快先查看提示坐标，再处理源头机器、刷怪塔、结构生成或模组实体。默认提示只发给管理员；需要安静运行时把 <code>limits.chunk.notice-target</code> 改为“不发送”，不要为了隐藏问题而直接关闭实体保护</p>
+        <p>说明某个区块实体或掉落物生成过快，先查看提示坐标，再处理源头机器、刷怪塔、结构生成或模组实体；默认提示只发给管理员，需要安静运行时把 <code>limits.chunk.notice-target</code> 改为“不发送”，不要为了隐藏问题而直接关闭实体保护</p>
 
-        <h3>Mohist 混合端出现主线程卡在 RadarListener</h3>
-         <p>1.4.6 的安全模式仍只记录短时间生成压力，不会在实体生成事件里读取 <code>chunk.entities</code>。如果要限制区块当前总量，请使用 <code>cyuclear-folia-1.4.6.jar</code> 并把 <code>limits.chunk.entities.mode</code> 改为“严格”；严格模式只在实体出生和抛射物发射入口读取当前区块</p>
+        <h3>实体限制里的“安全”与“严格”模式如何选择</h3>
+        <p>默认的“安全”模式只统计短时间滑动窗口内的实体新增生成压力，避免频繁遍历区块实体造成卡顿，适合绝大多数常规服务器；若刷怪塔或高频红石导致区块常驻实体总数堆积超标，可将 <code>limits.chunk.entities.mode</code> 改为“严格”，严格模式会在实体生成与发射入口直接核对区块内的实体总数，超出阈值立即拦截</p>
 
         <h3>我把实体阈值设成 350，为什么箭矢还是能到几千</h3>
-        <p>如果模式仍是“安全”，350 表示一个统计窗口内允许的新增实体压力，不是区块里同时存在的实体总数；箭矢分散在多个窗口生成时可以继续累积。把 <code>mode</code> 改为“严格”，并按需要把 <code>soft-threshold</code> 设为 <code>0</code>，再执行 <code>/cc reload</code>。严格模式只拦截之后的新实体和抛射物，已经堆在区块里的箭矢仍需周期清理或手动清理</p>
+        <p>如果模式仍是“安全”，350 表示一个统计窗口内允许的新增实体压力，不是区块里同时存在的实体总数，箭矢分散在多个窗口生成时可以继续累积；把 <code>mode</code> 改为“严格”，并按需要把 <code>soft-threshold</code> 设为 <code>0</code>，再执行 <code>/cc reload</code>；严格模式只拦截之后的新实体和抛射物，已经堆在区块里的箭矢仍需周期清理或手动清理</p>
 
         <h3>清理提示太吵</h3>
         <p>可以关闭聊天提示，改用 ActionBar 或 BossBar；也可以在 <code>sounds</code> 里关闭对应音效</p>
@@ -2330,29 +2327,26 @@ items:
         <p>确认 MythicMobs 已安装，并检查 <code>hooks.mythic-mobs.enabled</code>如果希望只按 MythicMobs ID 判断，开启 <code>hooks.mythic-mobs.id-only</code></p>
 
         <h3>需要查谁取走了虚空桶物品</h3>
-        <p>开启 <code>void-bin.claim-audit.enabled</code> 后，成功发放的领取会写入插件数据目录 <code>audit</code> 下的按日账本。管理员使用 <code>/cc history [玩家] [页码]</code> 查看本服记录；条目会包含时间、玩家、所在节点、物品、数量和发放方式。</p>
+        <p>开启 <code>void-bin.claim-audit.enabled</code> 后，成功发放的领取会写入插件数据目录 <code>audit</code> 下的按日账本；管理员使用 <code>/cc history [玩家] [页码]</code> 查看本服记录，条目会包含时间、玩家、所在节点、物品、数量和发放方式</p>
 
         <h3>某个区块一加载就严重卡顿</h3>
-        <p>如果区块能完成加载但实体活动会造成卡顿，可临时开启 <code>emergency.chunk-load-sweep</code>；卸载时清扫默认关闭，需要时再开 <code>emergency.chunk-unload-sweep</code>。若服务端在区块反序列化前已经崩溃，插件没有执行机会：先停服并备份世界文件，再使用离线区块工具处理实体数据，不要反复让玩家进入该区块。</p>
+        <p>如果区块能完成加载但实体活动会造成卡顿，可临时开启 <code>emergency.chunk-load-sweep</code>；卸载时清扫默认关闭，需要时再开 <code>emergency.chunk-unload-sweep</code>；若服务端在区块反序列化前已经崩溃，插件没有执行机会：先停服并备份世界文件，再使用离线区块工具处理实体数据，不要反复让玩家进入该区块</p>
       </section>
 
-      <section id="workflow">
+      <section id="tips">
         <h2>配置建议</h2>
-        <div class="grid two">
-          <div class="card">
-            <h4>保守清理</h4>
-            <p>掉落物可以保持黑名单模式，把钻石、下界之星、钥匙、礼包等高价值物品写入保留名单，再按服务器情况逐步补充规则</p>
-          </div>
-          <div class="card">
-            <h4>高压服务器</h4>
-          <p>重点关注 <code>limits.chunk.items.threshold</code>、<code>limits.chunk.items.specific</code>、<code>limits.chunk.entities.threshold</code>、<code>limits.chunk.entities.specific</code> 和 <code>limits.panic</code>，这些阈值要按在线人数和刷怪塔规模调整</p>
-          </div>
-        </div>
-        <div class="note">
-          玩家活跃的生存服可以开启虚空垃圾桶，用来减少误扫后的争议。若服务器只清理明确无价值对象，也可以关闭垃圾桶，减少额外交互
-        </div>
+        <ol>
+          <li>用默认配置启动一次，生成主配置文件、规则与菜单</li>
+          <li>给默认玩家组 <code>cyuclear.use</code> 权限，管理员授予 <code>cyuclear.admin</code></li>
+          <li>检查 <code>rules.yml</code>，把贵重物品、定制道具与任务物品加入掉落物保留名单</li>
+          <li>确认 <code>config.yml</code> 中的周期清理间隔、倒计时提示方式与世界黑白名单</li>
+          <li>在非高峰时段执行 <code>/cc preview</code> 预演清理，核对是否误扫重要实体或掉落物</li>
+          <li>使用测试账号打开 <code>/cc bin</code> 虚空垃圾桶，测试物品投放与取回流程</li>
+          <li>确认规则无误后将 <code>config.yml</code> 中的 <code>enabled</code> 设为 <code>true</code> 正式生效</li>
+          <li>观察控制台与 TPS 表现，按需微调区块硬限制阈值与清理冷却</li>
+        </ol>
         <div class="footer">
-          CyuClear 配置有不确定的地方，先在测试服确认，再放到正式服
+          CyuClear 文档遇到不确定的配置，先在测试服试一遍，再放到正式服
         </div>
       </section>
     </div>
